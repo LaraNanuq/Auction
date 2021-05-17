@@ -1,8 +1,7 @@
 # Configuration files
-/build/
-META-INF/
-WEB-INF/lib/
-WEB-INF/web.xml/
+**/META-INF/
+**/WEB-INF/lib/
+**/WEB-INF/web.xml/
 
 # Maven
 target/

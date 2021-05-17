@@ -10,15 +10,31 @@ public final class BusinessException extends Exception {
 
     private final int code;
 
+    /**
+     * Constructs a {@code BusinessException} with the specified error code.
+     * 
+     * @param code The error code of the exception
+     */
     public BusinessException(final int code) {
         this(code, null);
     }
 
+    /**
+     * Constructs a {@code BusinessException} with specified error code and cause.
+     * 
+     * @param code The error code of the exception
+     * @param code The cause of the exception
+     */
     public BusinessException(final int code, final Throwable cause) {
         super(cause);
         this.code = code;
     }
 
+    /**
+     * Gets the error code of this exception.
+     * 
+     * @return the error code of the exception.
+     */
     public int getCode() {
         return code;
     }

@@ -1,11 +1,12 @@
 package com.teamenchaire.auction.servlet;
 
 /**
- * A {@code class} which defines error codes for servlets.
+ * A {@code class} which defines error codes for the servlet layer.
  * 
  * @author Marin Taverniers
  */
-public class ServletErrorCode {
+public final class ServletErrorCode {
+
     private ServletErrorCode() {
     }
 

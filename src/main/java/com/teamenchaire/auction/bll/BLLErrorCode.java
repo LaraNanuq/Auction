@@ -1,11 +1,12 @@
 package com.teamenchaire.auction.bll;
 
 /**
- * A {@code class} which defines error codes for the BLL.
+ * A {@code class} which defines error codes for the BLL layer.
  * 
  * @author Marin Taverniers
  */
-public class BLLErrorCode {
+public final class BLLErrorCode {
+
     private BLLErrorCode() {
     }
 

@@ -17,12 +17,18 @@ import com.teamenchaire.auction.dal.DALErrorCode;
  * 
  * @author Marin Taverniers
  */
-public class JdbcConnectionProvider {
+public final class JdbcConnectionProvider {
     private static DataSource dataSource;
 
     private JdbcConnectionProvider() {
     }
 
+    /**
+     * Gets a connection to the database.
+     * 
+     * @return a connection to the database.
+     * @throws BusinessException if a connection cannot be established.
+     */
     public static Connection getConnection() throws BusinessException {
         Connection connection = null;
         try {

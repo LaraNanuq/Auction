@@ -5,7 +5,7 @@ import java.util.List;
 import com.teamenchaire.auction.BusinessException;
 
 /**
- * A {@code interface} which defines generic methods for DAO objects.
+ * A {@code interface} which defines CRUD methods for DAO objects.
  * 
  * @author Marin Taverniers
  */

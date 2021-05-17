@@ -5,7 +5,8 @@ package com.teamenchaire.auction.dal;
  * 
  * @author Marin Taverniers
  */
-public class DAOFactory {
+public final class DAOFactory {
+
     private DAOFactory() {
     }
 

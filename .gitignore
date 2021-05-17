@@ -55,3 +55,4 @@ nbdist/
 
 # Virtual machine crash logs
 hs_err_pid*
+/bin/

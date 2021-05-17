@@ -8,16 +8,16 @@
 /build/
 
 # Eclipse files
-.metadata/
-.settings/
-.classpath
-.project
+**/.metadata/
+**/.settings/
+*.classpath
+*.project
 
 # IDEA files
-.idea/
-.idea
+**/.idea/
+*.idea
 
 # Configuration files
-META-INF/
-WEB-INF/lib/
-WEB-INF/web.xml
+**/META-INF/
+**/WEB-INF/lib/
+**/WEB-INF/web.xml

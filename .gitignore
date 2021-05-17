@@ -33,6 +33,9 @@ buildNumber.properties
 *.iml
 *.ipr
 
+# VS Code
+.vscode
+
 # NetBeans
 nbproject/private/
 build/

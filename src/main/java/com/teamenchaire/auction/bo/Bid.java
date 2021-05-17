@@ -9,6 +9,8 @@ import java.time.LocalDate;
  * @author Marin Taverniers
  */
 public class Bid implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private Integer id;
     private LocalDate date;
     private Integer amount;

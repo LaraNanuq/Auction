@@ -1,7 +1,7 @@
 # Configuration files
 **/META-INF/
 **/WEB-INF/lib/
-**/WEB-INF/web.xml/
+**/WEB-INF/web.xml
 
 # Maven
 target/

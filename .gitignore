@@ -25,6 +25,7 @@ buildNumber.properties
 
 # Eclipse
 .metadata
+/bin/
 
 # IntelliJ IDEA
 .idea
@@ -55,4 +56,3 @@ nbdist/
 
 # Virtual machine crash logs
 hs_err_pid*
-/bin/

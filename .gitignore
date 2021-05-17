@@ -1,15 +1,23 @@
+# Java files
 *.class
 *.jar
 *.war
 *.zip
 *.tar.gz
 *.rar
+/build/
 
-.metadata/*
-.settings/*
+# Eclipse files
+.metadata/
+.settings/
 .classpath
 .project
-build/*
-src/main/webapp/META-INF/*
-src/main/webapp/WEB-INF/lib/*
-src/main/webapp/WEB-INF/web.xml
+
+# IDEA files
+.idea/
+.idea
+
+# Configuration files
+META-INF/
+WEB-INF/lib/
+WEB-INF/web.xml

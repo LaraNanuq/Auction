@@ -3,11 +3,13 @@ package com.teamenchaire.auction.bo;
 import java.io.Serializable;
 
 /**
- * A {@code class} which represents a user.
+ * A {@code class} which represents an user who can sell and buy items.
  * 
  * @author Marin Taverniers
  */
 public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private Integer id;
     private String nickname;
     private String lastName;
@@ -22,13 +24,13 @@ public class User implements Serializable {
     private Boolean isAdmin;
 
     /**
-     * Constructs a {@code User} with empty information.
+     * Constructs an {@code User} with empty information.
      */
     public User() {
     }
 
     /**
-     * Constructs a {@code User} with specified information.
+     * Constructs an {@code User} with specified information.
      * 
      * @param nickname    The nickname of the user
      * @param lastName    The last name of the user
@@ -49,7 +51,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Constructs a {@code User} with specified information.
+     * Constructs an {@code User} with specified information.
      * 
      * @param id          The id of the user
      * @param nickname    The nickname of the user
@@ -183,6 +185,8 @@ public class User implements Serializable {
      */
     @Override
     public String toString() {
-        return "User [id=%d, nickname=%s, lastName=%s, firstName=%s, email=%s, password=%s, phoneNumber=%s, street=%s, postalCode=%s, city=%s, credit=%d, isAdmin=%s]";
+        return String.format(
+                "User [id=%d, nickname=%s, lastName=%s, firstName=%s, email=%s, password=%s, phoneNumber=%s, street=%s, postalCode=%s, city=%s, credit=%d, isAdmin=%s]",
+                id, nickname, lastName, firstName, email, password, phoneNumber, street, postalCode, city, credit, isAdmin);
     }
 }

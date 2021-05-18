@@ -25,12 +25,16 @@ buildNumber.properties
 
 # Eclipse
 .metadata
+/bin/
 
 # IntelliJ IDEA
 .idea
 *.iws
 *.iml
 *.ipr
+
+# VS Code
+.vscode
 
 # NetBeans
 nbproject/private/

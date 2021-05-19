@@ -7,9 +7,15 @@ import com.teamenchaire.auction.bo.Bid;
 import com.teamenchaire.auction.dal.BidDAO;
 import com.teamenchaire.auction.dal.DAOFactory;
 
+/**
+ * A {@code class} which controls bids using a data access object.
+ */
 public final class BidManager {
     private final BidDAO bidDAO;
 
+    /**
+     * Constructs a {@code BidManager} using a data access object.
+     */
     public BidManager() {
         this.bidDAO = DAOFactory.getBidDAO();
     }

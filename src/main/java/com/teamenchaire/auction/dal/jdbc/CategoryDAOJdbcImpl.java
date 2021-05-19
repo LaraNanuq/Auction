@@ -12,9 +12,18 @@ import com.teamenchaire.auction.bo.Category;
 import com.teamenchaire.auction.dal.CategoryDAO;
 import com.teamenchaire.auction.dal.DALErrorCode;
 
+/**
+ * A {@code class} which implements CRUD methods for categories in the database
+ * using the JDBC driver.
+ * 
+ * @author Marin Taverniers
+ */
 public class CategoryDAOJdbcImpl implements CategoryDAO {
     private static final String SQL_SELECT_ALL = "SELECT * FROM categories";
 
+    /**
+     * Constructs a {@code CategoryDAOJdbcImpl}.
+     */
     public CategoryDAOJdbcImpl() {
         // Default constructor
     }

@@ -3,7 +3,7 @@ package com.teamenchaire.auction.bo;
 import java.io.Serializable;
 
 /**
- * A {@code class} which represents an item category.
+ * A {@code class} which represents a category of an item.
  * 
  * @author Marin Taverniers
  */

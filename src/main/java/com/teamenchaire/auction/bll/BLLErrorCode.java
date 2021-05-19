@@ -1,7 +1,7 @@
 package com.teamenchaire.auction.bll;
 
 /**
- * A {@code class} which defines error codes for the BLL layer.
+ * A {@code class} which defines error codes for the business logic layer.
  * 
  * @author Marin Taverniers
  */

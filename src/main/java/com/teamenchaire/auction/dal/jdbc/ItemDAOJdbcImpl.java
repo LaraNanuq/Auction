@@ -17,6 +17,12 @@ import com.teamenchaire.auction.bo.Withdrawal;
 import com.teamenchaire.auction.dal.DALErrorCode;
 import com.teamenchaire.auction.dal.ItemDAO;
 
+/**
+ * A {@code class} which implements CRUD methods for items in the database using
+ * the JDBC driver.
+ * 
+ * @author Marin Taverniers
+ */
 public final class ItemDAOJdbcImpl implements ItemDAO {
     private static final String SQL_INSERT_ITEM = "INSERT INTO items (item_name, item_description, bid_start_date, bid_end_date, starting_price, selling_price, id_user, id_category)"
             + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -26,12 +32,15 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
             + " JOIN categories c ON (i.id_category = c.id_category)"
             + " JOIN withdrawals w ON (i.id_item = w.id_item)";
 
+    /**
+     * Constructs an {@code ItemDAOJdbcImpl}.
+     */
     public ItemDAOJdbcImpl() {
         // Default constructor
     }
 
     @Override
-    public void insert(Item item) throws BusinessException {
+    public void insert(final Item item) throws BusinessException {
         try (Connection connection = JdbcConnectionProvider.getConnection()) {
             connection.setAutoCommit(false);
             try {
@@ -46,7 +55,7 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
         }
     }
 
-    private void insertItem(Connection connection, Item item) throws SQLException {
+    private void insertItem(final Connection connection, final Item item) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(SQL_INSERT_ITEM,
                 Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, item.getName());
@@ -73,11 +82,11 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
     }
 
     @Override
-    public void update(Item item) throws BusinessException {
+    public void update(final Item item) throws BusinessException {
     }
 
     @Override
-    public void delete(Item item) throws BusinessException {
+    public void delete(final Item item) throws BusinessException {
     }
 
     @Override
@@ -96,7 +105,7 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
     }
 
     @Override
-    public Item select(Integer id) throws BusinessException {
+    public Item select(final Integer id) throws BusinessException {
         return null;
     }
 

@@ -1,7 +1,7 @@
 package com.teamenchaire.auction.dal;
 
 /**
- * A {@code class} which defines error codes for the DAL layer.
+ * A {@code class} which defines error codes for the data access layer.
  * 
  * @author Marin Taverniers
  */

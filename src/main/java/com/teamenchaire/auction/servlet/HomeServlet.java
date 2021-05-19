@@ -19,10 +19,18 @@ import com.teamenchaire.auction.bo.Item;
 import com.teamenchaire.auction.bo.User;
 import com.teamenchaire.auction.bo.Withdrawal;
 
+/**
+ * A {@code Servlet} which handles requests to the home page.
+ * 
+ * @author Marin Taverniers
+ */
 @WebServlet("")
 public final class HomeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 
+     */
     public HomeServlet() {
         // Default constructor
     }

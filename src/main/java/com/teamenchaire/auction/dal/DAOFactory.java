@@ -5,7 +5,8 @@ import com.teamenchaire.auction.dal.jdbc.CategoryDAOJdbcImpl;
 import com.teamenchaire.auction.dal.jdbc.ItemDAOJdbcImpl;
 
 /**
- * A {@code class} which creates DAO objects using the JDBC technology.
+ * A {@code class} which creates instances of data access objects using the JDBC
+ * driver.
  * 
  * @author Marin Taverniers
  */

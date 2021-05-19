@@ -10,9 +10,15 @@ import com.teamenchaire.auction.bo.Withdrawal;
 import com.teamenchaire.auction.dal.DAOFactory;
 import com.teamenchaire.auction.dal.ItemDAO;
 
+/**
+ * A {@code class} which controls items using a data access object.
+ */
 public final class ItemManager {
     private final ItemDAO itemDAO;
 
+    /**
+     * Constructs an {@code ItemManager} using a data access object.
+     */
     public ItemManager() {
         this.itemDAO = DAOFactory.getItemDAO();
     }

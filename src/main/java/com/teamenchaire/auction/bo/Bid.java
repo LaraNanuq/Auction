@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * A {@code class} which represents a bid from a user on an item.
+ * A {@code class} which represents a bid from an user on an item.
  * 
  * @author Marin Taverniers
  */

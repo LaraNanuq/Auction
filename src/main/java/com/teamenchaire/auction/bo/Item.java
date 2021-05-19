@@ -10,7 +10,7 @@ import java.time.LocalDate;
  */
 public class Item implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     private Integer id;
     private String name;
     private String description;
@@ -18,6 +18,9 @@ public class Item implements Serializable {
     private LocalDate endDate;
     private Integer startingPrice;
     private Integer sellingPrice;
+    private User seller;
+    private Category category;
+    private Withdrawal withdrawalPoint;
 
     /**
      * Constructs an {@code Item} with empty information.
@@ -28,36 +31,45 @@ public class Item implements Serializable {
     /**
      * Constructs an {@code Item} with specified information.
      * 
-     * @param name          The name of the item
-     * @param description   The description of the item
-     * @param startDate     The bid start date of the item
-     * @param endDate       The bid end date of the item
-     * @param startingPrice The starting price of the item
-     * @param sellingPrice  The selling price of the item
+     * @param name            The name of the item
+     * @param description     The description of the item
+     * @param startDate       The bid start date of the item
+     * @param endDate         The bid end date of the item
+     * @param startingPrice   The starting price of the item
+     * @param sellingPrice    The selling price of the item
+     * @param seller          The user selling the item
+     * @param category        The category of the item
+     * @param withdrawalPoint The withdrawal point of the item
      */
     public Item(String name, String description, LocalDate startDate, LocalDate endDate, Integer startingPrice,
-            Integer sellingPrice) {
+            Integer sellingPrice, User seller, Category category, Withdrawal withdrawalPoint) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.startingPrice = startingPrice;
         this.sellingPrice = sellingPrice;
+        this.seller = seller;
+        this.category = category;
+        this.withdrawalPoint = withdrawalPoint;
     }
 
     /**
      * Constructs an {@code Item} with specified information.
      * 
-     * @param id            The id of the item
-     * @param name          The name of the item
-     * @param description   The description of the item
-     * @param startDate     The bid start date of the item
-     * @param endDate       The bid end date of the item
-     * @param startingPrice The starting price of the item
-     * @param sellingPrice  The selling price of the item
+     * @param id              The id of the item
+     * @param name            The name of the item
+     * @param description     The description of the item
+     * @param startDate       The bid start date of the item
+     * @param endDate         The bid end date of the item
+     * @param startingPrice   The starting price of the item
+     * @param sellingPrice    The selling price of the item
+     * @param seller          The user selling the item
+     * @param category        The category of the item
+     * @param withdrawalPoint The withdrawal point of the item
      */
     public Item(Integer id, String name, String description, LocalDate startDate, LocalDate endDate,
-            Integer startingPrice, Integer sellingPrice) {
+            Integer startingPrice, Integer sellingPrice, User seller, Category category, Withdrawal withdrawalPoint) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -65,6 +77,9 @@ public class Item implements Serializable {
         this.endDate = endDate;
         this.startingPrice = startingPrice;
         this.sellingPrice = sellingPrice;
+        this.seller = seller;
+        this.category = category;
+        this.withdrawalPoint = withdrawalPoint;
     }
 
     public Integer getId() {
@@ -123,6 +138,30 @@ public class Item implements Serializable {
         this.sellingPrice = sellingPrice;
     }
 
+    public User getSeller() {
+        return seller;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Withdrawal getWithdrawalPoint() {
+        return withdrawalPoint;
+    }
+
+    public void setWithdrawalPoint(Withdrawal withdrawalPoint) {
+        this.withdrawalPoint = withdrawalPoint;
+    }
+
     /**
      * Gets all information about this item.
      * 
@@ -131,7 +170,8 @@ public class Item implements Serializable {
     @Override
     public String toString() {
         return String.format(
-                "Item [id=%d, name=%s, description=%s, startDate=%s, endDate=%s, startingPrice=%d, sellingPrice=%d]",
-                id, name, description, startDate, endDate, startingPrice, sellingPrice);
+                "Item [id=%d, name=%s, description=%s, startDate=%s, endDate=%s, startingPrice=%d, sellingPrice=%d, seller=%s, category=%s, withdrawalPoint=%s]",
+                id, name, description, startDate, endDate, startingPrice, sellingPrice, seller, category,
+                withdrawalPoint);
     }
 }

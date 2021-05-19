@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     private Integer id;
     private String nickname;
     private String lastName;
@@ -187,6 +187,7 @@ public class User implements Serializable {
     public String toString() {
         return String.format(
                 "User [id=%d, nickname=%s, lastName=%s, firstName=%s, email=%s, password=%s, phoneNumber=%s, street=%s, postalCode=%s, city=%s, credit=%d, isAdmin=%s]",
-                id, nickname, lastName, firstName, email, password, phoneNumber, street, postalCode, city, credit, isAdmin);
+                id, nickname, lastName, firstName, email, password, phoneNumber, street, postalCode, city, credit,
+                isAdmin);
     }
 }

@@ -10,9 +10,10 @@ public final class DALErrorCode {
     private DALErrorCode() {
     }
 
-    /*
-     * Error codes
-     */
-    public static final int DB_DATASOURCE_CONTEXT = 11001;
-    public static final int DB_CONNECTION = 11002;
+    public static final int DB_DATASOURCE_CONTEXT = 10101;
+    public static final int DB_CONNECTION = 10102;
+    public static final int SQL_INSERT = 10201;
+    public static final int SQL_UPDATE = 10202;
+    public static final int SQL_DELETE = 10203;
+    public static final int SQL_SELECT = 10204;
 }

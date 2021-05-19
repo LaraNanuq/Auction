@@ -10,7 +10,7 @@ import java.time.LocalDate;
  */
 public class Bid implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     private Integer id;
     private LocalDate date;
     private Integer amount;

@@ -30,14 +30,17 @@ public class CategoryDAOJdbcImpl implements CategoryDAO {
 
     @Override
     public void insert(final Category category) throws BusinessException {
+        throw new BusinessException(DALErrorCode.SQL_INSERT);
     }
 
     @Override
     public void update(final Category category) throws BusinessException {
+        throw new BusinessException(DALErrorCode.SQL_UPDATE);
     }
 
     @Override
     public void delete(final Category category) throws BusinessException {
+        throw new BusinessException(DALErrorCode.SQL_DELETE);
     }
 
     @Override
@@ -57,7 +60,7 @@ public class CategoryDAOJdbcImpl implements CategoryDAO {
 
     @Override
     public Category select(final Integer id) throws BusinessException {
-        return null;
+        throw new BusinessException(DALErrorCode.SQL_SELECT);
     }
 
     private static Category buildCategory(final ResultSet result) throws SQLException {

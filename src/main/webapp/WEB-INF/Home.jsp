@@ -14,7 +14,7 @@
         <nav class="menubar">
             <div class="menubar-title">ENI-Enchères</div>
             <div class="menubar-link">
-                <a href="">S'inscrire - Se connecter</a>
+                <a href="${pageContext.request.contextPath}/Login">S'inscrire - Se connecter</a>
             </div>
         </nav>
 
@@ -25,12 +25,13 @@
             <!-- Filters -->
             <div class="filters">
                 <form action="${pageContext.request.contextPath}" method="POST">
-                    <input type="text" name="filterName" id="filter-name" placeholder="Le nom de l'article contient" />
+                    <input type="text" name="filterName" id="filter-name" placeholder="Le nom de l'article contient" value="${filterName}"/>
                     <label for="filter-category">Catégorie</label>
                     <select name="filterCategory" id="filter-category" required>
-                        <option value="all" selected>Toutes</option>
+                        <option value="all">Toutes</option>
                         <c:forEach var="category" items="${requestScope.categories}">
-                            <option value="${category.id}">${category.name}</option>
+                            <c:set var="selected" value="${requestScope.filterCategory == category.id ? selected}" />
+                            <option value="${category.id}" ${selected}>${category.name}</option>
                         </c:forEach>
                     </select>
                     <div class="form-buttons">

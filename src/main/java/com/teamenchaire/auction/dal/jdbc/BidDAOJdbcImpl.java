@@ -5,6 +5,7 @@ import java.util.List;
 import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bo.Bid;
 import com.teamenchaire.auction.dal.BidDAO;
+import com.teamenchaire.auction.dal.DALErrorCode;
 
 /**
  * A {@code class} which implements CRUD methods for bids in the database using
@@ -23,23 +24,26 @@ public final class BidDAOJdbcImpl implements BidDAO {
 
     @Override
     public void insert(final Bid bid) throws BusinessException {
+        throw new BusinessException(DALErrorCode.SQL_INSERT);
     }
 
     @Override
     public void update(final Bid bid) throws BusinessException {
+        throw new BusinessException(DALErrorCode.SQL_UPDATE);
     }
 
     @Override
     public void delete(final Bid bid) throws BusinessException {
+        throw new BusinessException(DALErrorCode.SQL_DELETE);
     }
 
     @Override
     public List<Bid> selectAll() throws BusinessException {
-        return null;
+        throw new BusinessException(DALErrorCode.SQL_SELECT);
     }
 
     @Override
     public Bid select(final Integer id) throws BusinessException {
-        return null;
+        throw new BusinessException(DALErrorCode.SQL_SELECT);
     }
 }

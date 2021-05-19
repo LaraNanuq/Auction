@@ -40,21 +40,27 @@ public final class HomeServlet extends HttpServlet {
         final CategoryManager categoryManager = new CategoryManager();
         final ItemManager itemManager = new ItemManager();
         try {
-            List<Category> categories = categoryManager.getCategories();
+            final List<Category> categories = categoryManager.getCategories();
             request.setAttribute("categories", categories);
-
-            //User user = new User(2, "surn", "lastn", "firstn", "ema@", "user_pass", "phone", "stre", "post", "cit", 123, false);
-            //Withdrawal point = new Withdrawal(user.getStreet(), user.getPostalCode(), user.getCity());
-            //itemManager.addItem(new Item("it_na", "it_de", LocalDate.now(), LocalDate.now().plusDays(2), 1, 789, user, categories.get(2), point));
-
-
             final List<Item> items = itemManager.getItems();
             request.setAttribute("items", items);
+
+            request.setAttribute("filterName", request.getParameter("filterName"));
+            request.setAttribute("filterCategory", request.getParameter("filterCategory"));
             
-            for (Item item : items) {
+
+            // User user = new User(2, "surn", "lastn", "firstn", "ema@", "user_pass",
+            // "phone", "stre", "post", "cit", 123, false);
+            // Withdrawal point = new Withdrawal(user.getStreet(), user.getPostalCode(),
+            // user.getCity());
+            //itemManager.addItem(new Item("it_na", "it_de", LocalDate.now(),
+            // LocalDate.now().plusDays(2), 1, 789, user, categories.get(2), point));
+
+
+            for (final Item item : items) {
                 System.out.println(item);
             }
-            
+
         } catch (final BusinessException e) {
             e.printStackTrace();
         }

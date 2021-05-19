@@ -83,10 +83,12 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
 
     @Override
     public void update(final Item item) throws BusinessException {
+        throw new BusinessException(DALErrorCode.SQL_UPDATE);
     }
 
     @Override
     public void delete(final Item item) throws BusinessException {
+        throw new BusinessException(DALErrorCode.SQL_DELETE);
     }
 
     @Override
@@ -106,7 +108,7 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
 
     @Override
     public Item select(final Integer id) throws BusinessException {
-        return null;
+        throw new BusinessException(DALErrorCode.SQL_SELECT);
     }
 
     private static Item buildItem(final ResultSet result) throws SQLException {

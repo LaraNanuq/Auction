@@ -26,24 +26,21 @@ public final class ItemManager {
         this.itemDAO = DAOFactory.getItemDAO();
     }
 
-    public Item addItem(final String name, final String description, final LocalDate startDate, final LocalDate endDate,
-            final Integer startingPrice, final User seller, final Category category, final Withdrawal withdrawalPoint)
-            throws BusinessException {
+    public Item addItem(final Integer sellerId, final String name, final String description, final Integer categoryId,
+            final Integer price, final LocalDate startDate, final LocalDate endDate, final String street,
+            final String postalCode, final String city) throws BusinessException {
+        final User seller = new UserManager().getUser(sellerId);
+        checkSeller(seller);
         checkName(name);
         checkDescription(description);
-        checkDates(startDate, endDate);
-        checkStartingPrice(startingPrice);
-        checkSeller(seller);
+        final Category category = new CategoryManager().getCategory(categoryId);
         checkCategory(category);
-        checkWithdrawal(withdrawalPoint);
-        final Item item = new Item(name, description, startDate, endDate, startingPrice, startingPrice, seller,
-                category, withdrawalPoint);
-        // if (item.getId() != null) {
-        // throw new BusinessException(BLLErrorCode.ITEM_ALREADY_EXISTS);
-        // }
-        // if (item == null) {
-        // throw new BusinessException(BLLErrorCode.ITEM_NULL);
-        // }
+        checkPrice(price);
+        checkDates(startDate, endDate);
+        final Withdrawal withdrawalPoint = new Withdrawal(street, postalCode, city);
+        checkWithdrawalPoint(withdrawalPoint);
+        final Item item = new Item(name, description, startDate, endDate, price, price, seller, category,
+                withdrawalPoint);
         itemDAO.insert(item);
         return item;
     }
@@ -52,23 +49,31 @@ public final class ItemManager {
         return itemDAO.selectAll();
     }
 
-    public List<Item> getItems(final String itemName, final Integer categoryId) throws BusinessException {
-        if ((itemName != null) && (!itemName.isEmpty())) {
-            if (categoryId != null) {
-                return itemDAO.selectBy(itemName, categoryId);
-            }
-            return itemDAO.selectBy(itemName);
-        }
-        if (categoryId != null) {
-            return itemDAO.selectBy(categoryId);
-        }
-        // if (itemName != null || categoryId != null) {
-        // return itemDAO.select(itemName, categoryId);
-        // }
-        return getItems();
+    public List<Item> getItems(final String name) throws BusinessException {
+        checkName(name);
+        return itemDAO.selectBy(name);
+    }
+
+    public List<Item> getItems(final Integer categoryId) throws BusinessException {
+        final Category category = new CategoryManager().getCategory(categoryId);
+        checkCategory(category);
+        return itemDAO.selectBy(categoryId);
+    }
+
+    public List<Item> getItems(final String name, final Integer categoryId) throws BusinessException {
+        checkName(name);
+        final Category category = new CategoryManager().getCategory(categoryId);
+        checkCategory(category);
+        return itemDAO.selectBy(name, categoryId);
     }
 
     /* Validation */
+
+    private void checkSeller(final User seller) throws BusinessException {
+        if ((seller == null) || (seller.getId() == null)) {
+            throw new BusinessException(BLLErrorCode.ITEM_SELLER_NULL);
+        }
+    }
 
     private void checkName(final String name) throws BusinessException {
         if (isStringNull(name)) {
@@ -79,6 +84,18 @@ public final class ItemManager {
     private void checkDescription(final String description) throws BusinessException {
         if (isStringNull(description)) {
             throw new BusinessException(BLLErrorCode.ITEM_DESCRIPTION_NULL);
+        }
+    }
+
+    private void checkCategory(final Category category) throws BusinessException {
+        if ((category == null) || (category.getId() == null)) {
+            throw new BusinessException(BLLErrorCode.ITEM_CATEGORY_NULL);
+        }
+    }
+
+    private void checkPrice(final Integer startingPrice) throws BusinessException {
+        if ((startingPrice == null) || (startingPrice < 0)) {
+            throw new BusinessException(BLLErrorCode.ITEM_STARTING_PRICE_INVALID);
         }
     }
 
@@ -94,25 +111,7 @@ public final class ItemManager {
         }
     }
 
-    private void checkStartingPrice(final Integer startingPrice) throws BusinessException {
-        if ((startingPrice == null) || (startingPrice < 0)) {
-            throw new BusinessException(BLLErrorCode.ITEM_STARTING_PRICE_INVALID);
-        }
-    }
-
-    private void checkSeller(final User seller) throws BusinessException {
-        if ((seller == null) || (seller.getId() == null)) {
-            throw new BusinessException(BLLErrorCode.ITEM_SELLER_NULL);
-        }
-    }
-
-    private void checkCategory(final Category category) throws BusinessException {
-        if ((category == null) || (category.getId() == null)) {
-            throw new BusinessException(BLLErrorCode.ITEM_CATEGORY_NULL);
-        }
-    }
-
-    private void checkWithdrawal(final Withdrawal withdrawalPoint) throws BusinessException {
+    private void checkWithdrawalPoint(final Withdrawal withdrawalPoint) throws BusinessException {
         if (withdrawalPoint == null) {
             throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_NULL);
         }

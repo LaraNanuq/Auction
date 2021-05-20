@@ -32,7 +32,13 @@
             <!-- Filters -->
             <div class="filters">
                 <form action="${pageContext.request.contextPath}/" method="POST">
-                    <input type="text" name="itemName" id="filter-name" placeholder="Le nom de l'article contient" value="${requestScope.itemName}"/>
+                    <input
+                        type="text"
+                        name="itemName"
+                        id="filter-name"
+                        placeholder="Le nom de l'article contient"
+                        value="${requestScope.itemName}"
+                    />
                     <label for="filter-category">Catégorie</label>
                     <select name="categoryId" id="filter-category" required>
                         <c:forEach var="category" items="${requestScope.categories}">
@@ -40,6 +46,8 @@
                             <option value="${category.id}" ${selected}>${category.name}</option>
                         </c:forEach>
                     </select>
+
+                    <!-- Form buttons -->
                     <div class="form-buttons">
                         <input type="submit" value="Rechercher" />
                     </div>
@@ -53,8 +61,9 @@
                     <c:when test="${!empty(requestScope.items)}">
                         <c:forEach var="item" items="${requestScope.items}">
                             <div class="item">
-                                ${item.name}<br /> Prix : ${item.sellingPrice}<br /> Fin de l'enchère :
-                                ${item.endDate}<br />
+                                ${item.name}<br />
+                                Prix : ${item.sellingPrice}<br />
+                                Fin de l'enchère : ${item.endDate}<br />
                                 Vendeur : ${item.seller.nickname}
                             </div>
                         </c:forEach>

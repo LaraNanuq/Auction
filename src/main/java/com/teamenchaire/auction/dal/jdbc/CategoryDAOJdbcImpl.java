@@ -1,6 +1,7 @@
 package com.teamenchaire.auction.dal.jdbc;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,6 +21,7 @@ import com.teamenchaire.auction.dal.DALErrorCode;
  */
 public class CategoryDAOJdbcImpl implements CategoryDAO {
     private static final String SQL_SELECT_ALL = "SELECT * FROM categories";
+    private static final String SQL_SELECT_BY_ID = "SELECT * FROM categories WHERE (id_category = ?)";
 
     /**
      * Constructs a {@code CategoryDAOJdbcImpl}.
@@ -60,7 +62,18 @@ public class CategoryDAOJdbcImpl implements CategoryDAO {
 
     @Override
     public Category selectById(final Integer id) throws BusinessException {
-        throw new BusinessException(DALErrorCode.SQL_SELECT);
+        Category category = null;
+        try (Connection connection = JdbcConnectionProvider.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID)) {
+            statement.setInt(1, id);
+            final ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                category = buildCategory(result);
+            }
+        } catch (final SQLException e) {
+            throw new BusinessException(DALErrorCode.SQL_SELECT, e);
+        }
+        return category;
     }
 
     private static Category buildCategory(final ResultSet result) throws SQLException {

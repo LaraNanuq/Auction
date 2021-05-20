@@ -42,15 +42,15 @@ public final class HomeServlet extends HttpServlet {
         }
         final String itemName = request.getParameter("itemName");
         final String categoryId = request.getParameter("categoryId");
-        request.setAttribute("itemName", itemName);
-        request.setAttribute("categoryId", categoryId);
         try {
             request.setAttribute("categories", getCategories());
-            request.setAttribute("items", getItems(itemName, categoryId));
+            request.setAttribute("items", getItems(itemName, StringParser.parseInt(categoryId)));
         } catch (final BusinessException e) {
             e.printStackTrace();
             request.setAttribute("errorCode", e.getCode());
         }
+        request.setAttribute("itemName", itemName);
+        request.setAttribute("categoryId", categoryId);
         final RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Home.jsp");
         try {
             dispatcher.forward(request, response);
@@ -65,37 +65,22 @@ public final class HomeServlet extends HttpServlet {
     }
 
     private List<Category> getCategories() throws BusinessException {
-        final CategoryManager categoryManager = new CategoryManager();
-        final List<Category> categories = categoryManager.getCategories();
+        final List<Category> categories = new CategoryManager().getCategories();
         categories.add(0, new Category(-1, "Toutes"));
         return categories;
     }
 
-    private List<Item> getItems(final String itemName, final String sCategoryId) throws BusinessException {
-        Integer categoryId = null;
-        if (sCategoryId != null) {
-            try {
-                categoryId = Integer.parseInt(sCategoryId);
-                if (categoryId == -1) {
-                    categoryId = null;
-                }
-            } catch (final NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-        // List<Item> items = null;
+    private List<Item> getItems(final String itemName, final Integer categoryId) throws BusinessException {
         final ItemManager itemManager = new ItemManager();
-        return itemManager.getItems(itemName, categoryId);
-        // if ((itemName == null) && (categoryId == null)) {
-        // items = itemManager.getItems();
-        // } else {
-        // items = itemManager.getItems(itemName, categoryId);
-        // }
-        // return items;
+        if ((itemName != null) && (!itemName.isEmpty()) && (categoryId != null) && (categoryId != -1)) {
+            return itemManager.getItems(itemName, categoryId);
+        }
+        if ((itemName != null) && (!itemName.isEmpty())) {
+            return itemManager.getItems(itemName);
+        }
+        if ((categoryId != null) && (categoryId != -1)) {
+            return itemManager.getItems(categoryId);
+        }
+        return itemManager.getItems();
     }
-    /*
-     * private String parseParameter(HttpServletRequest request, String parameter) {
-     * String value = request.getParameter(parameter); if (value != null) { value =
-     * value.trim(); } return value; }
-     */
 }

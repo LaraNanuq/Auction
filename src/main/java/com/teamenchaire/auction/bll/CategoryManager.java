@@ -25,4 +25,15 @@ public final class CategoryManager {
     public List<Category> getCategories() throws BusinessException {
         return categoryDAO.selectAll();
     }
+
+    public Category getCategory(final Integer id) throws BusinessException {
+        checkId(id);
+        return categoryDAO.selectById(id);
+    }
+
+    private void checkId(final Integer id) throws BusinessException {
+        if (id == null) {
+            throw new BusinessException(BLLErrorCode.CATEGORY_ID_NULL);
+        }
+    }
 }

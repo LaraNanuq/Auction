@@ -19,5 +19,5 @@ public interface GenericDAO<T> {
 
     List<T> selectAll() throws BusinessException;
 
-    T select(Integer id) throws BusinessException;
+    T selectById(Integer id) throws BusinessException;
 }

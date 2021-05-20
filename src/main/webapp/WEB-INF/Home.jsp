@@ -22,15 +22,21 @@
         <header>Liste des enchères</header>
 
         <section>
+            <!-- Errors -->
+            <c:if test="${!empty(requestScope.errorCode)}">
+                <div class="errors">
+                    <p>${requestScope.errorCode}</p>
+                </div>
+            </c:if>
+
             <!-- Filters -->
             <div class="filters">
-                <form action="${pageContext.request.contextPath}" method="POST">
-                    <input type="text" name="filterName" id="filter-name" placeholder="Le nom de l'article contient" value="${filterName}"/>
+                <form action="${pageContext.request.contextPath}/" method="POST">
+                    <input type="text" name="itemName" id="filter-name" placeholder="Le nom de l'article contient" value="${requestScope.itemName}"/>
                     <label for="filter-category">Catégorie</label>
-                    <select name="filterCategory" id="filter-category" required>
-                        <option value="all">Toutes</option>
+                    <select name="categoryId" id="filter-category" required>
                         <c:forEach var="category" items="${requestScope.categories}">
-                            <c:set var="selected" value="${requestScope.filterCategory == category.id ? selected}" />
+                            <c:set var="selected" value="${requestScope.categoryId == category.id ? 'selected' : ''}" />
                             <option value="${category.id}" ${selected}>${category.name}</option>
                         </c:forEach>
                     </select>
@@ -53,7 +59,7 @@
                             </div>
                         </c:forEach>
                     </c:when>
-                    <c:otherwise>Aucune enchère n'est en cours.</c:otherwise>
+                    <c:otherwise>Aucune enchère n'a été trouvée.</c:otherwise>
                 </c:choose>
             </div>
         </section>

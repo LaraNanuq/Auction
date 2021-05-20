@@ -59,7 +59,7 @@ public class CategoryDAOJdbcImpl implements CategoryDAO {
     }
 
     @Override
-    public Category select(final Integer id) throws BusinessException {
+    public Category selectById(final Integer id) throws BusinessException {
         throw new BusinessException(DALErrorCode.SQL_SELECT);
     }
 

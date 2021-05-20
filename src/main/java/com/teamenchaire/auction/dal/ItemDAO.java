@@ -1,5 +1,8 @@
 package com.teamenchaire.auction.dal;
 
+import java.util.List;
+
+import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bo.Item;
 
 /**
@@ -8,5 +11,9 @@ import com.teamenchaire.auction.bo.Item;
  * @author Marin Taverniers
  */
 public interface ItemDAO extends GenericDAO<Item> {
+    List<Item> selectBy(String itemName) throws BusinessException;
 
+    List<Item> selectBy(Integer categoryId) throws BusinessException;
+
+    List<Item> selectBy(String itemName, Integer categoryId) throws BusinessException;
 }

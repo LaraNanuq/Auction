@@ -43,7 +43,7 @@ public final class BidDAOJdbcImpl implements BidDAO {
     }
 
     @Override
-    public Bid select(final Integer id) throws BusinessException {
+    public Bid selectById(final Integer id) throws BusinessException {
         throw new BusinessException(DALErrorCode.SQL_SELECT);
     }
 }

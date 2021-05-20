@@ -32,6 +32,11 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
             + " JOIN categories c ON (i.id_category = c.id_category)"
             + " JOIN withdrawals w ON (i.id_item = w.id_item)";
 
+    private static final String SQL_SELECT_BY_NAME = SQL_SELECT_ALL + " WHERE (upper(item_name) LIKE ?)";
+    private static final String SQL_SELECT_BY_CATEGORY = SQL_SELECT_ALL + " WHERE (c.id_category = ?)";
+    private static final String SQL_SELECT_BY_NAME_AND_CATEGORY = SQL_SELECT_BY_NAME + " INTERSECT "
+            + SQL_SELECT_BY_CATEGORY;
+
     /**
      * Constructs an {@code ItemDAOJdbcImpl}.
      */
@@ -107,8 +112,50 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
     }
 
     @Override
-    public Item select(final Integer id) throws BusinessException {
+    public Item selectById(final Integer id) throws BusinessException {
         throw new BusinessException(DALErrorCode.SQL_SELECT);
+    }
+
+    @Override
+    public List<Item> selectBy(final String name) throws BusinessException {
+        return querySelect(SQL_SELECT_BY_NAME, name, 0);
+    }
+
+    @Override
+    public List<Item> selectBy(final Integer categoryId) throws BusinessException {
+        return querySelect(SQL_SELECT_BY_CATEGORY, "", categoryId);
+    }
+
+    @Override
+    public List<Item> selectBy(final String name, final Integer categoryId) throws BusinessException {
+        return querySelect(SQL_SELECT_BY_NAME_AND_CATEGORY, name, categoryId);
+    }
+
+    private List<Item> querySelect(final String query, final String name, final Integer categoryId) throws BusinessException {
+        final List<Item> items = new ArrayList<>();
+        try (Connection connection = JdbcConnectionProvider.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
+            switch (query) {
+                case SQL_SELECT_BY_NAME:
+                    statement.setString(1, "%" + name.toUpperCase() + "%");
+                    break;
+                case SQL_SELECT_BY_CATEGORY:
+                    statement.setInt(1, categoryId);
+                    break;
+                case SQL_SELECT_BY_NAME_AND_CATEGORY:
+                    statement.setString(1, "%" + name.toUpperCase() + "%");
+                    statement.setInt(2, categoryId);
+                    break;
+                default:
+            }
+            final ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                items.add(buildItem(result));
+            }
+        } catch (final SQLException e) {
+            throw new BusinessException(DALErrorCode.SQL_SELECT, e);
+        }
+        return items;
     }
 
     private static Item buildItem(final ResultSet result) throws SQLException {
@@ -133,3 +180,46 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
         return new Withdrawal(result.getString("street"), result.getString("postal_code"), result.getString("city"));
     }
 }
+
+        /*
+        final List<Item> items = new ArrayList<>();
+        try (Connection connection = JdbcConnectionProvider.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_NAME)) {
+            statement.setString(1, "%" + name.toUpperCase() + "%");
+            final ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                items.add(buildItem(result));
+            }
+        } catch (final SQLException e) {
+            throw new BusinessException(DALErrorCode.SQL_SELECT, e);
+        }
+        return items;*/
+
+        /*
+        final List<Item> items = new ArrayList<>();
+        try (Connection connection = JdbcConnectionProvider.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_CATEGORY)) {
+            statement.setInt(1, categoryId);
+            final ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                items.add(buildItem(result));
+            }
+        } catch (final SQLException e) {
+            throw new BusinessException(DALErrorCode.SQL_SELECT, e);
+        }
+        return items;*/
+
+        /*
+        final List<Item> items = new ArrayList<>();
+        try (Connection connection = JdbcConnectionProvider.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_NAME_AND_CATEGORY)) {
+            statement.setString(1, "%" + name.toUpperCase() + "%");
+            statement.setInt(2, categoryId);
+            final ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                items.add(buildItem(result));
+            }
+        } catch (final SQLException e) {
+            throw new BusinessException(DALErrorCode.SQL_SELECT, e);
+        }
+        return items;*/

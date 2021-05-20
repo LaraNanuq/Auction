@@ -52,6 +52,22 @@ public final class ItemManager {
         return itemDAO.selectAll();
     }
 
+    public List<Item> getItems(final String itemName, final Integer categoryId) throws BusinessException {
+        if ((itemName != null) && (!itemName.isEmpty())) {
+            if (categoryId != null) {
+                return itemDAO.selectBy(itemName, categoryId);
+            }
+            return itemDAO.selectBy(itemName);
+        }
+        if (categoryId != null) {
+            return itemDAO.selectBy(categoryId);
+        }
+        // if (itemName != null || categoryId != null) {
+        // return itemDAO.select(itemName, categoryId);
+        // }
+        return getItems();
+    }
+
     /* Validation */
 
     private void checkName(final String name) throws BusinessException {

@@ -1,7 +1,7 @@
 package com.teamenchaire.auction.servlet;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -16,15 +16,13 @@ import com.teamenchaire.auction.bll.CategoryManager;
 import com.teamenchaire.auction.bll.ItemManager;
 import com.teamenchaire.auction.bo.Category;
 import com.teamenchaire.auction.bo.Item;
-import com.teamenchaire.auction.bo.User;
-import com.teamenchaire.auction.bo.Withdrawal;
 
 /**
  * A {@code Servlet} which handles requests to the home page.
  * 
  * @author Marin Taverniers
  */
-@WebServlet("")
+@WebServlet("/")
 public final class HomeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -37,32 +35,21 @@ public final class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) {
-        final CategoryManager categoryManager = new CategoryManager();
-        final ItemManager itemManager = new ItemManager();
         try {
-            final List<Category> categories = categoryManager.getCategories();
-            request.setAttribute("categories", categories);
-            final List<Item> items = itemManager.getItems();
-            request.setAttribute("items", items);
-
-            request.setAttribute("filterName", request.getParameter("filterName"));
-            request.setAttribute("filterCategory", request.getParameter("filterCategory"));
-            
-
-            // User user = new User(2, "surn", "lastn", "firstn", "ema@", "user_pass",
-            // "phone", "stre", "post", "cit", 123, false);
-            // Withdrawal point = new Withdrawal(user.getStreet(), user.getPostalCode(),
-            // user.getCity());
-            //itemManager.addItem(new Item("it_na", "it_de", LocalDate.now(),
-            // LocalDate.now().plusDays(2), 1, 789, user, categories.get(2), point));
-
-
-            for (final Item item : items) {
-                System.out.println(item);
-            }
-
+            request.setCharacterEncoding("UTF-8");
+        } catch (final UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        final String itemName = request.getParameter("itemName");
+        final String categoryId = request.getParameter("categoryId");
+        request.setAttribute("itemName", itemName);
+        request.setAttribute("categoryId", categoryId);
+        try {
+            request.setAttribute("categories", getCategories());
+            request.setAttribute("items", getItems(itemName, categoryId));
         } catch (final BusinessException e) {
             e.printStackTrace();
+            request.setAttribute("errorCode", e.getCode());
         }
         final RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Home.jsp");
         try {
@@ -76,4 +63,39 @@ public final class HomeServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response) {
         doGet(request, response);
     }
+
+    private List<Category> getCategories() throws BusinessException {
+        final CategoryManager categoryManager = new CategoryManager();
+        final List<Category> categories = categoryManager.getCategories();
+        categories.add(0, new Category(-1, "Toutes"));
+        return categories;
+    }
+
+    private List<Item> getItems(final String itemName, final String sCategoryId) throws BusinessException {
+        Integer categoryId = null;
+        if (sCategoryId != null) {
+            try {
+                categoryId = Integer.parseInt(sCategoryId);
+                if (categoryId == -1) {
+                    categoryId = null;
+                }
+            } catch (final NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        // List<Item> items = null;
+        final ItemManager itemManager = new ItemManager();
+        return itemManager.getItems(itemName, categoryId);
+        // if ((itemName == null) && (categoryId == null)) {
+        // items = itemManager.getItems();
+        // } else {
+        // items = itemManager.getItems(itemName, categoryId);
+        // }
+        // return items;
+    }
+    /*
+     * private String parseParameter(HttpServletRequest request, String parameter) {
+     * String value = request.getParameter(parameter); if (value != null) { value =
+     * value.trim(); } return value; }
+     */
 }

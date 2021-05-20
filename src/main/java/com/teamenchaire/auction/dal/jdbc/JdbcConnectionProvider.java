@@ -34,7 +34,7 @@ public final class JdbcConnectionProvider {
         Connection connection = null;
         try {
             connection = getDataSource().getConnection();
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             throw new BusinessException(DALErrorCode.DB_CONNECTION, e);
         }
         return connection;
@@ -49,9 +49,9 @@ public final class JdbcConnectionProvider {
     private static DataSource getDataSource() throws BusinessException {
         if (dataSource == null) {
             try {
-                final Context context = new InitialContext();
+                Context context = new InitialContext();
                 dataSource = (DataSource) context.lookup("java:comp/env/" + CONTEXT_NAME);
-            } catch (final NamingException e) {
+            } catch (NamingException e) {
                 throw new BusinessException(DALErrorCode.DB_DATASOURCE_CONTEXT, e);
             }
         }

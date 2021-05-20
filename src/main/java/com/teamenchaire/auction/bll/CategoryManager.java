@@ -13,7 +13,7 @@ import com.teamenchaire.auction.dal.DAOFactory;
  * @author Marin Taverniers
  */
 public final class CategoryManager {
-    private final CategoryDAO categoryDAO;
+    private CategoryDAO categoryDAO;
 
     /**
      * Constructs a {@code CategoryManager} using a data access object.
@@ -26,12 +26,12 @@ public final class CategoryManager {
         return categoryDAO.selectAll();
     }
 
-    public Category getCategory(final Integer id) throws BusinessException {
+    public Category getCategory(Integer id) throws BusinessException {
         checkId(id);
         return categoryDAO.selectById(id);
     }
 
-    private void checkId(final Integer id) throws BusinessException {
+    private void checkId(Integer id) throws BusinessException {
         if (id == null) {
             throw new BusinessException(BLLErrorCode.CATEGORY_ID_NULL);
         }

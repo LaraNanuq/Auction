@@ -55,7 +55,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="category-id">Catégorie</label>
-                                <select name="categoryId" id="category-id" required>
+                                <select name="categoryId" id="category-id">
+                                    <option value="" disabled selected>- Sélectionnez -</option>
                                     <c:forEach var="category" items="${requestScope.categories}">
                                         <c:set var="selected" value="${requestScope.categoryId == category.id ? 'selected' : ''}" />
                                         <option value="${category.id}" ${selected}>${category.name}</option>

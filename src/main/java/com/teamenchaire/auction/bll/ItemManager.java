@@ -17,7 +17,7 @@ import com.teamenchaire.auction.dal.ItemDAO;
  * @author Marin Taverniers
  */
 public final class ItemManager {
-    private final ItemDAO itemDAO;
+    private ItemDAO itemDAO;
 
     /**
      * Constructs an {@code ItemManager} using a data access object.
@@ -26,21 +26,20 @@ public final class ItemManager {
         this.itemDAO = DAOFactory.getItemDAO();
     }
 
-    public Item addItem(final Integer sellerId, final String name, final String description, final Integer categoryId,
-            final Integer price, final LocalDate startDate, final LocalDate endDate, final String street,
-            final String postalCode, final String city) throws BusinessException {
-        final User seller = new UserManager().getUser(sellerId);
+    public Item addItem(Integer sellerId, String name, String description, Integer categoryId, Integer price,
+            LocalDate startDate, LocalDate endDate, String street, String postalCode, String city)
+            throws BusinessException {
+        User seller = new UserManager().getUser(sellerId);
         checkSeller(seller);
         checkName(name);
         checkDescription(description);
-        final Category category = new CategoryManager().getCategory(categoryId);
+        Category category = new CategoryManager().getCategory(categoryId);
         checkCategory(category);
         checkPrice(price);
         checkDates(startDate, endDate);
-        final Withdrawal withdrawalPoint = new Withdrawal(street, postalCode, city);
+        Withdrawal withdrawalPoint = new Withdrawal(street, postalCode, city);
         checkWithdrawalPoint(withdrawalPoint);
-        final Item item = new Item(name, description, startDate, endDate, price, price, seller, category,
-                withdrawalPoint);
+        Item item = new Item(name, description, startDate, endDate, price, price, seller, category, withdrawalPoint);
         itemDAO.insert(item);
         return item;
     }
@@ -49,69 +48,72 @@ public final class ItemManager {
         return itemDAO.selectAll();
     }
 
-    public List<Item> getItems(final String name) throws BusinessException {
+    public List<Item> getItems(String name) throws BusinessException {
         checkName(name);
         return itemDAO.selectBy(name);
     }
 
-    public List<Item> getItems(final Integer categoryId) throws BusinessException {
-        final Category category = new CategoryManager().getCategory(categoryId);
+    public List<Item> getItems(Integer categoryId) throws BusinessException {
+        Category category = new CategoryManager().getCategory(categoryId);
         checkCategory(category);
         return itemDAO.selectBy(categoryId);
     }
 
-    public List<Item> getItems(final String name, final Integer categoryId) throws BusinessException {
+    public List<Item> getItems(String name, Integer categoryId) throws BusinessException {
         checkName(name);
-        final Category category = new CategoryManager().getCategory(categoryId);
+        Category category = new CategoryManager().getCategory(categoryId);
         checkCategory(category);
         return itemDAO.selectBy(name, categoryId);
     }
 
     /* Validation */
 
-    private void checkSeller(final User seller) throws BusinessException {
+    private void checkSeller(User seller) throws BusinessException {
         if ((seller == null) || (seller.getId() == null)) {
             throw new BusinessException(BLLErrorCode.ITEM_SELLER_NULL);
         }
     }
 
-    private void checkName(final String name) throws BusinessException {
+    private void checkName(String name) throws BusinessException {
         if (isStringNull(name)) {
             throw new BusinessException(BLLErrorCode.ITEM_NAME_NULL);
         }
     }
 
-    private void checkDescription(final String description) throws BusinessException {
+    private void checkDescription(String description) throws BusinessException {
         if (isStringNull(description)) {
             throw new BusinessException(BLLErrorCode.ITEM_DESCRIPTION_NULL);
         }
     }
 
-    private void checkCategory(final Category category) throws BusinessException {
+    private void checkCategory(Category category) throws BusinessException {
         if ((category == null) || (category.getId() == null)) {
             throw new BusinessException(BLLErrorCode.ITEM_CATEGORY_NULL);
         }
     }
 
-    private void checkPrice(final Integer startingPrice) throws BusinessException {
+    private void checkPrice(Integer startingPrice) throws BusinessException {
         if ((startingPrice == null) || (startingPrice < 0)) {
             throw new BusinessException(BLLErrorCode.ITEM_STARTING_PRICE_INVALID);
         }
     }
 
-    private void checkDates(final LocalDate startDate, final LocalDate endDate) throws BusinessException {
+    private void checkDates(LocalDate startDate, LocalDate endDate) throws BusinessException {
         if (startDate == null) {
             throw new BusinessException(BLLErrorCode.ITEM_START_DATE_NULL);
+        }
+        if (startDate.isBefore(LocalDate.now())) {
+            throw new BusinessException(BLLErrorCode.ITEM_START_DATE_INVALID);
         }
         if (endDate == null) {
             throw new BusinessException(BLLErrorCode.ITEM_END_DATE_NULL);
         }
-        if (startDate.isAfter(endDate.minusDays(1))) {
+        if (startDate.isAfter(endDate)) {
             throw new BusinessException(BLLErrorCode.ITEM_DATES_INVALID);
         }
     }
 
-    private void checkWithdrawalPoint(final Withdrawal withdrawalPoint) throws BusinessException {
+    private void checkWithdrawalPoint(Withdrawal withdrawalPoint) throws BusinessException {
         if (withdrawalPoint == null) {
             throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_NULL);
         }
@@ -126,7 +128,7 @@ public final class ItemManager {
         }
     }
 
-    private boolean isStringNull(final String s) {
+    private boolean isStringNull(String s) {
         return ((s == null) || (s.trim().isEmpty()));
     }
 }

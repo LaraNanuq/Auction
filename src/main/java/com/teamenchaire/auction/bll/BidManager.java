@@ -13,7 +13,7 @@ import com.teamenchaire.auction.dal.DAOFactory;
  * @author Marin Taverniers
  */
 public final class BidManager {
-    private final BidDAO bidDAO;
+    private BidDAO bidDAO;
 
     /**
      * Constructs a {@code BidManager} using a data access object.

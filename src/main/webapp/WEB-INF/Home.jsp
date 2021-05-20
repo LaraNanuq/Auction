@@ -34,15 +34,16 @@
                 <form action="${pageContext.request.contextPath}/" method="POST">
                     <input
                         type="text"
-                        name="itemName"
+                        name="filterName"
                         id="filter-name"
                         placeholder="Le nom de l'article contient"
-                        value="${requestScope.itemName}"
+                        value="${requestScope.filterName}"
                     />
                     <label for="filter-category">Catégorie</label>
-                    <select name="categoryId" id="filter-category" required>
+                    <select name="filterCategoryId" id="filter-category">
+                        <option value="" selected>- Toutes -</option>
                         <c:forEach var="category" items="${requestScope.categories}">
-                            <c:set var="selected" value="${requestScope.categoryId == category.id ? 'selected' : ''}" />
+                            <c:set var="selected" value="${requestScope.filterCategoryId == category.id ? 'selected' : ''}" />
                             <option value="${category.id}" ${selected}>${category.name}</option>
                         </c:forEach>
                     </select>
@@ -50,6 +51,9 @@
                     <!-- Form buttons -->
                     <div class="form-buttons">
                         <input type="submit" value="Rechercher" />
+                        <a class="form-button" href="${pageContext.request.contextPath}/">
+                            Réinitialiser
+                        </a>
                     </div>
                 </form>
             </div>

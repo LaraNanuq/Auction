@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.CategoryManager;
 import com.teamenchaire.auction.bll.ItemManager;
-import com.teamenchaire.auction.bo.Category;
 import com.teamenchaire.auction.bo.Item;
 
 /**
@@ -26,59 +25,46 @@ import com.teamenchaire.auction.bo.Item;
 public final class HomeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 
-     */
-    public HomeServlet() {
-        // Default constructor
-    }
-
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setCharacterEncoding("UTF-8");
-        } catch (final UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        final String itemName = request.getParameter("itemName");
-        final String categoryId = request.getParameter("categoryId");
+        String filterName = ParameterParser.getTrimmedString(request, "filterName");
+        Integer filterCategoryId = ParameterParser.getInt(request, "filterCategoryId");
         try {
-            request.setAttribute("categories", getCategories());
-            request.setAttribute("items", getItems(itemName, StringParser.parseInt(categoryId)));
-        } catch (final BusinessException e) {
+            request.setAttribute("categories", new CategoryManager().getCategories());
+            request.setAttribute("items", getItems(filterName, filterCategoryId));
+        } catch (BusinessException e) {
             e.printStackTrace();
             request.setAttribute("errorCode", e.getCode());
         }
-        request.setAttribute("itemName", itemName);
-        request.setAttribute("categoryId", categoryId);
-        final RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Home.jsp");
+        request.setAttribute("filterName", filterName);
+        request.setAttribute("filterCategoryId", filterCategoryId);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Home.jsp");
         try {
             dispatcher.forward(request, response);
-        } catch (final ServletException | IOException e) {
+        } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         doGet(request, response);
     }
 
-    private List<Category> getCategories() throws BusinessException {
-        final List<Category> categories = new CategoryManager().getCategories();
-        categories.add(0, new Category(-1, "Toutes"));
-        return categories;
-    }
-
-    private List<Item> getItems(final String itemName, final Integer categoryId) throws BusinessException {
-        final ItemManager itemManager = new ItemManager();
-        if ((itemName != null) && (!itemName.isEmpty()) && (categoryId != null) && (categoryId != -1)) {
-            return itemManager.getItems(itemName, categoryId);
+    private List<Item> getItems(String name, Integer categoryId) throws BusinessException {
+        ItemManager itemManager = new ItemManager();
+        if ((name != null) && (!name.isEmpty())) {
+            if ((categoryId != null)) {
+                return itemManager.getItems(name, categoryId);
+            }
+            return itemManager.getItems(name);
         }
-        if ((itemName != null) && (!itemName.isEmpty())) {
-            return itemManager.getItems(itemName);
-        }
-        if ((categoryId != null) && (categoryId != -1)) {
+        if (categoryId != null) {
             return itemManager.getItems(categoryId);
         }
         return itemManager.getItems();

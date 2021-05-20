@@ -22,8 +22,8 @@ import com.teamenchaire.auction.bo.User;
  * 
  * @author Marin Taverniers
  */
-@WebServlet("/Sale")
-public final class SaleServlet extends HttpServlet {
+@WebServlet("/sell")
+public final class SellServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -45,7 +45,7 @@ public final class SaleServlet extends HttpServlet {
             request.setAttribute("city", user.getCity());
         }
         try {
-            request.getRequestDispatcher("/WEB-INF/Sale.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/Sell.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
@@ -72,7 +72,7 @@ public final class SaleServlet extends HttpServlet {
         try {
             new ItemManager().addItem(user.getId(), name, description, categoryId, price, startDate, endDate, street,
                     postalCode, city);
-            response.sendRedirect(this.getServletContext().getContextPath());
+            response.sendRedirect(request.getContextPath());
             return;
         } catch (BusinessException e) {
             e.printStackTrace();

@@ -7,12 +7,15 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Enchères</title>
+        <title>Vendre</title>
     </head>
     <body>
         <!-- Menubar -->
         <nav class="menubar">
             <div class="menubar-title">ENI-Enchères</div>
+            <div class="menubar-link">
+                <a href="${pageContext.request.contextPath}/login">S'inscrire - Se connecter</a>
+            </div>
         </nav>
 
         <hr />
@@ -26,9 +29,9 @@
                 </div>
             </c:if>
 
-            <!-- Sale -->
-            <div class="sale">
-                <form action="${pageContext.request.contextPath}/Sale" method="POST">
+            <!-- Sell -->
+            <div class="sell">
+                <form action="${pageContext.request.contextPath}/sell" method="POST">
                     <!-- Item -->
                     <div class="item">
                         <fieldset>
@@ -152,7 +155,7 @@
                     <!-- Form buttons -->
                     <div class="form-buttons">
                         <input type="submit" value="Valider" />
-                        <a class="form-button" href="${pageContext.request.contextPath}/">
+                        <a class="form-button" href="${pageContext.request.contextPath}">
                             Annuler
                         </a>
                     </div>

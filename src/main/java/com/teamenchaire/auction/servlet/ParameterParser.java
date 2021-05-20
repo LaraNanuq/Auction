@@ -6,6 +6,11 @@ import java.time.format.DateTimeParseException;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * An utility {@code class} which parses parameters for HTTP requests.
+ * 
+ * @author Marin Taverniers
+ */
 public final class ParameterParser {
 
     private ParameterParser() {
@@ -45,5 +50,13 @@ public final class ParameterParser {
         } catch (DateTimeParseException e) {
             return null;
         }
+    }
+
+    public static Boolean isChecked(HttpServletRequest request, String parameter) {
+        String value = getTrimmedString(request, parameter);
+        if (value != null) {
+            return ((value.equalsIgnoreCase("on")) || (value.equalsIgnoreCase("true")));
+        }
+        return null;
     }
 }

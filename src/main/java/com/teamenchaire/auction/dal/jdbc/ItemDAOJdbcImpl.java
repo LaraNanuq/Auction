@@ -20,22 +20,62 @@ import com.teamenchaire.auction.dal.ItemDAO;
 /**
  * A {@code class} which implements CRUD methods for items in the database using
  * the JDBC driver.
- * 
+ *
  * @author Marin Taverniers
  */
 public final class ItemDAOJdbcImpl implements ItemDAO {
-    private static final String SQL_INSERT_ITEM = "INSERT INTO items (item_name, item_description, bid_start_date, bid_end_date, starting_price, selling_price, id_user, id_category)"
+
+    // Insert
+    private static final String SQL_INSERT_ITEM =
+            "INSERT INTO items (item_name, item_description, bid_start_date, bid_end_date, starting_price, selling_price, id_user, id_category)"
             + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String SQL_INSERT_WITHDRAWAL = "INSERT INTO withdrawals (id_item, street, postal_code, city)"
+
+    private static final String SQL_INSERT_WITHDRAWAL =
+            "INSERT INTO withdrawals (id_item, street, postal_code, city)"
             + " VALUES (?, ?, ?, ?)";
-    private static final String SQL_SELECT_ALL = "SELECT * FROM items i" + " JOIN users u ON (i.id_user = u.id_user)"
+
+    // Select
+    private static final String SQL_SELECT_ALL =
+            "SELECT * FROM items i"
+            + " JOIN users u ON (i.id_user = u.id_user)"
             + " JOIN categories c ON (i.id_category = c.id_category)"
             + " JOIN withdrawals w ON (i.id_item = w.id_item)";
 
-    private static final String SQL_SELECT_BY_NAME = SQL_SELECT_ALL + " WHERE (upper(item_name) LIKE ?)";
-    private static final String SQL_SELECT_BY_CATEGORY = SQL_SELECT_ALL + " WHERE (c.id_category = ?)";
-    private static final String SQL_SELECT_BY_NAME_AND_CATEGORY = SQL_SELECT_BY_NAME + " INTERSECT "
-            + SQL_SELECT_BY_CATEGORY;
+    private static final String SQL_WHERE_HAS_BEGAN = "dateDiff(day, getDate(), i.bid_start_date) <= 0";
+    private static final String SQL_WHERE_HAS_ENDED = "dateDiff(day, getDate(), i.bid_end_date) < 0";
+
+    private static final String SQL_SELECT_ALL_AVAILABLE = SQL_SELECT_ALL
+            + " WHERE (" + SQL_WHERE_HAS_BEGAN + ") AND (NOT " + SQL_WHERE_HAS_ENDED + ")";
+
+    private static final String SQL_SELECT_AVAILABLE_PURCHASES = SQL_SELECT_ALL
+            + " WHERE (i.id_user != ?) AND (" + SQL_WHERE_HAS_BEGAN + ") AND (NOT " + SQL_WHERE_HAS_ENDED + ")";
+
+    private static final String SQL_SELECT_CURRENT_PURCHASES = SQL_SELECT_ALL
+            + " LEFT JOIN bids b ON (i.id_item = b.id_item)"
+            + " WHERE (b.id_user = ?) AND (NOT " + SQL_WHERE_HAS_ENDED + ")";
+
+    private static final String SQL_SELECT_WON_PURCHASES = SQL_SELECT_ALL
+            + " LEFT JOIN bids b ON (i.id_item = b.id_item)"
+            + " WHERE (b.id_user = ?) AND (b.bid_amount = i.selling_price) AND (" + SQL_WHERE_HAS_ENDED + ")";
+
+    private static final String SQL_SELECT_CURRENT_SALES = SQL_SELECT_ALL
+            + " WHERE (i.id_user = ?) AND (" + SQL_WHERE_HAS_BEGAN + ") AND (NOT " + SQL_WHERE_HAS_ENDED + ")";
+
+    private static final String SQL_SELECT_FUTURE_SALES = SQL_SELECT_ALL
+            + " WHERE (i.id_user = ?) AND (NOT " + SQL_WHERE_HAS_BEGAN + ")";
+
+    private static final String SQL_SELECT_ENDED_SALES = SQL_SELECT_ALL
+            + " WHERE (i.id_user = ?) AND (" + SQL_WHERE_HAS_ENDED + ")";
+
+    // Additional select clause
+    private static final String SQL_AND_WHERE_NAME =
+            " AND (upper(item_name) LIKE ?)";
+
+    private static final String SQL_AND_WHERE_CATEGORY =
+            " AND (c.id_category = ?)";
+
+    private static final String SQL_ORDER_BY =
+            " ORDER BY i.bid_start_date DESC";
 
     /**
      * Constructs an {@code ItemDAOJdbcImpl}.
@@ -98,17 +138,7 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
 
     @Override
     public List<Item> selectAll() throws BusinessException {
-        List<Item> items = new ArrayList<>();
-        try (Connection connection = JdbcConnectionProvider.getConnection();
-                Statement statement = connection.createStatement()) {
-            ResultSet result = statement.executeQuery(SQL_SELECT_ALL);
-            while (result.next()) {
-                items.add(buildItem(result));
-            }
-        } catch (SQLException e) {
-            throw new BusinessException(DALErrorCode.SQL_SELECT, e);
-        }
-        return items;
+        throw new BusinessException(DALErrorCode.SQL_SELECT);
     }
 
     @Override
@@ -117,36 +147,56 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
     }
 
     @Override
-    public List<Item> selectBy(String name) throws BusinessException {
-        return querySelect(SQL_SELECT_BY_NAME, name, 0);
+    public List<Item> selectAllAvailable(String name, Integer categoryId) throws BusinessException {
+        return selectWithFilter(SQL_SELECT_ALL_AVAILABLE, null, name, categoryId);
     }
 
     @Override
-    public List<Item> selectBy(Integer categoryId) throws BusinessException {
-        return querySelect(SQL_SELECT_BY_CATEGORY, "", categoryId);
+    public List<Item> selectAvailablePurchases(Integer userId, String name, Integer categoryId) throws BusinessException {
+        return selectWithFilter(SQL_SELECT_AVAILABLE_PURCHASES, userId, name, categoryId);
     }
 
     @Override
-    public List<Item> selectBy(String name, Integer categoryId) throws BusinessException {
-        return querySelect(SQL_SELECT_BY_NAME_AND_CATEGORY, name, categoryId);
+    public List<Item> selectCurrentPurchases(Integer userId, String name, Integer categoryId) throws BusinessException {
+        return selectWithFilter(SQL_SELECT_CURRENT_PURCHASES, userId, name, categoryId);
     }
 
-    private List<Item> querySelect(String query, String name, Integer categoryId) throws BusinessException {
+    @Override
+    public List<Item> selectWonPurchases(Integer userId, String name, Integer categoryId) throws BusinessException {
+        return selectWithFilter(SQL_SELECT_WON_PURCHASES, userId, name, categoryId);
+    }
+
+    @Override
+    public List<Item> selectCurrentSales(Integer userId, String name, Integer categoryId) throws BusinessException {
+        return selectWithFilter(SQL_SELECT_CURRENT_SALES, userId, name, categoryId);
+    }
+
+    @Override
+    public List<Item> selectFutureSales(Integer userId, String name, Integer categoryId) throws BusinessException {
+        return selectWithFilter(SQL_SELECT_FUTURE_SALES, userId, name, categoryId);
+    }
+
+    @Override
+    public List<Item> selectEndedSales(Integer userId, String name, Integer categoryId) throws BusinessException {
+        return selectWithFilter(SQL_SELECT_ENDED_SALES, userId, name, categoryId);
+    }
+
+    private List<Item> selectWithFilter(String query, Integer userId, String name, Integer categoryId) throws BusinessException {
         List<Item> items = new ArrayList<>();
         try (Connection connection = JdbcConnectionProvider.getConnection();
-                PreparedStatement statement = connection.prepareStatement(query)) {
-            switch (query) {
-                case SQL_SELECT_BY_NAME:
-                    statement.setString(1, "%" + name.toUpperCase() + "%");
-                    break;
-                case SQL_SELECT_BY_CATEGORY:
-                    statement.setInt(1, categoryId);
-                    break;
-                case SQL_SELECT_BY_NAME_AND_CATEGORY:
-                    statement.setString(1, "%" + name.toUpperCase() + "%");
-                    statement.setInt(2, categoryId);
-                    break;
-                default:
+                PreparedStatement statement = connection.prepareStatement(buildFilterQuery(query, name, categoryId))) {
+            int paramIndex = 1;
+            if (userId != null) {
+                statement.setInt(paramIndex, userId);
+                paramIndex++;
+            }
+            if (name != null) {
+                statement.setString(paramIndex, "%" + name.toUpperCase() + "%");
+                paramIndex++;
+            }
+            if (categoryId != null) {
+                statement.setInt(paramIndex, categoryId);
+                paramIndex++;
             }
             ResultSet result = statement.executeQuery();
             while (result.next()) {
@@ -156,6 +206,21 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
             throw new BusinessException(DALErrorCode.SQL_SELECT, e);
         }
         return items;
+    }
+
+    private String buildFilterQuery(String query, String name, Integer categoryId) {
+        StringBuilder filterQuery = new StringBuilder();
+        filterQuery.append(query);
+        if (name != null) {
+            filterQuery.append(" ");
+            filterQuery.append(SQL_AND_WHERE_NAME);
+        }
+        if (categoryId != null) {
+            filterQuery.append(" ");
+            filterQuery.append(SQL_AND_WHERE_CATEGORY);
+        }
+        filterQuery.append(SQL_ORDER_BY);
+        return filterQuery.toString();
     }
 
     private static Item buildItem(ResultSet result) throws SQLException {
@@ -180,46 +245,3 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
         return new Withdrawal(result.getString("street"), result.getString("postal_code"), result.getString("city"));
     }
 }
-
-        /*
-        List<Item> items = new ArrayList<>();
-        try (Connection connection = JdbcConnectionProvider.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_NAME)) {
-            statement.setString(1, "%" + name.toUpperCase() + "%");
-            ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                items.add(buildItem(result));
-            }
-        } catch (SQLException e) {
-            throw new BusinessException(DALErrorCode.SQL_SELECT, e);
-        }
-        return items;*/
-
-        /*
-        List<Item> items = new ArrayList<>();
-        try (Connection connection = JdbcConnectionProvider.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_CATEGORY)) {
-            statement.setInt(1, categoryId);
-            ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                items.add(buildItem(result));
-            }
-        } catch (SQLException e) {
-            throw new BusinessException(DALErrorCode.SQL_SELECT, e);
-        }
-        return items;*/
-
-        /*
-        List<Item> items = new ArrayList<>();
-        try (Connection connection = JdbcConnectionProvider.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_NAME_AND_CATEGORY)) {
-            statement.setString(1, "%" + name.toUpperCase() + "%");
-            statement.setInt(2, categoryId);
-            ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                items.add(buildItem(result));
-            }
-        } catch (SQLException e) {
-            throw new BusinessException(DALErrorCode.SQL_SELECT, e);
-        }
-        return items;*/

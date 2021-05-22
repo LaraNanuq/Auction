@@ -6,11 +6,11 @@ package com.teamenchaire.auction.servlet;
  * @author Marin Taverniers
  */
 public final class ServletErrorCode {
-
+    
     private ServletErrorCode() {
     }
 
-    /*
-     * Error codes
-     */
+
+    public static final int ITEMS_TYPE_EMPTY = 30101;
+
 }

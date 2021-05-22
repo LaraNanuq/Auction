@@ -44,6 +44,43 @@ public final class ItemManager {
         return item;
     }
 
+    public List<Item> getAllAvailableItems(String name, Integer categoryId) throws BusinessException {
+        return itemDAO.selectAllAvailable(name, categoryId);
+    }
+    
+    public List<Item> getAvailablePurchasesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
+        checkUserId(userId);
+        //checkName
+        //check category
+        return itemDAO.selectAvailablePurchases(userId, name, categoryId);
+    }
+    
+    public List<Item> getCurrentPurchasesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
+        checkUserId(userId);
+        return itemDAO.selectCurrentPurchases(userId, name, categoryId);
+    }
+    
+    public List<Item> getWonPurchasesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
+        checkUserId(userId);
+        return itemDAO.selectWonPurchases(userId, name, categoryId);
+    }
+    
+    public List<Item> getCurrentSalesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
+        checkUserId(userId);
+        return itemDAO.selectCurrentSales(userId, name, categoryId);
+    }
+    
+    public List<Item> getFutureSalesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
+        checkUserId(userId);
+        return itemDAO.selectFutureSales(userId, name, categoryId);
+    }
+    
+    public List<Item> getEndedSalesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
+        checkUserId(userId);
+        return itemDAO.selectEndedSales(userId, name, categoryId);
+    }
+
+/*
     public List<Item> getItems() throws BusinessException {
         return itemDAO.selectAll();
     }
@@ -65,8 +102,14 @@ public final class ItemManager {
         checkCategory(category);
         return itemDAO.selectBy(name, categoryId);
     }
-
+*/
     /* Validation */
+
+    private void checkUserId(Integer id) throws BusinessException {
+        if ((id == null)) {
+            throw new BusinessException(BLLErrorCode.USER_ID_NULL);
+        }
+    }
 
     private void checkSeller(User seller) throws BusinessException {
         if ((seller == null) || (seller.getId() == null)) {
@@ -78,11 +121,17 @@ public final class ItemManager {
         if (isStringNull(name)) {
             throw new BusinessException(BLLErrorCode.ITEM_NAME_NULL);
         }
+        if (name.length() > 30) {
+            throw new BusinessException(BLLErrorCode.ITEM_NAME_TOO_LONG);
+        }
     }
 
     private void checkDescription(String description) throws BusinessException {
         if (isStringNull(description)) {
             throw new BusinessException(BLLErrorCode.ITEM_DESCRIPTION_NULL);
+        }
+        if (description.length() > 300) {
+            throw new BusinessException(BLLErrorCode.ITEM_DESCRIPTION_TOO_LONG);
         }
     }
 
@@ -120,11 +169,20 @@ public final class ItemManager {
         if (isStringNull(withdrawalPoint.getStreet())) {
             throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_STREET_NULL);
         }
+        if (withdrawalPoint.getStreet().length() > 30) {
+            throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_STREET_TOO_LONG);
+        }
         if (isStringNull(withdrawalPoint.getPostalCode())) {
             throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_POSTAL_CODE_NULL);
         }
+        if (withdrawalPoint.getPostalCode().length() > 15) {
+            throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_POSTAL_CODE_TOO_LONG);
+        }
         if (isStringNull(withdrawalPoint.getCity())) {
             throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_CITY_NULL);
+        }
+        if (withdrawalPoint.getCity().length() > 30) {
+            throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_CITY_TOO_LONG);
         }
     }
 

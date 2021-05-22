@@ -12,9 +12,14 @@
     <body>
         <!-- Menubar -->
         <nav class="menubar">
-            <div class="menubar-title">ENI-Enchères</div>
+            <div class="menubar-title menubar-link">
+                <a href="${pageContext.request.contextPath}">ENI-Enchères</a>
+            </div>
             <div class="menubar-link">
                 <a href="${pageContext.request.contextPath}/login">S'inscrire - Se connecter</a>
+            </div>
+            <div class="menubar-link">
+                <a href="${pageContext.request.contextPath}/sell">Vendre</a>
             </div>
         </nav>
 
@@ -66,16 +71,6 @@
                                     </c:forEach>
                                 </select>
                             </div>
-                            <!-- 
-                            <div class="form-group">
-                                <label for="picture">Photo</label>
-                                <input
-                                    type="file"
-                                    name="picture"
-                                    id="picture"
-                                />
-                            </div>
-                            -->
                         </fieldset>
                     </div>
                     

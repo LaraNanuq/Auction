@@ -52,11 +52,13 @@ public final class ParameterParser {
         }
     }
 
-    public static Boolean isChecked(HttpServletRequest request, String parameter) {
-        String value = getTrimmedString(request, parameter);
-        if (value != null) {
-            return ((value.equalsIgnoreCase("on")) || (value.equalsIgnoreCase("true")));
+    public static String[] getTrimmedStringArray(HttpServletRequest request, String parameter) {
+        String[] values = request.getParameterValues(parameter);
+        if (values != null) {
+            for (int i = 0; i < values.length; i++) {
+                values[i] = values[i].trim();
+            }
         }
-        return null;
+        return values;
     }
 }

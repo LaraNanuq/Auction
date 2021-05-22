@@ -2,8 +2,11 @@ package com.teamenchaire.auction.servlet;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,14 +19,15 @@ import javax.servlet.http.HttpSession;
 import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.CategoryManager;
 import com.teamenchaire.auction.bll.ItemManager;
+import com.teamenchaire.auction.bo.Category;
 import com.teamenchaire.auction.bo.Item;
 
 /**
- * A {@code Servlet} which handles requests to the home page.
+ * A {@code Servlet} which handles requests to the page to list items.
  * 
  * @author Marin Taverniers
  */
-@WebServlet(urlPatterns = {"", "/index", "/home", "/items"})
+@WebServlet("/items")
 public final class ItemsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -34,52 +38,64 @@ public final class ItemsServlet extends HttpServlet {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        List<Category> categories = null;
         String name = ParameterParser.getTrimmedString(request, "name");
         Integer categoryId = ParameterParser.getInt(request, "categoryId");
         try {
-            request.setAttribute("categories", new CategoryManager().getCategories());
+            categories = new CategoryManager().getCategories();
 
             //HttpSession session = request.getSession(false);
             HttpSession session = request.getSession(true);
-            boolean isLogged = (session != null);
-            request.setAttribute("isLogged", isLogged);
-            if (!isLogged) {
-
-                // Disconnected user
-                request.setAttribute("items", getItems(name, categoryId));
+            Map<String, Map<String, Boolean>> groups = new HashMap<>();
+            String selectedGroup = null;
+            
+            int userId = 1;
+            Map<String, List<Item>> itemGroups = new HashMap<>();
+            
+            if (session == null) {
+                // Anonymous user
+                itemGroups.put("purchases", new ItemManager().getAllAvailableItems(name, categoryId));
             } else {
-                String[] test = request.getParameterValues("purchases");
-                System.out.println(Arrays.toString(test));
-                String[] test2 = request.getParameterValues("sales");
-                System.out.println(Arrays.toString(test2));
-
-                // Connected user
-                String type = ParameterParser.getTrimmedString(request, "type");
-                Boolean availablePurchases = ParameterParser.isChecked(request, "availablePurchases");
-                //if (availablePurchases == null) {
-                    //availablePurchases = true;
-                //}
-                Boolean currentPurchases = ParameterParser.isChecked(request, "currentPurchases");
-                //if (currentPurchases == null) {
-                    //currentPurchases = true;
-                //}
-                Boolean wonPurchases = ParameterParser.isChecked(request, "wonPurchases");
-                Boolean currentSales = ParameterParser.isChecked(request, "currentSales");
-                Boolean futureSales = ParameterParser.isChecked(request, "futureSales");
-                Boolean endedSales = ParameterParser.isChecked(request, "endedSales");
-                if ((type == null) || (type.equalsIgnoreCase("purchases"))) {
-                    // Erreur si aucune checkbox
+                
+                // Logged user
+                groups.put("purchases", new HashMap<>());
+                groups.put("sales", new HashMap<>());
+                selectedGroup = ParameterParser.getTrimmedString(request, "group");
+                if ((selectedGroup == null) || (selectedGroup.isEmpty())) {
+                    selectedGroup = "purchases";
+                    groups.get("purchases").put("available", true);
                 } else {
-                    // Erreur si aucune checkbox
+                    for (Entry<String, Map<String, Boolean>> group : groups.entrySet()) {
+                        String[] selectedTypes = ParameterParser.getTrimmedStringArray(request, group.getKey());
+                        if (selectedTypes != null) {
+                            for (String selectedType : selectedTypes) {
+                                group.getValue().put(selectedType, true);
+                            }
+                        }
+                    }
                 }
-                request.setAttribute("type", type);
-                //request.setAttribute("purchases", purchases);
-                //request.setAttribute("sales", sales);
+                request.setAttribute("isLogged", true);
+                request.setAttribute("group", selectedGroup);
+                for (Entry<String, Map<String, Boolean>> group : groups.entrySet()) {
+                    request.setAttribute(group.getKey(), group.getValue());
+                }
+                if (groups.get(selectedGroup).isEmpty()) {
+                    throw new BusinessException(ServletErrorCode.ITEMS_TYPE_EMPTY);
+                }
+                
+                for (String subGroup : groups.get(selectedGroup).keySet()) {
+                    itemGroups.put(subGroup, getItems(selectedGroup, subGroup, userId, name, categoryId));
+                }
             }
+            request.setAttribute("itemGroups", itemGroups);
+            
         } catch (BusinessException e) {
             e.printStackTrace();
             request.setAttribute("errorCode", e.getCode());
         }
+        
+        // Forward
+        request.setAttribute("categories", categories);
         request.setAttribute("name", name);
         request.setAttribute("categoryId", categoryId);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Items.jsp");
@@ -95,17 +111,36 @@ public final class ItemsServlet extends HttpServlet {
         doGet(request, response);
     }
 
-    private List<Item> getItems(String name, Integer categoryId) throws BusinessException {
+    private List<Item> getItems(String selectedGroup, String subGroupName, Integer userId, String name, Integer categoryId) throws BusinessException {
         ItemManager itemManager = new ItemManager();
-        if ((name != null) && (!name.isEmpty())) {
-            if ((categoryId != null)) {
-                return itemManager.getItems(name, categoryId);
+        List<Item> items = new ArrayList<>();
+        if (selectedGroup.equalsIgnoreCase("purchases")) {
+            switch (subGroupName) {
+                case "available":
+                    items = itemManager.getAvailablePurchasesItems(userId, name, categoryId);
+                    break;
+                case "current":
+                    items = itemManager.getCurrentPurchasesItems(userId, name, categoryId);
+                    break;
+                case "won":
+                    items = itemManager.getWonPurchasesItems(userId, name, categoryId);
+                    break;
+                default:
             }
-            return itemManager.getItems(name);
+        } else if (selectedGroup.equalsIgnoreCase("sales")) {
+            switch (subGroupName) {
+                case "current":
+                    items =  itemManager.getCurrentSalesItems(userId, name, categoryId);
+                    break;
+                case "future":
+                    items =  itemManager.getFutureSalesItems(userId, name, categoryId);
+                    break;
+                case "ended":
+                    items =  itemManager.getEndedSalesItems(userId, name, categoryId);
+                    break;
+                default:
+            }
         }
-        if (categoryId != null) {
-            return itemManager.getItems(categoryId);
-        }
-        return itemManager.getItems();
+        return items;
     }
 }

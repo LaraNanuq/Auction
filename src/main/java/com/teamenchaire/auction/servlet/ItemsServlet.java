@@ -21,6 +21,7 @@ import com.teamenchaire.auction.bll.CategoryManager;
 import com.teamenchaire.auction.bll.ItemManager;
 import com.teamenchaire.auction.bo.Category;
 import com.teamenchaire.auction.bo.Item;
+import com.teamenchaire.auction.servlet.util.ParameterParser;
 
 /**
  * A {@code Servlet} which handles requests to the page to list items.

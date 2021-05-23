@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
@@ -9,36 +10,25 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Articles</title>
     </head>
+
     <body>
-        <!-- Menubar -->
-        <nav class="menubar">
-            <div class="menubar-title menubar-link">
-                <a href="${pageContext.request.contextPath}">ENI-Enchères</a>
-            </div>
-            <div class="menubar-link">
-                <a href="${pageContext.request.contextPath}/login">S'inscrire - Se connecter</a>
-            </div>
-            <div class="menubar-link">
-                <a href="${pageContext.request.contextPath}/sell">Vendre</a>
-            </div>
-        </nav>
+        <%@ include file="fragment/Navigation.jspf" %>
 
-        <hr />
-        <header>Liste des articles</header>
+        <!-- Content -->
+        <section class="section">
+            <p class="section-title">
+                Liste des articles
+            </p>
 
-        <section>
-            <!-- Errors -->
-            <c:if test="${!empty(requestScope.errorCode)}">
-                <div class="errors">
-                    <p>${requestScope.errorCode}</p>
-                </div>
-            </c:if>
+            <%@ include file="fragment/Error.jspf" %>
 
             <!-- Filters -->
-            <div class="filters">
-                <form action="${pageContext.request.contextPath}/items" method="GET">
+            <form action="${pageContext.request.contextPath}/items" method="GET" class="form">
+                <div class="form-section">
                     <fieldset>
-                        <legend>Filtres</legend>
+                        <legend class="form-section-title">
+                            Filtres
+                        </legend>
                         <div class="form-group">
                             <input
                                 type="text"
@@ -46,74 +36,180 @@
                                 id="filter-name"
                                 placeholder="Nom de l'article"
                                 value="${requestScope.name}"
+                                class="form-input"
                             />
                         </div>
                         <div class="form-group">
-                            <label for="filter-category">Catégorie</label>
-                            <select name="categoryId" id="filter-category">
-                                <option value="" selected>- Toutes -</option>
+                            <label for="filter-category" class="form-label">
+                                Catégorie
+                            </label>
+                            <select name="categoryId" id="filter-category" class="form-input">
+                                <option value="" selected>
+                                    - Toutes -
+                                </option>
                                 <c:forEach var="category" items="${requestScope.categories}">
-                                    <c:set var="selected" value="${requestScope.categoryId == category.id ? 'selected' : ''}" />
-                                    <option value="${category.id}" ${selected}>${category.name}</option>
+                                    <option value="${category.id}" ${requestScope.categoryId == category.id ? 'selected' : ''}>
+                                        ${category.name}
+                                    </option>
                                 </c:forEach>
                             </select>
                         </div>
                         <c:if test="${requestScope.isLogged}">
                             <div class="form-group">
-                                <input type="radio" name="group" id="filter-purchases" value="purchases" ${requestScope.group == 'purchases' ? 'checked' : ''}>
-                                <label for="filter-purchases">Achats</label>
-                                <input type="checkbox" name="purchases" id="filter-purchases-available" value="available" ${requestScope.purchases.available ? 'checked' : ''}>
-                                <label for="filter-purchases-available">Enchères disponibles</label>
-                                <input type="checkbox" name="purchases" id="filter-purchases-current" value="current" ${requestScope.purchases.current ? 'checked' : ''}>
-                                <label for="filter-purchases-current">Enchères en cours</label>
-                                <input type="checkbox" name="purchases" id="filter-purchases-won" value="won" ${requestScope.purchases.won ? 'checked' : ''}>
-                                <label for="filter-purchases-won">Enchères remportées</label>
+                                <input
+                                    type="radio"
+                                    name="group"
+                                    id="filter-purchases"
+                                    value="purchases"
+                                    class="form-input"
+                                    ${requestScope.group == 'purchases' ? 'checked' : ''}
+                                />
+                                <label for="filter-purchases" class="form-label">
+                                    Achats
+                                </label>
+                                <ul class="filter-list">
+                                    <li class="filter-item">
+                                        <input
+                                            type="checkbox"
+                                            name="purchases"
+                                            id="filter-purchases-available"
+                                            value="available"
+                                            class="form-input"
+                                            ${requestScope.purchases.available ? 'checked' : ''}
+                                        />
+                                        <label for="filter-purchases-available" class="form-label">
+                                            Enchères disponibles
+                                        </label>
+                                    </li>
+                                    <li class="filter-item">
+                                        <input
+                                            type="checkbox"
+                                            name="purchases"
+                                            id="filter-purchases-current"
+                                            value="current"
+                                            class="form-input"
+                                            ${requestScope.purchases.current ? 'checked' : ''}
+                                        />
+                                        <label for="filter-purchases-current" class="form-label">
+                                            Enchères en cours
+                                        </label>
+                                    </li>
+                                    <li class="filter-item">
+                                        <input
+                                            type="checkbox"
+                                            name="purchases"
+                                            id="filter-purchases-won"
+                                            value="won"
+                                            class="form-input"
+                                            ${requestScope.purchases.won ? 'checked' : ''}
+                                        />
+                                        <label for="filter-purchases-won" class="form-label">
+                                            Enchères remportées
+                                        </label>
+                                    </li>
+                                </ul>
                             </div>
                             <div class="form-group">
-                                <input type="radio" name="group" id="filter-sales" value="sales" ${requestScope.group == 'sales' ? 'checked' : ''}>
-                                <label for="filter-sales">Ventes</label>
-                                <input type="checkbox" name="sales" id="filter-sales-current" value="current" ${requestScope.sales.current ? 'checked' : ''}>
-                                <label for="filter-sales-current">Ventes en cours</label>
-                                <input type="checkbox" name="sales" id="filter-sales-future" value="future" ${requestScope.sales.future ? 'checked' : ''}>
-                                <label for="filter-sales-future">Ventes à venir</label>
-                                <input type="checkbox" name="sales" id="filter-sales-ended" value="ended" ${requestScope.sales.ended ? 'checked' : ''}>
-                                <label for="filter-sales-ended">Ventes terminées</label>
+                                <input
+                                    type="radio"
+                                    name="group"
+                                    id="filter-sales"
+                                    value="sales"
+                                    class="form-input"
+                                    ${requestScope.group == 'sales' ? 'checked' : ''}
+                                />
+                                <label for="filter-sales" class="form-label">
+                                    Ventes
+                                </label>
+                                <ul class="filter-list">
+                                    <li class="filter-item">
+                                        <input
+                                            type="checkbox"
+                                            name="sales"
+                                            id="filter-sales-current"
+                                            value="current"
+                                            class="form-input"
+                                            ${requestScope.sales.current ? 'checked' : ''}
+                                        />
+                                        <label for="filter-sales-current" class="form-label">
+                                            Ventes en cours
+                                        </label>
+                                    </li>
+                                    <li class="filter-item">
+                                        <input
+                                            type="checkbox"
+                                            name="sales"
+                                            id="filter-sales-future"
+                                            value="future"
+                                            class="form-input"
+                                            ${requestScope.sales.future ? 'checked' : ''}
+                                        />
+                                        <label for="filter-sales-future" class="form-label">
+                                            Ventes à venir
+                                        </label>
+                                    </li>
+                                    <li class="filter-item">
+                                        <input
+                                            type="checkbox"
+                                            name="sales"
+                                            id="filter-sales-ended"
+                                            value="ended"
+                                            class="form-input"
+                                            ${requestScope.sales.ended ? 'checked' : ''}
+                                        />
+                                        <label for="filter-sales-ended" class="form-label">
+                                            Ventes terminées
+                                        </label>
+                                    </li>
+                                </ul>
                             </div>
                         </c:if>
 
                         <!-- Form buttons -->
-                        <div class="form-buttons">
-                            <input type="submit" value="Rechercher" />
-                            <a class="form-button" href="${pageContext.request.contextPath}/items">
+                        <div class="form-button-group">
+                            <input type="submit" value="Rechercher" class="form-button" />
+                            <a href="${pageContext.request.contextPath}/items" class="form-button">
                                 Réinitialiser
                             </a>
                         </div>
                     </fieldset>
-                </form>
-            </div>
+                </div>
+            </form>
 
             <!-- Items -->
             <c:forEach var="itemGroup" items="${requestScope.itemGroups}">
-                <hr />
-                <h3>${itemGroup.key}</h3>
-                <div class="items">
+                <div class="section">
+                    <p class="section-title">
+                        ${itemGroup.key}
+                    </p>
                     <c:choose>
                         <c:when test="${!empty(itemGroup.value)}">
-                            <c:forEach var="item" items="${itemGroup.value}">
-                                <div class="item">
-                                    ${item.name}<br />
-                                    Prix : ${item.sellingPrice}<br />
-                                    Début de l'enchère : ${item.startDate}<br />
-                                    Fin de l'enchère : ${item.endDate}<br />
-                                    Vendeur : ${item.seller.nickname}
-                                </div>
-                                <br />
-                            </c:forEach>
+                            <ul class="item-list">
+                                <c:forEach var="item" items="${itemGroup.value}">
+                                    <li class="item">
+                                        <p class="item-title">
+                                            ${item.name}
+                                        </p>
+                                        <p class="item-info">
+                                            Prix : ${item.sellingPrice}<br />
+                                            Fin de l'enchère : ${item.endDate}<br />
+                                            Vendeur : ${item.seller.nickname}<br />
+                                        </p>
+                                    </li>
+                                </c:forEach>
+                            </ul>
                         </c:when>
-                        <c:otherwise>Aucun article n'a été trouvé.</c:otherwise>
+                        <c:otherwise>
+                            <p class="section-text">
+                                Aucun article n'a été trouvé.
+                            </p>
+                        </c:otherwise>
                     </c:choose>
                 </div>
+                <hr />
             </c:forEach>
         </section>
+
+        <%@ include file="fragment/Footer.jspf" %>
     </body>
 </html>

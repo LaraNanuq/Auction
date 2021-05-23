@@ -1,0 +1,42 @@
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!-- Navigation -->
+<nav class="navigation">
+    <a href="${pageContext.request.contextPath}" class="navigation-title navigation-link">
+        ENI-Enchères
+    </a>
+    <ul class="navigation-list">
+        <li class="navigation-item">
+            <a href="${pageContext.request.contextPath}/items" class="navigation-link">
+                Articles
+            </a>
+        </li>
+        <c:choose>
+            <c:when test="${!requestScope.isLogged}">
+                <li class="navigation-item">
+                    <a href="${pageContext.request.contextPath}/login" class="navigation-link">
+                        Connexion
+                    </a>
+                </li>
+            </c:when>
+            <c:otherwise>
+                <li class="navigation-item">
+                    <a href="${pageContext.request.contextPath}/sell" class="navigation-link">
+                        Vendre
+                    </a>
+                </li>
+                <li class="navigation-item">
+                    <a href="${pageContext.request.contextPath}/profile" class="navigation-link">
+                        Mon profil
+                    </a>
+                </li>
+                <li class="navigation-item">
+                    <a href="${pageContext.request.contextPath}/logout" class="navigation-link">
+                        Déconnexion
+                    </a>
+                </li>
+            </c:otherwise>
+        </c:choose>
+    </ul>
+</nav>

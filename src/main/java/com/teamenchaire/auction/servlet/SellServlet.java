@@ -16,6 +16,7 @@ import com.teamenchaire.auction.bll.CategoryManager;
 import com.teamenchaire.auction.bll.ItemManager;
 import com.teamenchaire.auction.bll.UserManager;
 import com.teamenchaire.auction.bo.User;
+import com.teamenchaire.auction.servlet.util.ParameterParser;
 
 /**
  * A {@code Servlet} which handles requests to the page to sell an item.
@@ -29,6 +30,7 @@ public final class SellServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         User user = new UserManager().getUser(1);
+        request.setAttribute("isLogged", true);
 
         try {
             request.setAttribute("categories", new CategoryManager().getCategories());

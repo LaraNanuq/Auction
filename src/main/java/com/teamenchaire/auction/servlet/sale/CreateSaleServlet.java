@@ -1,4 +1,4 @@
-package com.teamenchaire.auction.servlet;
+package com.teamenchaire.auction.servlet.sale;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -15,16 +15,17 @@ import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.CategoryManager;
 import com.teamenchaire.auction.bll.ItemManager;
 import com.teamenchaire.auction.bll.UserManager;
+import com.teamenchaire.auction.bo.Item;
 import com.teamenchaire.auction.bo.User;
-import com.teamenchaire.auction.servlet.util.ParameterParser;
+import com.teamenchaire.auction.servlet.ParameterParser;
 
 /**
- * A {@code Servlet} which handles requests to the page to sell an item.
+ * A {@code Servlet} which handles requests to the page to create a sale.
  * 
  * @author Marin Taverniers
  */
-@WebServlet("/sell")
-public final class SellServlet extends HttpServlet {
+@WebServlet("/sale/create")
+public final class CreateSaleServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -47,7 +48,7 @@ public final class SellServlet extends HttpServlet {
             request.setAttribute("city", user.getCity());
         }
         try {
-            request.getRequestDispatcher("/WEB-INF/Sell.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/pages/sale/Create.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
@@ -71,9 +72,9 @@ public final class SellServlet extends HttpServlet {
         String postalCode = ParameterParser.getTrimmedString(request, "postalCode");
         String city = ParameterParser.getTrimmedString(request, "city");
         try {
-            new ItemManager().addItem(user.getId(), name, description, categoryId, price, startDate, endDate, street,
+            Item item = new ItemManager().addItem(user.getId(), name, description, categoryId, price, startDate, endDate, street,
                     postalCode, city);
-            response.sendRedirect(request.getContextPath());
+            response.sendRedirect(request.getContextPath() + "/auction/item/" + item.getId());
             return;
         } catch (BusinessException e) {
             e.printStackTrace();

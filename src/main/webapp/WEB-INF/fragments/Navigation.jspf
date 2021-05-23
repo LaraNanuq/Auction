@@ -8,31 +8,31 @@
     </a>
     <ul class="navigation-list">
         <li class="navigation-item">
-            <a href="${pageContext.request.contextPath}/items" class="navigation-link">
-                Articles
+            <a href="${pageContext.request.contextPath}/auction/list" class="navigation-link">
+                Enchères
             </a>
         </li>
         <c:choose>
             <c:when test="${!requestScope.isLogged}">
                 <li class="navigation-item">
-                    <a href="${pageContext.request.contextPath}/login" class="navigation-link">
+                    <a href="${pageContext.request.contextPath}/account/login" class="navigation-link">
                         Connexion
                     </a>
                 </li>
             </c:when>
             <c:otherwise>
                 <li class="navigation-item">
-                    <a href="${pageContext.request.contextPath}/sell" class="navigation-link">
-                        Vendre
+                    <a href="${pageContext.request.contextPath}/sale/create" class="navigation-link">
+                        Création de vente
                     </a>
                 </li>
                 <li class="navigation-item">
-                    <a href="${pageContext.request.contextPath}/profile" class="navigation-link">
-                        Mon profil
+                    <a href="${pageContext.request.contextPath}/account/edit" class="navigation-link">
+                        Mon compte
                     </a>
                 </li>
                 <li class="navigation-item">
-                    <a href="${pageContext.request.contextPath}/logout" class="navigation-link">
+                    <a href="${pageContext.request.contextPath}/account/logout" class="navigation-link">
                         Déconnexion
                     </a>
                 </li>

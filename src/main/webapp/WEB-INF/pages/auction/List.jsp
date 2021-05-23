@@ -8,11 +8,11 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Articles</title>
+        <title>Liste des articles</title>
     </head>
 
     <body>
-        <%@ include file="fragment/Navigation.jspf" %>
+        <%@ include file="/WEB-INF/fragments/Navigation.jspf" %>
 
         <!-- Content -->
         <section class="section">
@@ -20,10 +20,10 @@
                 Liste des articles
             </p>
 
-            <%@ include file="fragment/Error.jspf" %>
+            <%@ include file="/WEB-INF/fragments/Error.jspf" %>
 
             <!-- Filters -->
-            <form action="${pageContext.request.contextPath}/items" method="GET" class="form">
+            <form action="${pageContext.request.contextPath}/auction/list" method="GET" class="form">
                 <div class="form-section">
                     <fieldset>
                         <legend class="form-section-title">
@@ -168,7 +168,7 @@
                         <!-- Form buttons -->
                         <div class="form-button-group">
                             <input type="submit" value="Rechercher" class="form-button" />
-                            <a href="${pageContext.request.contextPath}/items" class="form-button">
+                            <a href="${pageContext.request.contextPath}/auction/list" class="form-button">
                                 Réinitialiser
                             </a>
                         </div>
@@ -176,7 +176,7 @@
                 </div>
             </form>
 
-            <!-- Items -->
+            <!-- Auction -->
             <c:forEach var="itemGroup" items="${requestScope.itemGroups}">
                 <div class="section">
                     <p class="section-title">
@@ -210,6 +210,6 @@
             </c:forEach>
         </section>
 
-        <%@ include file="fragment/Footer.jspf" %>
+        <%@ include file="/WEB-INF/fragments/Footer.jspf" %>
     </body>
 </html>

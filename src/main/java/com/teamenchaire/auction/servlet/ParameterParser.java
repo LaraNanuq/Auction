@@ -1,4 +1,4 @@
-package com.teamenchaire.auction.servlet.util;
+package com.teamenchaire.auction.servlet;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

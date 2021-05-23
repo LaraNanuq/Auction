@@ -10,7 +10,5 @@ public final class ServletErrorCode {
     private ServletErrorCode() {
     }
 
-
     public static final int ITEMS_TYPE_EMPTY = 30101;
-
 }

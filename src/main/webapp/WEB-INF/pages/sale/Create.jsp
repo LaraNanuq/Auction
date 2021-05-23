@@ -8,22 +8,22 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Vendre</title>
+        <title>Création de vente</title>
     </head>
 
     <body>
-        <%@ include file="fragment/Navigation.jspf" %>
+        <%@ include file="/WEB-INF/fragments/Navigation.jspf" %>
 
         <!-- Content -->
         <section class="section">
             <p class="section-title">
-                Nouvelle vente
+                Création de vente
             </p>
 
-            <%@ include file="fragment/Error.jspf" %>
+            <%@ include file="/WEB-INF/fragments/Error.jspf" %>
 
-            <!-- Item information -->
-            <form action="${pageContext.request.contextPath}/sell" method="POST" class="form">
+            <!-- Sale -->
+            <form action="${pageContext.request.contextPath}/sale/create" method="POST" class="form">
                 <!-- Item -->
                 <div class="form-section">
                     <fieldset>
@@ -173,13 +173,13 @@
                 <!-- Form buttons -->
                 <div class="form-button-group">
                     <input type="submit" value="Valider" class="form-button" />
-                    <a href="${pageContext.request.contextPath}" class="form-button">
+                    <a href="${pageContext.request.contextPath}/home" class="form-button">
                         Annuler
                     </a>
                 </div>
             </form>
         </section>
 
-        <%@ include file="fragment/Footer.jspf" %>
+        <%@ include file="/WEB-INF/fragments/Footer.jspf" %>
     </body>
 </html>

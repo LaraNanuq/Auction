@@ -1,4 +1,4 @@
-package com.teamenchaire.auction.servlet;
+package com.teamenchaire.auction.servlet.auction;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -21,15 +21,16 @@ import com.teamenchaire.auction.bll.CategoryManager;
 import com.teamenchaire.auction.bll.ItemManager;
 import com.teamenchaire.auction.bo.Category;
 import com.teamenchaire.auction.bo.Item;
-import com.teamenchaire.auction.servlet.util.ParameterParser;
+import com.teamenchaire.auction.servlet.ParameterParser;
+import com.teamenchaire.auction.servlet.ServletErrorCode;
 
 /**
- * A {@code Servlet} which handles requests to the page to list items.
+ * A {@code Servlet} which handles requests to the page to list auction.
  * 
  * @author Marin Taverniers
  */
-@WebServlet("/items")
-public final class ItemsServlet extends HttpServlet {
+@WebServlet("/auction/list")
+public final class ListAuctionServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -99,7 +100,7 @@ public final class ItemsServlet extends HttpServlet {
         request.setAttribute("categories", categories);
         request.setAttribute("name", name);
         request.setAttribute("categoryId", categoryId);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/Items.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/pages/auction/List.jsp");
         try {
             dispatcher.forward(request, response);
         } catch (ServletException | IOException e) {

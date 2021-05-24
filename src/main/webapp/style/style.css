@@ -1,1 +1,42 @@
 /* Style sheet */
+
+/* Menu bar */
+.navigation
+    .navigation-title
+    .navigation-list
+        .navigation-item
+        .navigation-link
+
+/* Error */
+.error
+    .error-text
+
+/* Footer */
+.footer
+    .footer-text
+
+/* Body */
+.section
+    .section-title
+
+/* Form */
+.form
+    .form-section
+        .form-section-title
+    .form-list
+        .form-list-item
+    .form-group
+        .form-label
+        .form-input
+        .form-textarea
+    .form-button-group
+        .form-button
+
+/* Text section */
+.info-section
+    .info-section-title
+    .info-list
+        .info-list-item
+    .info-group
+        .info-label
+        .info-value

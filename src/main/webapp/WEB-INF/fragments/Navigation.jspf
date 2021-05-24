@@ -13,7 +13,7 @@
             </a>
         </li>
         <c:choose>
-            <c:when test="${!requestScope.isLogged}">
+            <c:when test="${empty(sessionScope.user)}">
                 <li class="navigation-item">
                     <a href="${pageContext.request.contextPath}/account/login" class="navigation-link">
                         Connexion
@@ -23,12 +23,12 @@
             <c:otherwise>
                 <li class="navigation-item">
                     <a href="${pageContext.request.contextPath}/sale/create" class="navigation-link">
-                        Création de vente
+                        Créer une vente
                     </a>
                 </li>
                 <li class="navigation-item">
-                    <a href="${pageContext.request.contextPath}/account/edit" class="navigation-link">
-                        Mon compte
+                    <a href="${pageContext.request.contextPath}/user/profile/${sessionScope.user.nickname}" class="navigation-link">
+                        Mon profil
                     </a>
                 </li>
                 <li class="navigation-item">

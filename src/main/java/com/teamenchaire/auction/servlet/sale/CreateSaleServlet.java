@@ -32,6 +32,7 @@ public final class CreateSaleServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         User user = new UserManager().getUser(1);
         request.setAttribute("isLogged", true);
+        request.setAttribute("user", user);
 
         try {
             request.setAttribute("categories", new CategoryManager().getCategories());

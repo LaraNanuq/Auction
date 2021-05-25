@@ -35,6 +35,9 @@ public final class UserDAOJdbcImpl implements UserDAO {
             "DELETE FROM users WHERE (id_user = ?)";
 
     // Select
+    private static final String SQL_SELECT_BY_ID =
+            "SELECT * FROM users WHERE (id_user = ?)";
+        
     private static final String SQL_SELECT_BY_NICKNAME =
             "SELECT * FROM users WHERE (nickname = ?)";
 
@@ -132,7 +135,18 @@ public final class UserDAOJdbcImpl implements UserDAO {
 
     @Override
     public User selectById(Integer id) throws BusinessException {
-        throw new BusinessException(DALErrorCode.SQL_SELECT);
+        User user = null;
+        try (Connection connection = JdbcConnectionProvider.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID)) {
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                user = buildUser(result);
+            }
+        } catch (SQLException e) {
+            throw new BusinessException(DALErrorCode.SQL_SELECT, e);
+        }
+        return user;
     }
 
     @Override

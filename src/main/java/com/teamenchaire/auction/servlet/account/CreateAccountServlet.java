@@ -25,7 +25,7 @@ public final class CreateAccountServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getSession().getAttribute("user") == null) {
+        if (request.getSession().getAttribute("userId") == null) {
             ServletDispatcher.forwardToJsp(request, response, "/pages/account/Create.jsp");
         } else {
             ServletDispatcher.redirectToServlet(request, response, "/home");
@@ -54,7 +54,7 @@ public final class CreateAccountServlet extends HttpServlet {
                 throw new BusinessException(ServletErrorCode.ACCOUNT_CREATE_PASSWORD_CHECK_INVALID);
             }
             User user = new UserManager().addUser(nickname, lastName, firstName, email, password, phoneNumber, street, postalCode, city);
-            request.getSession().setAttribute("user", user);
+            request.getSession().setAttribute("userId", user.getId());
             ServletDispatcher.redirectToServlet(request, response, "/home");
             return;
         } catch (BusinessException e) {

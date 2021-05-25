@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.CategoryManager;
 import com.teamenchaire.auction.bll.ItemManager;
+import com.teamenchaire.auction.bll.UserManager;
 import com.teamenchaire.auction.bo.Item;
 import com.teamenchaire.auction.bo.User;
 import com.teamenchaire.auction.servlet.ServletParameterParser;
@@ -31,10 +32,8 @@ public final class CreateSaleServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
-        User user = (User) request.getSession().getAttribute("user");
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
 
-        request.setAttribute("isLogged", true);
-        request.setAttribute("user", user);
 
         try {
             request.setAttribute("categories", new CategoryManager().getCategories());
@@ -46,9 +45,16 @@ public final class CreateSaleServlet extends HttpServlet {
             request.setAttribute("startDate", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
         }
         if (request.getAttribute("street") == null) {
-            request.setAttribute("street", user.getStreet());
-            request.setAttribute("postalCode", user.getPostalCode());
-            request.setAttribute("city", user.getCity());
+            User user;
+            try {
+                user = new UserManager().getUserById(userId);
+                request.setAttribute("street", user.getStreet());
+                request.setAttribute("postalCode", user.getPostalCode());
+                request.setAttribute("city", user.getCity());
+
+            } catch (BusinessException e) {
+                e.printStackTrace();
+            }
         }
         try {
             request.getRequestDispatcher("/WEB-INF/pages/sale/Create.jsp").forward(request, response);
@@ -60,7 +66,7 @@ public final class CreateSaleServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
-        User user = (User) request.getSession().getAttribute("user");
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
 
         try {
             request.setCharacterEncoding("UTF-8");
@@ -77,7 +83,8 @@ public final class CreateSaleServlet extends HttpServlet {
         String postalCode = ServletParameterParser.getTrimmedString(request, "postalCode");
         String city = ServletParameterParser.getTrimmedString(request, "city");
         try {
-            Item item = new ItemManager().addItem(user, name, description, categoryId, price, startDate, endDate, street,
+
+            Item item = new ItemManager().addItem(userId, name, description, categoryId, price, startDate, endDate, street,
                     postalCode, city);
             response.sendRedirect(request.getContextPath() + "/auction/item/" + item.getId());
             return;

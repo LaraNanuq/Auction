@@ -11,12 +11,13 @@ public final class BLLErrorCode {
     }
 
     /* User */
-    public static final int USER_USER_NAME_NULL = 20301;
-    public static final int USER_PASSWORD_NULL = 20302;
-    public static final int USER_UNKNOWN = 20303;
-    public static final int USER_PASSWORD_INVALID = 20304;
-    public static final int USER_ID_NULL = 20305;
-    public static final int USER_NICKNAME_NULL = 20306;
+    public static final int USER_NULL = 20301;
+    public static final int USER_USER_NAME_NULL = 20302;
+    public static final int USER_PASSWORD_NULL = 20303;
+    public static final int USER_UNKNOWN = 20304;
+    public static final int USER_PASSWORD_INVALID = 20305;
+    public static final int USER_ID_NULL = 20306;
+    public static final int USER_NICKNAME_NULL = 20307;
 
     /* Item */
     public static final int ITEM_SELLER_NULL = 20102;

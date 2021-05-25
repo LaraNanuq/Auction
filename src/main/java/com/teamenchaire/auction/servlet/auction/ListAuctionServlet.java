@@ -20,9 +20,8 @@ import com.teamenchaire.auction.bll.CategoryManager;
 import com.teamenchaire.auction.bll.ItemManager;
 import com.teamenchaire.auction.bo.Category;
 import com.teamenchaire.auction.bo.Item;
-import com.teamenchaire.auction.bo.User;
-import com.teamenchaire.auction.servlet.ServletParameterParser;
 import com.teamenchaire.auction.servlet.ServletErrorCode;
+import com.teamenchaire.auction.servlet.ServletParameterParser;
 
 /**
  * A {@code Servlet} which handles requests to the page to list auction.
@@ -46,15 +45,14 @@ public final class ListAuctionServlet extends HttpServlet {
         try {
             categories = new CategoryManager().getCategories();
 
-            User user = (User) request.getSession().getAttribute("user");
+            Integer userId = (Integer) request.getSession().getAttribute("userId");
 
             Map<String, Map<String, Boolean>> groups = new HashMap<>();
             String selectedGroup = null;
             
-            int userId = 1;
             Map<String, List<Item>> itemGroups = new HashMap<>();
             
-            if (user == null) {
+            if (userId == null) {
                 // Anonymous user
                 itemGroups.put("purchases", new ItemManager().getAllAvailableItems(name, categoryId));
             } else {

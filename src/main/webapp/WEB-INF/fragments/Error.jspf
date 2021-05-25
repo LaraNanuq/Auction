@@ -5,6 +5,7 @@
     <div class="error">
         <p class="error-text">
             ${requestScope.errorCode}
+            <fmt:message key="${requestScope.errorCode}" />
         </p>
     </div>
 </c:if>

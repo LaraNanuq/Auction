@@ -25,13 +25,20 @@ public final class ProfileUserServlet extends HttpServlet {
         User user = null;
         if (nickname != null) {
             nickname = nickname.replace("/", "").trim();
-            user = (User) request.getSession().getAttribute("user");
-            if (nickname.equalsIgnoreCase(user.getNickname())) {
-                request.setAttribute("isEditable", true);
-            } else {
-                user = null;
+            Integer userId = (Integer) request.getSession().getAttribute("userId");
+            
+            try {
+                user = new UserManager().getUserById(userId);
+                if (nickname.equalsIgnoreCase(user.getNickname())) {
+                    request.setAttribute("isEditable", true);
+                } else {
+                    user = null;
+                }
+            } catch (BusinessException e) {
+                e.printStackTrace();
             }
         }
+        
         if (user == null) {
             try {
                 user = new UserManager().getUserByNickname(nickname);

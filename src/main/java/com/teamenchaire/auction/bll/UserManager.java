@@ -35,6 +35,7 @@ public final class UserManager {
         checkPostalCode(postalCode);
         checkCity(city);
 
+        // TODO
         // Vérifications spécifiques à l'insertion :
             // + Ajouter la vérification de pseudo unique
             // + Ajouter la vérification de mail unique
@@ -46,9 +47,8 @@ public final class UserManager {
         return user;
     }
 
-    public User updateUser(User user, String nickname, String lastName, String firstName, String email, String password,
+    public User updateUser(Integer id, String nickname, String lastName, String firstName, String email, String password,
             String phoneNumber, String street, String postalCode, String city) throws BusinessException {
-        checkUser(user);
         checkNickname(nickname);
         checkLastName(lastName);
         checkFirstName(firstName);
@@ -61,21 +61,38 @@ public final class UserManager {
 
         // Si tout est bon, créer un objet "temporaire" pour faire la maj dans la bdd
         // (car en cas d'erreur, l'objet "user" ne doit pas encore bouger)
-        // Donc pas de setter, mais je réfléchis encore si c'est une bonne solution...
-        User userUpdated = new User(user.getId(), nickname, lastName, firstName, email, password, phoneNumber, street,
-                postalCode, city, user.getCredit(), user.isAdmin());
-        userDAO.update(userUpdated);
-        return userUpdated;
+
+        // EDIT : Suite à la réponse du prof, on récupère tout le temps l'objet à jour, donc plus besoin d'objet temporaire
+        User user = getUserById(id);
+        checkUser(user);
+        user.setNickname(nickname);
+        user.setLastName(lastName);
+        user.setFirstName(firstName);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setPhoneNumber(phoneNumber);
+        user.setStreet(street);
+        user.setPostalCode(postalCode);
+        user.setCity(city);
+        userDAO.update(user);
+        return user;
     }
 
-    public void removeUser(User user) throws BusinessException {
+    public void removeUser(Integer id) throws BusinessException {
+        User user = getUserById(id);
         checkUser(user);
 
+        // TODO
         // Vérifications spécifiques à la suppression :
             // + Vérifier que l'utilisateur n'a pas d'articles en vente
             // + Vérifier que l'utilisateur n'a pas d'enchères en cours
 
         userDAO.delete(user);
+    }
+
+    public User getUserById(Integer id) throws BusinessException {
+        checkId(id);
+        return userDAO.selectById(id);
     }
 
     public User getUserByNickname(String nickname) throws BusinessException {
@@ -114,6 +131,8 @@ public final class UserManager {
 
     /* Validation */
 
+    // TODO
+
     // Définir les conditions de validation appelées à la création ou la mise à jour
     // (de manière non spécifique)
 
@@ -125,7 +144,15 @@ public final class UserManager {
     // A toi de jouer (hihi) !
 
     private void checkUser(User user) throws BusinessException {
+        if (user == null) {
+            throw new BusinessException(BLLErrorCode.USER_NULL);
+        }
+    }
 
+    private void checkId(Integer id) throws BusinessException {
+        if (id == null) {
+            throw new BusinessException(BLLErrorCode.USER_ID_NULL);
+        }
     }
 
     private void checkNickname(String nickname) throws BusinessException {

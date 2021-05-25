@@ -57,7 +57,7 @@
                             </c:forEach>
                         </select>
                     </div>
-                    <c:if test="${!empty(sessionScope.user)}">
+                    <c:if test="${!empty(sessionScope.userId)}">
                         <div class="form-group">
                             <input
                                 type="radio"

@@ -26,11 +26,9 @@ public final class ItemManager {
         this.itemDAO = DAOFactory.getItemDAO();
     }
 
-    public Item addItem(User seller, String name, String description, Integer categoryId, Integer price,
+    public Item addItem(Integer sellerId, String name, String description, Integer categoryId, Integer price,
             LocalDate startDate, LocalDate endDate, String street, String postalCode, String city)
             throws BusinessException {
-        //User seller = new UserManager().getUserByNickname(sellerId);
-        checkSeller(seller);
         checkName(name);
         checkDescription(description);
         Category category = new CategoryManager().getCategoryById(categoryId);
@@ -39,6 +37,8 @@ public final class ItemManager {
         checkDates(startDate, endDate);
         Withdrawal withdrawalPoint = new Withdrawal(street, postalCode, city);
         checkWithdrawalPoint(withdrawalPoint);
+        User seller = new UserManager().getUserById(sellerId);
+        checkUser(seller);
         Item item = new Item(name, description, startDate, endDate, price, price, seller, category, withdrawalPoint);
         itemDAO.insert(item);
         return item;
@@ -50,7 +50,7 @@ public final class ItemManager {
     
     public List<Item> getAvailablePurchasesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
         checkUserId(userId);
-        //checkName?
+        // TODO : checkName?
         //check category?
         return itemDAO.selectAvailablePurchases(userId, name, categoryId);
     }
@@ -82,15 +82,15 @@ public final class ItemManager {
 
     /* Validation */
 
-    private void checkUserId(Integer id) throws BusinessException {
-        if ((id == null)) {
-            throw new BusinessException(BLLErrorCode.USER_ID_NULL);
+    private void checkUser(User user) throws BusinessException {
+        if ((user == null) || (user.getId() == null)) {
+            throw new BusinessException(BLLErrorCode.ITEM_SELLER_NULL);
         }
     }
 
-    private void checkSeller(User seller) throws BusinessException {
-        if ((seller == null) || (seller.getId() == null)) {
-            throw new BusinessException(BLLErrorCode.ITEM_SELLER_NULL);
+    private void checkUserId(Integer id) throws BusinessException {
+        if ((id == null)) {
+            throw new BusinessException(BLLErrorCode.USER_ID_NULL);
         }
     }
 

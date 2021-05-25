@@ -12,7 +12,7 @@
             </a>
         </li>
         <c:choose>
-            <c:when test="${empty(sessionScope.user)}">
+            <c:when test="${empty(sessionScope.userId)}">
                 <li class="navigation-item">
                     <a href="${pageContext.request.contextPath}/account/login" class="navigation-link">
                         Connexion
@@ -26,7 +26,7 @@
                     </a>
                 </li>
                 <li class="navigation-item">
-                    <a href="${pageContext.request.contextPath}/user/profile/${sessionScope.user.nickname}" class="navigation-link">
+                    <a href="${pageContext.request.contextPath}/user/profile/${sessionScope.userId}" class="navigation-link">
                         Mon profil
                     </a>
                 </li>

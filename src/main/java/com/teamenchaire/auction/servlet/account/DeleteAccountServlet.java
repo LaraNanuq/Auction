@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 
 import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.UserManager;
-import com.teamenchaire.auction.bo.User;
 import com.teamenchaire.auction.servlet.ServletDispatcher;
 import com.teamenchaire.auction.servlet.ServletErrorCode;
 import com.teamenchaire.auction.servlet.ServletParameterParser;
@@ -24,7 +23,7 @@ public final class DeleteAccountServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getSession().getAttribute("user") != null) {
+        if (request.getSession().getAttribute("userId") != null) {
             ServletDispatcher.forwardToJsp(request, response, "/pages/account/Delete.jsp");
         } else {
             ServletDispatcher.redirectToServlet(request, response, "/home");
@@ -39,8 +38,8 @@ public final class DeleteAccountServlet extends HttpServlet {
                 throw new BusinessException(ServletErrorCode.ACCOUNT_DELETE_CONFIRMATION_INVALID);
             }
             HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
-            new UserManager().removeUser(user);
+            Integer userId = (Integer) session.getAttribute("userId");
+            new UserManager().removeUser(userId);
             ServletDispatcher.redirectToServlet(request, response, "/logout");
             return;
         } catch (BusinessException e) {

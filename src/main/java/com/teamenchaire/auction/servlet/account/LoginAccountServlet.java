@@ -24,7 +24,7 @@ public final class LoginAccountServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getSession().getAttribute("user") == null) {
+        if (request.getSession().getAttribute("userId") == null) {
             ServletDispatcher.forwardToJsp(request, response, "/pages/account/Login.jsp");
         } else {
             ServletDispatcher.redirectToServlet(request, response, "/home");
@@ -43,7 +43,7 @@ public final class LoginAccountServlet extends HttpServlet {
         boolean rememberMe = ServletParameterParser.getChecked(request, "rememberMe");
         try {
             User user = new UserManager().getUserByUserName(userName, password);
-            request.getSession().setAttribute("user", user);
+            request.getSession().setAttribute("userId", user.getId());
             // TODO : Handle "rememberMe"
             ServletDispatcher.redirectToServlet(request, response, "/home");
             return;

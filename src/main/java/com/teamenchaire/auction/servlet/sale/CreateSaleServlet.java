@@ -10,14 +10,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.CategoryManager;
 import com.teamenchaire.auction.bll.ItemManager;
-import com.teamenchaire.auction.bll.UserManager;
 import com.teamenchaire.auction.bo.Item;
 import com.teamenchaire.auction.bo.User;
-import com.teamenchaire.auction.servlet.ParameterParser;
+import com.teamenchaire.auction.servlet.ServletParameterParser;
 
 /**
  * A {@code Servlet} which handles requests to the page to create a sale.
@@ -30,7 +30,9 @@ public final class CreateSaleServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        User user = new UserManager().getUser(1);
+
+        User user = (User) request.getSession().getAttribute("user");
+
         request.setAttribute("isLogged", true);
         request.setAttribute("user", user);
 
@@ -57,23 +59,25 @@ public final class CreateSaleServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        User user = new UserManager().getUser(1);
+
+        User user = (User) request.getSession().getAttribute("user");
+
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String name = ParameterParser.getTrimmedString(request, "name");
-        String description = ParameterParser.getTrimmedString(request, "description");
-        Integer categoryId = ParameterParser.getInt(request, "categoryId");
-        Integer price = ParameterParser.getInt(request, "price");
-        LocalDate startDate = ParameterParser.getDate(request, "startDate");
-        LocalDate endDate = ParameterParser.getDate(request, "endDate");
-        String street = ParameterParser.getTrimmedString(request, "street");
-        String postalCode = ParameterParser.getTrimmedString(request, "postalCode");
-        String city = ParameterParser.getTrimmedString(request, "city");
+        String name = ServletParameterParser.getTrimmedString(request, "name");
+        String description = ServletParameterParser.getTrimmedString(request, "description");
+        Integer categoryId = ServletParameterParser.getInt(request, "categoryId");
+        Integer price = ServletParameterParser.getInt(request, "price");
+        LocalDate startDate = ServletParameterParser.getDate(request, "startDate");
+        LocalDate endDate = ServletParameterParser.getDate(request, "endDate");
+        String street = ServletParameterParser.getTrimmedString(request, "street");
+        String postalCode = ServletParameterParser.getTrimmedString(request, "postalCode");
+        String city = ServletParameterParser.getTrimmedString(request, "city");
         try {
-            Item item = new ItemManager().addItem(user.getId(), name, description, categoryId, price, startDate, endDate, street,
+            Item item = new ItemManager().addItem(user, name, description, categoryId, price, startDate, endDate, street,
                     postalCode, city);
             response.sendRedirect(request.getContextPath() + "/auction/item/" + item.getId());
             return;

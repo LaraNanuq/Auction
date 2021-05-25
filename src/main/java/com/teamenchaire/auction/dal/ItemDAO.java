@@ -11,13 +11,6 @@ import com.teamenchaire.auction.bo.Item;
  * @author Marin Taverniers
  */
 public interface ItemDAO extends GenericDAO<Item> {
-    // List<Item> selectBy(String itemName) throws BusinessException;
-
-    // List<Item> selectBy(Integer categoryId) throws BusinessException;
-
-    // List<Item> selectBy(String itemName, Integer categoryId) throws
-    // BusinessException;
-
     List<Item> selectAllAvailable(String name, Integer categoryId) throws BusinessException;
 
     List<Item> selectAvailablePurchases(Integer userId, String name, Integer categoryId) throws BusinessException;

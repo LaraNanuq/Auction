@@ -3,6 +3,7 @@ package com.teamenchaire.auction.dal;
 import com.teamenchaire.auction.dal.jdbc.BidDAOJdbcImpl;
 import com.teamenchaire.auction.dal.jdbc.CategoryDAOJdbcImpl;
 import com.teamenchaire.auction.dal.jdbc.ItemDAOJdbcImpl;
+import com.teamenchaire.auction.dal.jdbc.UserDAOJdbcImpl;
 
 /**
  * A {@code class} which creates instances of data access objects using the JDBC
@@ -13,6 +14,10 @@ import com.teamenchaire.auction.dal.jdbc.ItemDAOJdbcImpl;
 public final class DAOFactory {
 
     private DAOFactory() {
+    }
+
+    public static UserDAO getUserDAO() {
+        return new UserDAOJdbcImpl();
     }
 
     public static ItemDAO getItemDAO() {

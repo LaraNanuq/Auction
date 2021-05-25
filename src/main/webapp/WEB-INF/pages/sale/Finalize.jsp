@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ page pageEncoding="UTF-8" %>
-<%@ page isErrorPage="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -13,7 +12,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/style/style.css" />
-        <title>Page introuvable</title>
+        <title>Finalisation de vente</title>
     </head>
 
     <body>
@@ -22,15 +21,13 @@
         <!-- Content -->
         <section class="section">
             <p class="section-title">
-                Page introuvable
+                Finalisation de vente
             </p>
 
-            <!-- Error -->
-            <div class="error">
-                <p class="error-text">
-                    Désolé, cette page n'existe pas ou a été déplacée.
-                </p>
-            </div>
+            <%@ include file="/WEB-INF/fragments/Error.jspf" %>
+
+            <!-- Sale -->
+            
         </section>
 
         <%@ include file="/WEB-INF/fragments/Footer.jspf" %>

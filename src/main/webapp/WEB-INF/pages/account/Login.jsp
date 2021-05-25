@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setBundle basename="com.teamenchaire.auction.localization.localization" />
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,7 +19,7 @@
         <%@ include file="/WEB-INF/fragments/Navigation.jspf" %>
 
         <!-- Content -->
-        <section class="section">
+        <section class="section login-section">
             <p class="section-title">
                 Connexion
             </p>
@@ -30,15 +33,15 @@
                         Profil existant
                     </legend>
                     <div class="form-group">
-                        <label for="nickname" class="form-label">
-                            Pseudo
+                        <label for="user-name" class="form-label">
+                            Nom d'utilisateur
                         </label>
                         <input
                             type="text"
-                            name="nickname"
-                            id="nickname"
-                            placeholder="Pseudo"
-                            value="${requestScope.nickname}"
+                            name="userName"
+                            id="user-name"
+                            placeholder="Pseudo ou email"
+                            value="${requestScope.userName}"
                             class="form-input"
                             autofocus
                         />
@@ -52,29 +55,32 @@
                             name="password"
                             id="password"
                             placeholder="Mot de passe"
+                            value="${requestScope.password}"
                             class="form-input"
                         />
-                        <a href="${pageContext.request.contextPath}/account/login" class="form-link">
-                            Mot de passe oublié
-                        </a>
-                    </div>
-                    <div class="form-group">
-                        <input
-                            type="checkbox"
-                            name="rememberMe"
-                            id="remember-me"
-                            class="form-input"
-                            ${requestScope.rememberMe ? 'checked' : ''}
-                        />
-                        <label for="remember-me" class="form-label">
-                            Se souvenir de moi
-                        </label>
                     </div>
 
                     <!-- Form buttons -->
-                    <div class="form-button-group">
-                        <input type="submit" value="Valider" class="form-button" />
+                    <div class="login-form-button">
+                        <div class="form-group">
+                            <div class="form-button-group">
+                                <input type="submit" value="Valider" class="form-button" />
+                            </div>
+                            <input
+                                type="checkbox"
+                                name="rememberMe"
+                                id="remember-me"
+                                class=""
+                                ${requestScope.rememberMe ? 'checked' : ''}
+                            />
+                            <label for="remember-me" class="remember-me">
+                                Se souvenir de moi
+                            </label>
+                        </div>
                     </div>
+                    <a href="${pageContext.request.contextPath}/account/login" class="form-link">
+                        Mot de passe oublié
+                    </a>
                 </fieldset>
             </form>
 
@@ -84,8 +90,10 @@
                     Nouveau profil
                 </legend>
                 <div class="form-button-group">
-                    <a href="${pageContext.request.contextPath}/account/create" class="form-button">
-                        Créer un compte
+                    <a href="${pageContext.request.contextPath}/account/create">
+                        <button type="button" class="login-form-button-long">
+                            Créer un compte
+                        </button>
                     </a>
                 </div>
             </fieldset>

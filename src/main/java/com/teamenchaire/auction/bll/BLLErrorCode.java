@@ -10,9 +10,15 @@ public final class BLLErrorCode {
     private BLLErrorCode() {
     }
 
-    //public static final int ITEM_NULL = 20101;
-    //public static final int ITEM_ALREADY_EXISTS = 20102;
+    /* User */
+    public static final int USER_USER_NAME_NULL = 20301;
+    public static final int USER_PASSWORD_NULL = 20302;
+    public static final int USER_UNKNOWN = 20303;
+    public static final int USER_PASSWORD_INVALID = 20304;
+    public static final int USER_ID_NULL = 20305;
+    public static final int USER_NICKNAME_NULL = 20306;
 
+    /* Item */
     public static final int ITEM_SELLER_NULL = 20102;
     public static final int ITEM_NAME_NULL = 20103;
     public static final int ITEM_NAME_TOO_LONG = 20104;
@@ -32,7 +38,6 @@ public final class BLLErrorCode {
     public static final int ITEM_WITHDRAWAL_CITY_NULL = 20118;
     public static final int ITEM_WITHDRAWAL_CITY_TOO_LONG = 20119;
 
+    /* Category */
     public static final int CATEGORY_ID_NULL = 20201;
-
-    public static final int USER_ID_NULL = 20301;
 }

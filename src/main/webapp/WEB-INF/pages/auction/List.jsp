@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setBundle basename="com.teamenchaire.auction.localization.localization" />
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -168,7 +171,7 @@
                     <!-- Form buttons -->
                     <div class="form-button-group">
                         <input type="submit" value="Rechercher" class="form-button" />
-                        <a href="${pageContext.request.contextPath}/auction/list" class="form-button">
+                        <a href="${pageContext.request.contextPath}/auction/list" class="auction-list-button-reset">
                             Réinitialiser
                         </a>
                     </div>

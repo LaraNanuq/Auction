@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setBundle basename="com.teamenchaire.auction.localization.localization" />
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -38,7 +41,7 @@
                             name="nickname"
                             id="nickname"
                             placeholder="Pseudo"
-                            value="${requestScope.user.nickname}"
+                            value="${requestScope.nickname}"
                             class="form-input"
                             autofocus
                         />
@@ -52,7 +55,7 @@
                             name="lastName"
                             id="last-name"
                             placeholder="Nom"
-                            value="${requestScope.user.lastName}"
+                            value="${requestScope.lastName}"
                             class="form-input"
                         />
                     </div>
@@ -65,7 +68,7 @@
                             name="firstName"
                             id="first-name"
                             placeholder="Prénom"
-                            value="${requestScope.user.firstName}"
+                            value="${requestScope.firstName}"
                             class="form-input"
                         />
                     </div>
@@ -78,7 +81,7 @@
                             name="email"
                             id="email"
                             placeholder="Email"
-                            value="${requestScope.user.email}"
+                            value="${requestScope.email}"
                             class="form-input"
                         />
                     </div>
@@ -91,7 +94,7 @@
                             name="phoneNumber"
                             id="phone-number"
                             placeholder="Téléphone"
-                            value="${requestScope.user.phoneNumber}"
+                            value="${requestScope.phoneNumber}"
                             class="form-input"
                         />
                     </div>
@@ -104,7 +107,7 @@
                             name="street"
                             id="street"
                             placeholder="Rue"
-                            value="${requestScope.user.street}"
+                            value="${requestScope.street}"
                             class="form-input"
                         />
                     </div>
@@ -113,11 +116,11 @@
                             Code postal
                         </label>
                         <input
-                            type="number"
+                            type="text"
                             name="postalCode"
                             id="postal-code"
                             placeholder="Code postal"
-                            value="${requestScope.user.postalCode}"
+                            value="${requestScope.postalCode}"
                             class="form-input"
                         />
                     </div>
@@ -130,7 +133,7 @@
                             name="city"
                             id="city"
                             placeholder="Ville"
-                            value="${requestScope.user.city}"
+                            value="${requestScope.city}"
                             class="form-input"
                         />
                     </div>
@@ -155,6 +158,7 @@
                             name="newPassword"
                             id="new-password"
                             placeholder="Nouveau mot de passe"
+                            value="${requestScope.newPassword}"
                             class="form-input"
                         />
                     </div>
@@ -178,7 +182,7 @@
                                 Crédit
                             </label>
                             <span id="price" class="info-value">
-                                ${requestScope.user.credit}
+                                ${sessionScope.user.credit}
                             </span>
                         </div>
                     </div>
@@ -188,6 +192,9 @@
                         <input type="submit" value="Valider" class="form-button" />
                         <a href="${pageContext.request.contextPath}/account/delete" class="form-button">
                             Supprimer mon compte
+                        </a>
+                        <a href="${pageContext.request.contextPath}/home" class="form-button">
+                            Retour
                         </a>
                     </div>
                 </fieldset>

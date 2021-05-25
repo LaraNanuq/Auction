@@ -1,12 +1,17 @@
 package com.teamenchaire.auction.servlet.account;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.teamenchaire.auction.BusinessException;
+import com.teamenchaire.auction.bll.UserManager;
+import com.teamenchaire.auction.bo.User;
+import com.teamenchaire.auction.servlet.ServletDispatcher;
+import com.teamenchaire.auction.servlet.ServletErrorCode;
+import com.teamenchaire.auction.servlet.ServletParameterParser;
 
 /**
  * A {@code Servlet} which handles requests to the page to delete an account.
@@ -19,11 +24,29 @@ public final class DeleteAccountServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        
+        if (request.getSession().getAttribute("user") != null) {
+            ServletDispatcher.forwardToJsp(request, response, "/pages/account/Delete.jsp");
+        } else {
+            ServletDispatcher.redirectToServlet(request, response, "/home");
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        boolean confirmation = ServletParameterParser.getChecked(request, "confirmation");
+        try {
+            if (!confirmation) {
+                throw new BusinessException(ServletErrorCode.ACCOUNT_DELETE_CONFIRMATION_INVALID);
+            }
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+            new UserManager().removeUser(user);
+            ServletDispatcher.redirectToServlet(request, response, "/logout");
+            return;
+        } catch (BusinessException e) {
+            e.printStackTrace();
+            request.setAttribute("errorCode", e.getCode());
+        }
         doGet(request, response);
     }
 }

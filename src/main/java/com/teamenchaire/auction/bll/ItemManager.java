@@ -26,14 +26,14 @@ public final class ItemManager {
         this.itemDAO = DAOFactory.getItemDAO();
     }
 
-    public Item addItem(Integer sellerId, String name, String description, Integer categoryId, Integer price,
+    public Item addItem(User seller, String name, String description, Integer categoryId, Integer price,
             LocalDate startDate, LocalDate endDate, String street, String postalCode, String city)
             throws BusinessException {
-        User seller = new UserManager().getUser(sellerId);
+        //User seller = new UserManager().getUserByNickname(sellerId);
         checkSeller(seller);
         checkName(name);
         checkDescription(description);
-        Category category = new CategoryManager().getCategory(categoryId);
+        Category category = new CategoryManager().getCategoryById(categoryId);
         checkCategory(category);
         checkPrice(price);
         checkDates(startDate, endDate);
@@ -50,8 +50,8 @@ public final class ItemManager {
     
     public List<Item> getAvailablePurchasesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
         checkUserId(userId);
-        //checkName
-        //check category
+        //checkName?
+        //check category?
         return itemDAO.selectAvailablePurchases(userId, name, categoryId);
     }
     
@@ -80,29 +80,6 @@ public final class ItemManager {
         return itemDAO.selectEndedSales(userId, name, categoryId);
     }
 
-/*
-    public List<Item> getItems() throws BusinessException {
-        return itemDAO.selectAll();
-    }
-
-    public List<Item> getItems(String name) throws BusinessException {
-        checkName(name);
-        return itemDAO.selectBy(name);
-    }
-
-    public List<Item> getItems(Integer categoryId) throws BusinessException {
-        Category category = new CategoryManager().getCategory(categoryId);
-        checkCategory(category);
-        return itemDAO.selectBy(categoryId);
-    }
-
-    public List<Item> getItems(String name, Integer categoryId) throws BusinessException {
-        checkName(name);
-        Category category = new CategoryManager().getCategory(categoryId);
-        checkCategory(category);
-        return itemDAO.selectBy(name, categoryId);
-    }
-*/
     /* Validation */
 
     private void checkUserId(Integer id) throws BusinessException {

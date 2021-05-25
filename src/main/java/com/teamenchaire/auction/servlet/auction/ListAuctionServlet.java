@@ -14,14 +14,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.CategoryManager;
 import com.teamenchaire.auction.bll.ItemManager;
 import com.teamenchaire.auction.bo.Category;
 import com.teamenchaire.auction.bo.Item;
-import com.teamenchaire.auction.servlet.ParameterParser;
+import com.teamenchaire.auction.bo.User;
+import com.teamenchaire.auction.servlet.ServletParameterParser;
 import com.teamenchaire.auction.servlet.ServletErrorCode;
 
 /**
@@ -41,20 +41,20 @@ public final class ListAuctionServlet extends HttpServlet {
             e.printStackTrace();
         }
         List<Category> categories = null;
-        String name = ParameterParser.getTrimmedString(request, "name");
-        Integer categoryId = ParameterParser.getInt(request, "categoryId");
+        String name = ServletParameterParser.getTrimmedString(request, "name");
+        Integer categoryId = ServletParameterParser.getInt(request, "categoryId");
         try {
             categories = new CategoryManager().getCategories();
 
-            //HttpSession session = request.getSession(false);
-            HttpSession session = request.getSession(true);
+            User user = (User) request.getSession().getAttribute("user");
+
             Map<String, Map<String, Boolean>> groups = new HashMap<>();
             String selectedGroup = null;
             
             int userId = 1;
             Map<String, List<Item>> itemGroups = new HashMap<>();
             
-            if (session == null) {
+            if (user == null) {
                 // Anonymous user
                 itemGroups.put("purchases", new ItemManager().getAllAvailableItems(name, categoryId));
             } else {
@@ -62,13 +62,13 @@ public final class ListAuctionServlet extends HttpServlet {
                 // Logged user
                 groups.put("purchases", new HashMap<>());
                 groups.put("sales", new HashMap<>());
-                selectedGroup = ParameterParser.getTrimmedString(request, "group");
+                selectedGroup = ServletParameterParser.getTrimmedString(request, "group");
                 if ((selectedGroup == null) || (selectedGroup.isEmpty())) {
                     selectedGroup = "purchases";
                     groups.get("purchases").put("available", true);
                 } else {
                     for (Entry<String, Map<String, Boolean>> group : groups.entrySet()) {
-                        String[] selectedTypes = ParameterParser.getTrimmedStringArray(request, group.getKey());
+                        String[] selectedTypes = ServletParameterParser.getTrimmedStringArray(request, group.getKey());
                         if (selectedTypes != null) {
                             for (String selectedType : selectedTypes) {
                                 group.getValue().put(selectedType, true);
@@ -82,7 +82,7 @@ public final class ListAuctionServlet extends HttpServlet {
                     request.setAttribute(group.getKey(), group.getValue());
                 }
                 if (groups.get(selectedGroup).isEmpty()) {
-                    throw new BusinessException(ServletErrorCode.ITEMS_TYPE_EMPTY);
+                    throw new BusinessException(ServletErrorCode.AUCTION_LIST_FILTER_GROUP_EMPTY);
                 }
                 
                 for (String subGroup : groups.get(selectedGroup).keySet()) {

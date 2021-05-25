@@ -20,8 +20,13 @@ import com.teamenchaire.auction.dal.DALErrorCode;
  * @author Marin Taverniers
  */
 public class CategoryDAOJdbcImpl implements CategoryDAO {
-    private static final String SQL_SELECT_ALL = "SELECT * FROM categories";
-    private static final String SQL_SELECT_BY_ID = "SELECT * FROM categories WHERE (id_category = ?)";
+
+    /* Select */
+    private static final String SQL_SELECT_ALL =
+            "SELECT * FROM categories";
+    
+    private static final String SQL_SELECT_BY_ID =
+            "SELECT * FROM categories WHERE (id_category = ?)";
 
     /**
      * Constructs a {@code CategoryDAOJdbcImpl}.

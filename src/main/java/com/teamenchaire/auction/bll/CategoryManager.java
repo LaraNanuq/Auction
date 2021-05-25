@@ -26,10 +26,12 @@ public final class CategoryManager {
         return categoryDAO.selectAll();
     }
 
-    public Category getCategory(Integer id) throws BusinessException {
+    public Category getCategoryById(Integer id) throws BusinessException {
         checkId(id);
         return categoryDAO.selectById(id);
     }
+
+    /* Validation */
 
     private void checkId(Integer id) throws BusinessException {
         if (id == null) {

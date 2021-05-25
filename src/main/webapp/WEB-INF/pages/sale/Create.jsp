@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setBundle basename="com.teamenchaire.auction.localization.localization" />
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -168,14 +171,16 @@
                 <!-- Form buttons -->
                 <div class="form-button-group">
                     <input type="submit" value="Valider" class="form-button" />
-                    <a href="${pageContext.request.contextPath}/home" class="form-button">
-                        Annuler
-                    </a>
                     <c:if test="${requestScope.isDeletable}">
                         <a href="${pageContext.request.contextPath}/sale/delete/${requestScope.item.id}" class="form-button">
                             Supprimer
                         </a>
                     </c:if>
+                    <a href="${pageContext.request.contextPath}/home">
+                        <button type="button" class="form-button">
+                            Retour
+                        </button>
+                    </a>
                 </div>
             </form>
         </section>

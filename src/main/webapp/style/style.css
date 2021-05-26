@@ -15,7 +15,6 @@ ul {
 article, aside, canvas, details, figcaption, figure, footer,
 header, hgroup, menu, nav, section, summary, main {
     margin: 0;
-    
     outline: 0;
 }
 
@@ -34,7 +33,7 @@ body {
     background-color: #333334;
     padding-left: 80px;
     padding-right: 80px;
-    height: 70px;
+    height: 50px;
     color: white;
 }
     .navigation-title {
@@ -80,10 +79,11 @@ body {
 /* Body */
 .section {
     padding-left: 220px;
-    padding-right: 80px;
+    padding-right: 80px; 
 }
     .section-title {
-        padding-top: 10px;
+        padding-top: 20px;
+        padding-bottom: 15px;
         font-size: x-large;
         color: #333334;
         font-weight: bold;
@@ -116,6 +116,7 @@ body {
                 color: #333334;
                 font-weight: bold;
                 font-size: small;
+                padding-right: 15px;
             }
 
             .form-input {
@@ -123,9 +124,14 @@ body {
                 border-radius: 4px;
                 width: 50%;
             }
+                .form-input-textarea {
+                }
 
-            .form-textarea {
-            }
+                .form-input-radio {
+                }
+
+                .form-input-checkbox {
+                }
 
             .form-link {
                 color: black;
@@ -137,15 +143,31 @@ body {
         }
         .form-button-group :hover {
             color: grey;
+            cursor: pointer;
         }
             .form-button {
                 text-decoration: none;
-                width: 130px;
-                height: 40px;
-                border-radius: 5px;
                 color: white;
                 background-color: #333334;
+                border-radius: 5px;
+                width: 130px;
+                height: 40px;
                 font-size: large;
+                border: none;
+            }
+
+            .form-button-link {
+                text-decoration: none;
+                color: white;
+                background-color: #333334;
+			    border-radius: 4px;
+			    padding: 7px;
+			    padding-left: 30px;
+			    padding-right: 30px;
+			    margin-top: 3px;
+			    margin-right: 4px;
+			    font-size: 18px;
+			    border-bottom: 3px solid transparent;
             }
 
 /* Text section */
@@ -160,8 +182,12 @@ body {
         }
 
     .info-group {
+        padding: 10px;
     }
         .info-value {
+            font-size: 15px;
+	        font-weight: bold;
+            padding-left: 20px;
         }
 
 /* Login */
@@ -180,23 +206,4 @@ body {
 .login-remember-me {
     color: #333334;
     font-size: small;
-}
-
-.login-form-button-long {
-    width: 180px;
-    height: 40px;
-    border-radius: 5px;
-    color: white;
-    background-color: #333334 ;
-    font-size: large;
-}
-
-/* Auction list */
-.auction-list-button-reset {
-    text-decoration: none;
-    color: grey;
-}
-
-.auction-list-button-reset:hover {
-    color: black;
 }

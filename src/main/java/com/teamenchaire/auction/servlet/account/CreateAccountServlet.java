@@ -13,11 +13,12 @@ import com.teamenchaire.auction.bo.User;
 import com.teamenchaire.auction.servlet.ServletDispatcher;
 import com.teamenchaire.auction.servlet.ServletErrorCode;
 import com.teamenchaire.auction.servlet.ServletParameterParser;
+import com.teamenchaire.auction.servlet.UserSession;
 
 /**
  * A {@code Servlet} which handles requests to the page to create an account.
  * 
- * @author Marin Taverniers
+ * @author Ayelen Dumas
  */
 @WebServlet("/account/create")
 public final class CreateAccountServlet extends HttpServlet {
@@ -25,10 +26,11 @@ public final class CreateAccountServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getSession().getAttribute("userId") == null) {
-            ServletDispatcher.forwardToJsp(request, response, "/pages/account/Create.jsp");
+        ServletDispatcher dispatcher = new ServletDispatcher(request, response);
+        if (!new UserSession(request).isValid()) {
+            dispatcher.forwardToJsp("/pages/account/Create.jsp");
         } else {
-            ServletDispatcher.redirectToServlet(request, response, "/home");
+            dispatcher.redirectToServlet("/home");
         }
     }
 
@@ -39,37 +41,41 @@ public final class CreateAccountServlet extends HttpServlet {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-		String nickname = ServletParameterParser.getTrimmedString(request, "nickname");
-		String lastName = ServletParameterParser.getTrimmedString(request, "lastName");
-		String firstName = ServletParameterParser.getTrimmedString(request, "firstName");
-		String email = ServletParameterParser.getTrimmedString(request, "email");
-		String phoneNumber = ServletParameterParser.getTrimmedString(request, "phoneNumber");
-		String street = ServletParameterParser.getTrimmedString(request, "street");
-		String postalCode = ServletParameterParser.getTrimmedString(request, "postalCode");
-		String city = ServletParameterParser.getTrimmedString(request, "city");
-		String password = ServletParameterParser.getString(request, "password");
-		String passwordCheck = ServletParameterParser.getString(request, "passwordCheck");
+        ServletParameterParser parser = new ServletParameterParser(request);
+        String nickname = parser.getTrimmedString("nickname");
+        String lastName = parser.getTrimmedString("lastName");
+        String firstName = parser.getTrimmedString("firstName");
+        String email = parser.getTrimmedString("email");
+        String phoneNumber = parser.getTrimmedString("phoneNumber");
+        String street = parser.getTrimmedString("street");
+        String postalCode = parser.getTrimmedString("postalCode");
+        String city = parser.getTrimmedString("city");
+        String password = parser.getString("password");
+        String passwordCheck = parser.getString("passwordCheck");
         try {
-            if (!password.equals(passwordCheck)) {
-                throw new BusinessException(ServletErrorCode.ACCOUNT_CREATE_PASSWORD_CHECK_INVALID);
-            }
-            User user = new UserManager().addUser(nickname, lastName, firstName, email, password, phoneNumber, street, postalCode, city);
-            request.getSession().setAttribute("userId", user.getId());
-            ServletDispatcher.redirectToServlet(request, response, "/home");
-            return;
+            checkPassword(password, passwordCheck);
+            User user = new UserManager().addUser(nickname, lastName, firstName, email, password, phoneNumber, street,
+                    postalCode, city);
+            new UserSession(request).setUserId(user.getId());
         } catch (BusinessException e) {
             e.printStackTrace();
             request.setAttribute("errorCode", e.getCode());
+            request.setAttribute("nickname", nickname);
+            request.setAttribute("lastName", lastName);
+            request.setAttribute("firstName", firstName);
+            request.setAttribute("email", email);
+            request.setAttribute("phoneNumber", phoneNumber);
+            request.setAttribute("street", street);
+            request.setAttribute("postalCode", postalCode);
+            request.setAttribute("city", city);
+            request.setAttribute("password", password);
         }
-        request.setAttribute("nickname", nickname);
-        request.setAttribute("lastName", lastName);
-        request.setAttribute("firstName", firstName);
-        request.setAttribute("email", email);
-        request.setAttribute("phoneNumber", phoneNumber);
-        request.setAttribute("street", street);
-        request.setAttribute("postalCode", postalCode);
-        request.setAttribute("city", city);
-        request.setAttribute("password", password);
         doGet(request, response);
+    }
+
+    private void checkPassword(String password, String passwordCheck) throws BusinessException {
+        if ((password != null) && (!password.equals(passwordCheck))) {
+            throw new BusinessException(ServletErrorCode.ACCOUNT_CREATE_PASSWORD_CHECK_INVALID);
+        }
     }
 }

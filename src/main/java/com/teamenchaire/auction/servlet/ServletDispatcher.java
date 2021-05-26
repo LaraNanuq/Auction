@@ -8,36 +8,46 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * An utility {@code class} which dispatches servlet requests to other resources.
+ * An utility {@code class} which dispatches servlet requests to other
+ * resources.
  * 
  * @author Marin Taverniers
  */
 public class ServletDispatcher {
+    private HttpServletRequest request;
+    private HttpServletResponse response;
 
-    private ServletDispatcher() {
+    public ServletDispatcher(HttpServletRequest request, HttpServletResponse response) {
+        this.request = request;
+        this.response = response;
     }
 
-    public static void forwardToJsp(HttpServletRequest request, HttpServletResponse response, String url) {
+    public void forwardToJsp(String url) {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF" + url);
         try {
             dispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
-            sendError(response, e);
+            e.printStackTrace();
+            sendError();
         }
     }
 
-    public static void redirectToServlet(HttpServletRequest request, HttpServletResponse response, String url) {
+    public void redirectToServlet(String url) {
         try {
             response.sendRedirect(request.getContextPath() + url);
         } catch (IOException e) {
-            sendError(response, e);
+            e.printStackTrace();
+            sendError();
         }
     }
 
-    private static void sendError(HttpServletResponse response, Throwable cause) {
-        cause.printStackTrace();
+    public void sendError() {
+        sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    }
+
+    public void sendError(int code) {
         try {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.sendError(code);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -12,6 +12,7 @@ import com.teamenchaire.auction.bll.UserManager;
 import com.teamenchaire.auction.bo.User;
 import com.teamenchaire.auction.servlet.ServletDispatcher;
 import com.teamenchaire.auction.servlet.ServletParameterParser;
+import com.teamenchaire.auction.servlet.UserSession;
 
 /**
  * A {@code Servlet} which handles requests to the page to log into an account.
@@ -24,10 +25,11 @@ public final class LoginAccountServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getSession().getAttribute("userId") == null) {
-            ServletDispatcher.forwardToJsp(request, response, "/pages/account/Login.jsp");
+        ServletDispatcher dispatcher = new ServletDispatcher(request, response);
+        if (!new UserSession(request).isValid()) {
+            dispatcher.forwardToJsp("/pages/account/Login.jsp");
         } else {
-            ServletDispatcher.redirectToServlet(request, response, "/home");
+            dispatcher.redirectToServlet("/home");
         }
     }
 
@@ -38,22 +40,20 @@ public final class LoginAccountServlet extends HttpServlet {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String userName = ServletParameterParser.getTrimmedString(request, "userName");
-        String password = ServletParameterParser.getString(request, "password");
-        boolean rememberMe = ServletParameterParser.getChecked(request, "rememberMe");
+        ServletParameterParser parser = new ServletParameterParser(request);
+        String userName = parser.getTrimmedString("userName");
+        String password = parser.getString("password");
+        boolean rememberMe = parser.getChecked("rememberMe");
         try {
             User user = new UserManager().getUserByUserName(userName, password);
-            request.getSession().setAttribute("userId", user.getId());
-            // TODO : Handle "rememberMe"
-            ServletDispatcher.redirectToServlet(request, response, "/home");
-            return;
+            new UserSession(request).setUserId(user.getId());
         } catch (BusinessException e) {
             e.printStackTrace();
             request.setAttribute("errorCode", e.getCode());
+            request.setAttribute("userName", userName);
+            request.setAttribute("password", password);
+            request.setAttribute("rememberMe", rememberMe);
         }
-        request.setAttribute("userName", userName);
-        request.setAttribute("password", password);
-        request.setAttribute("rememberMe", rememberMe);
         doGet(request, response);
     }
 }

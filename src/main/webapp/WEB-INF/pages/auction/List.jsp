@@ -57,113 +57,67 @@
                             </c:forEach>
                         </select>
                     </div>
-                    <c:if test="${!empty(sessionScope.userId)}">
-                        <div class="form-group">
+                    <c:if test="${sessionScope.isValid}">
+                        <div>
                             <input
                                 type="radio"
                                 name="group"
                                 id="filter-purchases"
                                 value="purchases"
-                                class="form-input"
+                                class="form-input-radio"
                                 ${requestScope.group == 'purchases' ? 'checked' : ''}
                             />
                             <label for="filter-purchases" class="form-label">
                                 Achats
                             </label>
+
                             <ul class="form-list">
-                                <li class="form-list-item">
-                                    <input
-                                        type="checkbox"
-                                        name="purchases"
-                                        id="filter-purchases-available"
-                                        value="available"
-                                        class="form-input"
-                                        ${requestScope.purchases.available ? 'checked' : ''}
-                                    />
-                                    <label for="filter-purchases-available" class="form-label">
-                                        Enchères disponibles
-                                    </label>
-                                </li>
-                                <li class="form-list-item">
-                                    <input
-                                        type="checkbox"
-                                        name="purchases"
-                                        id="filter-purchases-current"
-                                        value="current"
-                                        class="form-input"
-                                        ${requestScope.purchases.current ? 'checked' : ''}
-                                    />
-                                    <label for="filter-purchases-current" class="form-label">
-                                        Enchères en cours
-                                    </label>
-                                </li>
-                                <li class="form-list-item">
-                                    <input
-                                        type="checkbox"
-                                        name="purchases"
-                                        id="filter-purchases-won"
-                                        value="won"
-                                        class="form-input"
-                                        ${requestScope.purchases.won ? 'checked' : ''}
-                                    />
-                                    <label for="filter-purchases-won" class="form-label">
-                                        Enchères remportées
-                                    </label>
-                                </li>
+                                <c:forEach var="subGroup" items="${requestScope.purchasesGroups}">
+                                    <li class="form-list-item">
+                                        <input
+                                            type="checkbox"
+                                            name="purchases"
+                                            id="filter-purchases-${subGroup.key.groupName}"
+                                            value="${subGroup.key.groupName}"
+                                            class="form-input-checkbox"
+                                            ${subGroup.value ? 'checked' : ''}
+                                        />
+                                        <label for="filter-purchases-${subGroup.key.groupName}" class="form-label">
+                                            <fmt:message key="purchases_${subGroup.key.groupName}" />
+                                        </label>
+                                    </li>
+                                </c:forEach>
                             </ul>
                         </div>
-                        <div class="form-group">
+                        <div>
                             <input
                                 type="radio"
                                 name="group"
                                 id="filter-sales"
                                 value="sales"
-                                class="form-input"
+                                class="form-input-radio"
                                 ${requestScope.group == 'sales' ? 'checked' : ''}
                             />
                             <label for="filter-sales" class="form-label">
                                 Ventes
                             </label>
+
                             <ul class="form-list">
-                                <li class="form-list-item">
-                                    <input
-                                        type="checkbox"
-                                        name="sales"
-                                        id="filter-sales-current"
-                                        value="current"
-                                        class="form-input"
-                                        ${requestScope.sales.current ? 'checked' : ''}
-                                    />
-                                    <label for="filter-sales-current" class="form-label">
-                                        Ventes en cours
-                                    </label>
-                                </li>
-                                <li class="form-list-item">
-                                    <input
-                                        type="checkbox"
-                                        name="sales"
-                                        id="filter-sales-future"
-                                        value="future"
-                                        class="form-input"
-                                        ${requestScope.sales.future ? 'checked' : ''}
-                                    />
-                                    <label for="filter-sales-future" class="form-label">
-                                        Ventes à venir
-                                    </label>
-                                </li>
-                                <li class="form-list-item">
-                                    <input
-                                        type="checkbox"
-                                        name="sales"
-                                        id="filter-sales-ended"
-                                        value="ended"
-                                        class="form-input"
-                                        ${requestScope.sales.ended ? 'checked' : ''}
-                                    />
-                                    <label for="filter-sales-ended" class="form-label">
-                                        Ventes terminées
-                                    </label>
-                                </li>
+                                <c:forEach var="subGroup" items="${requestScope.salesGroups}">
+                                    <li class="form-list-item">
+                                        <input
+                                            type="checkbox"
+                                            name="sales"
+                                            id="filter-sales-${subGroup.key.groupName}"
+                                            value="${subGroup.key.groupName}"
+                                            class="form-input-checkbox"
+                                            ${subGroup.value ? 'checked' : ''}
+                                        />
+                                        <label for="filter-sales-${subGroup.key.groupName}" class="form-label">
+                                            <fmt:message key="sales_${subGroup.key.groupName}" />
+                                        </label>
+                                    </li>
+                                </c:forEach>
                             </ul>
                         </div>
                     </c:if>
@@ -171,7 +125,7 @@
                     <!-- Form buttons -->
                     <div class="form-button-group">
                         <input type="submit" value="Rechercher" class="form-button" />
-                        <a href="${pageContext.request.contextPath}/auction/list" class="auction-list-button-reset">
+                        <a href="${pageContext.request.contextPath}/auction/list" class="form-button-link">
                             Réinitialiser
                         </a>
                     </div>
@@ -179,15 +133,15 @@
             </form>
 
             <!-- Auction -->
-            <c:forEach var="itemGroup" items="${requestScope.itemGroups}">
+            <c:forEach var="itemsGroup" items="${requestScope.items}">
                 <div class="info-section">
                     <p class="info-section-title">
-                        ${itemGroup.key}
+                        <fmt:message key="${requestScope.group}_${itemsGroup.key}" />
                     </p>
                     <c:choose>
-                        <c:when test="${!empty(itemGroup.value)}">
+                        <c:when test="${!empty(itemsGroup.value)}">
                             <ul class="info-list">
-                                <c:forEach var="item" items="${itemGroup.value}">
+                                <c:forEach var="item" items="${itemsGroup.value}">
                                     <li class="info-list-item">
                                         <p class="info-value">
                                             ${item.name}

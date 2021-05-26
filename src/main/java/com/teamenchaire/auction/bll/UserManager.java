@@ -37,8 +37,8 @@ public final class UserManager {
 
         // TODO
         // Vérifications spécifiques à l'insertion :
-            // + Ajouter la vérification de pseudo unique
-            // + Ajouter la vérification de mail unique
+        // + Ajouter la vérification de pseudo unique
+        // + Ajouter la vérification de mail unique
 
         // Si tout est bon :
         User user = new User(nickname, lastName, firstName, email, password, phoneNumber, street, postalCode, city,
@@ -47,8 +47,9 @@ public final class UserManager {
         return user;
     }
 
-    public User updateUser(Integer id, String nickname, String lastName, String firstName, String email, String password,
-            String phoneNumber, String street, String postalCode, String city) throws BusinessException {
+    public User updateUser(Integer id, String nickname, String lastName, String firstName, String email,
+            String password, String phoneNumber, String street, String postalCode, String city)
+            throws BusinessException {
         checkNickname(nickname);
         checkLastName(lastName);
         checkFirstName(firstName);
@@ -58,11 +59,6 @@ public final class UserManager {
         checkStreet(street);
         checkPostalCode(postalCode);
         checkCity(city);
-
-        // Si tout est bon, créer un objet "temporaire" pour faire la maj dans la bdd
-        // (car en cas d'erreur, l'objet "user" ne doit pas encore bouger)
-
-        // EDIT : Suite à la réponse du prof, on récupère tout le temps l'objet à jour, donc plus besoin d'objet temporaire
         User user = getUserById(id);
         checkUser(user);
         user.setNickname(nickname);
@@ -84,8 +80,8 @@ public final class UserManager {
 
         // TODO
         // Vérifications spécifiques à la suppression :
-            // + Vérifier que l'utilisateur n'a pas d'articles en vente
-            // + Vérifier que l'utilisateur n'a pas d'enchères en cours
+        // + Vérifier que l'utilisateur n'a pas d'articles en vente
+        // + Vérifier que l'utilisateur n'a pas d'enchères en cours
 
         userDAO.delete(user);
     }
@@ -105,12 +101,6 @@ public final class UserManager {
         return userDAO.selectByEmail(email);
     }
 
-    // Plusieurs possibilités, là :
-    // 1-Je vérifie les paramètres
-    // 2-Je regarde s'il y a un @ dans le nom pour appeler la bonne méthode
-    // 3-Je vérifie l'exactitude du mot de passe
-    // 4-Une erreur différente est levée pour tous les cas
-    //   Sinon, je retourne l'utilisateur "connecté"
     public User getUserByUserName(String userName, String password) throws BusinessException {
         checkUserName(userName);
         checkPassword(password);
@@ -124,7 +114,7 @@ public final class UserManager {
             throw new BusinessException(BLLErrorCode.USER_UNKNOWN);
         }
         if (!password.equals(user.getPassword())) {
-            throw new BusinessException(BLLErrorCode.USER_PASSWORD_INVALID);
+            throw new BusinessException(BLLErrorCode.USER_PASSWORD_TOO_LONG);
         }
         return user;
     }
@@ -135,13 +125,6 @@ public final class UserManager {
 
     // Définir les conditions de validation appelées à la création ou la mise à jour
     // (de manière non spécifique)
-
-    // Penser à regarder le script de création de table pour vérifier si l'attribut
-    // peut être nul et sa longueur maximum !
-
-    // Créer des erreurs explicites dans BLLErrorCode
-
-    // A toi de jouer (hihi) !
 
     private void checkUser(User user) throws BusinessException {
         if (user == null) {
@@ -156,44 +139,81 @@ public final class UserManager {
     }
 
     private void checkNickname(String nickname) throws BusinessException {
-        if (nickname == null) {
+        if (isStringNull(nickname)) {
             throw new BusinessException(BLLErrorCode.USER_NICKNAME_NULL);
         }
-        // + Ajouter une vérification que le pseudo ne contient que des caractères
+        if ((!isAlphaNumeric(nickname)) || (isTooLong(30, nickname))) {
+            throw new BusinessException(BLLErrorCode.USER_NICKNAME_INVALID);
+        }
     }
 
     private void checkLastName(String lastName) throws BusinessException {
-
+        if (isStringNull(lastName)) {
+            throw new BusinessException(BLLErrorCode.USER_LAST_NAME_NULL);
+        }
+        if (isTooLong(30, lastName)) {
+            throw new BusinessException(BLLErrorCode.USER_LAST_NAME_TOO_LONG);
+        }
     }
 
     private void checkFirstName(String firstName) throws BusinessException {
-
+        if (isStringNull(firstName)) {
+            throw new BusinessException(BLLErrorCode.USER_FIRST_NAME_NULL);
+        }
+        if (isTooLong(30, firstName)) {
+            throw new BusinessException(BLLErrorCode.USER_FIRST_NAME_TOO_LONG);
+        }
     }
 
     private void checkEmail(String email) throws BusinessException {
-
+        if (isStringNull(email)) {
+            throw new BusinessException(BLLErrorCode.USER_EMAIL_NULL);
+        }
+        if (isTooLong(50, email)) {
+            throw new BusinessException(BLLErrorCode.USER_EMAIL_TOO_LONG);
+        }
     }
 
     private void checkPassword(String password) throws BusinessException {
-        if ((password == null) || (password.isEmpty())) {
+        if (isStringNull(password)) {
             throw new BusinessException(BLLErrorCode.USER_PASSWORD_NULL);
+        }
+        if (isTooLong(30, password)) {
+            throw new BusinessException(BLLErrorCode.USER_PASSWORD_TOO_LONG);
         }
     }
 
     private void checkPhoneNumber(String phoneNumber) throws BusinessException {
-
+        if ((phoneNumber != null) && (isTooLong(15, phoneNumber))) {
+            throw new BusinessException(BLLErrorCode.PHONE_NUMBER_TOO_LONG);
+        }
     }
 
     private void checkStreet(String street) throws BusinessException {
-
+        if (isStringNull(street)) {
+            throw new BusinessException(BLLErrorCode.USER_STREET_NULL);
+        }
+        if (isTooLong(50, street)) {
+            throw new BusinessException(BLLErrorCode.USER_STREET_TOO_LONG);
+        }
     }
 
     private void checkPostalCode(String postalCode) throws BusinessException {
-
+        if (isStringNull(postalCode)) {
+            throw new BusinessException(BLLErrorCode.USER_POSTAL_CODE_NULL);
+        }
+        if (isTooLong(10, postalCode)) {
+            throw new BusinessException(BLLErrorCode.USER_POSTAL_CODE_TOO_LONG);
+        }
     }
 
     private void checkCity(String city) throws BusinessException {
-
+        if (isStringNull(city)) {
+            throw new BusinessException(BLLErrorCode.USER_CITY_NULL);
+        }
+        if (isTooLong(30, city)) {
+            throw new BusinessException(BLLErrorCode.USER_CITY_TOO_LONG);
+        }
     }
 
     private void checkUserName(String userName) throws BusinessException {
@@ -204,5 +224,18 @@ public final class UserManager {
 
     private boolean isStringNull(String s) {
         return ((s == null) || (s.trim().isEmpty()));
+    }
+
+    public boolean isAlphaNumeric(String s) {
+        for (char c : s.toCharArray()) {
+            if (!Character.isLetterOrDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isTooLong(int limit, String s) {
+        return (s.length() > limit);
     }
 }

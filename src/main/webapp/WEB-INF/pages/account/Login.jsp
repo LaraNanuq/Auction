@@ -90,10 +90,11 @@
                     Nouveau profil
                 </legend>
                 <div class="form-button-group">
-                    <a href="${pageContext.request.contextPath}/account/create">
-                        <button type="button" class="login-form-button-long">
-                            Créer un compte
-                        </button>
+                    <a href="${pageContext.request.contextPath}/account/create" class="form-button-link">
+                        Créer un compte
+                    </a>
+                    <a onclick="history.go(-1)" class="form-button-link">
+                        Retour
                     </a>
                 </div>
             </fieldset>

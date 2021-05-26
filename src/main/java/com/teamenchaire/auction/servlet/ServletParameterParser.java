@@ -3,24 +3,28 @@ package com.teamenchaire.auction.servlet;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * An utility {@code class} which parses parameters of servlet requests.
+ * A {@code class} which parses parameters of a servlet request.
  * 
  * @author Marin Taverniers
  */
 public final class ServletParameterParser {
+    private HttpServletRequest request;
 
-    private ServletParameterParser() {
+    public ServletParameterParser(HttpServletRequest request) {
+        this.request = request;
     }
 
-    public static String getString(HttpServletRequest request, String parameter) {
+    public String getString(String parameter) {
         return request.getParameter(parameter);
     }
 
-    public static String getTrimmedString(HttpServletRequest request, String parameter) {
+    public String getTrimmedString(String parameter) {
         String value = request.getParameter(parameter);
         if (value != null) {
             value = value.trim();
@@ -28,17 +32,18 @@ public final class ServletParameterParser {
         return value;
     }
 
-    public static String[] getTrimmedStringArray(HttpServletRequest request, String parameter) {
+    public List<String> getTrimmedStringList(String parameter) {
+        List<String> list = new ArrayList<>();
         String[] values = request.getParameterValues(parameter);
         if (values != null) {
-            for (int i = 0; i < values.length; i++) {
-                values[i] = values[i].trim();
+            for (String value : values) {
+                list.add(value.trim());
             }
         }
-        return values;
+        return list;
     }
 
-    public static Integer getInt(HttpServletRequest request, String parameter) {
+    public Integer getInt(String parameter) {
         try {
             return Integer.parseInt(request.getParameter(parameter));
         } catch (NumberFormatException e) {
@@ -46,12 +51,12 @@ public final class ServletParameterParser {
         }
     }
 
-    public static boolean getChecked(HttpServletRequest request, String parameter) {
-        String value = getTrimmedString(request, parameter);
+    public boolean getChecked(String parameter) {
+        String value = getTrimmedString(parameter);
         return ((value != null) && ((value.equalsIgnoreCase("on")) || (value.equalsIgnoreCase("true"))));
     }
 
-    public static LocalDate getDate(HttpServletRequest request, String parameter) {
+    public LocalDate getDate(String parameter) {
         try {
             return LocalDate.parse(request.getParameter(parameter));
         } catch (DateTimeParseException e) {
@@ -59,7 +64,7 @@ public final class ServletParameterParser {
         }
     }
 
-    public static LocalTime getTime(HttpServletRequest request, String parameter) {
+    public LocalTime getTime(String parameter) {
         try {
             return LocalTime.parse(request.getParameter(parameter));
         } catch (DateTimeParseException e) {

@@ -31,6 +31,13 @@
                     Désolé, cette page n'existe pas ou a été déplacée.
                 </p>
             </div>
+
+            <!-- Buttons -->
+            <div class="form-button-group">
+                <a onclick="history.go(-1)" class="form-button-link">
+                    Retour
+                </a>
+            </div>
         </section>
 
         <%@ include file="/WEB-INF/fragments/Footer.jspf" %>

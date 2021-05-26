@@ -15,9 +15,23 @@ public final class BLLErrorCode {
     public static final int USER_USER_NAME_NULL = 20302;
     public static final int USER_PASSWORD_NULL = 20303;
     public static final int USER_UNKNOWN = 20304;
-    public static final int USER_PASSWORD_INVALID = 20305;
+    public static final int USER_PASSWORD_TOO_LONG = 20305;
     public static final int USER_ID_NULL = 20306;
     public static final int USER_NICKNAME_NULL = 20307;
+    public static final int USER_NICKNAME_INVALID = 20308;
+    public static final int USER_LAST_NAME_NULL = 20309;
+    public static final int USER_LAST_NAME_TOO_LONG = 20310;
+    public static final int PHONE_NUMBER_TOO_LONG = 20311;
+    public static final int USER_FIRST_NAME_NULL = 20312;
+    public static final int USER_FIRST_NAME_TOO_LONG = 20313;
+    public static final int USER_EMAIL_NULL = 20314;
+    public static final int USER_EMAIL_TOO_LONG = 20315;
+    public static final int USER_STREET_NULL = 20316;
+    public static final int USER_STREET_TOO_LONG = 20317;
+    public static final int USER_POSTAL_CODE_NULL = 20318;
+    public static final int USER_POSTAL_CODE_TOO_LONG = 20319;
+    public static final int USER_CITY_NULL = 20320;
+    public static final int USER_CITY_TOO_LONG = 20321;
 
     /* Item */
     public static final int ITEM_SELLER_NULL = 20102;

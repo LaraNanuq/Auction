@@ -47,7 +47,7 @@
                     <!-- Form buttons -->
                     <div class="form-button-group">
                         <input type="submit" value="Valider" class="form-button" />
-                        <a href="${pageContext.request.contextPath}/home" class="form-button">
+                        <a onclick="history.go(-1)" class="form-button-link">
                             Retour
                         </a>
                     </div>

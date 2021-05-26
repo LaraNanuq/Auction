@@ -73,15 +73,16 @@ public final class CreateSaleServlet extends HttpServlet {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String name = ServletParameterParser.getTrimmedString(request, "name");
-        String description = ServletParameterParser.getTrimmedString(request, "description");
-        Integer categoryId = ServletParameterParser.getInt(request, "categoryId");
-        Integer price = ServletParameterParser.getInt(request, "price");
-        LocalDate startDate = ServletParameterParser.getDate(request, "startDate");
-        LocalDate endDate = ServletParameterParser.getDate(request, "endDate");
-        String street = ServletParameterParser.getTrimmedString(request, "street");
-        String postalCode = ServletParameterParser.getTrimmedString(request, "postalCode");
-        String city = ServletParameterParser.getTrimmedString(request, "city");
+        ServletParameterParser parser = new ServletParameterParser(request);
+        String name = parser.getTrimmedString("name");
+        String description = parser.getTrimmedString("description");
+        Integer categoryId = parser.getInt("categoryId");
+        Integer price = parser.getInt("price");
+        LocalDate startDate = parser.getDate("startDate");
+        LocalDate endDate = parser.getDate("endDate");
+        String street = parser.getTrimmedString("street");
+        String postalCode = parser.getTrimmedString("postalCode");
+        String city = parser.getTrimmedString("city");
         try {
 
             Item item = new ItemManager().addItem(userId, name, description, categoryId, price, startDate, endDate, street,

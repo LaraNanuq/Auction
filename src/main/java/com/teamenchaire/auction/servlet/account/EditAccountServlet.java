@@ -13,11 +13,12 @@ import com.teamenchaire.auction.bo.User;
 import com.teamenchaire.auction.servlet.ServletDispatcher;
 import com.teamenchaire.auction.servlet.ServletErrorCode;
 import com.teamenchaire.auction.servlet.ServletParameterParser;
+import com.teamenchaire.auction.servlet.UserSession;
 
 /**
  * A {@code Servlet} which handles requests to the page to edit an account.
  * 
- * @author Marin Taverniers
+ * @author Ayelen Dumas
  */
 @WebServlet("/account/edit")
 public final class EditAccountServlet extends HttpServlet {
@@ -25,14 +26,11 @@ public final class EditAccountServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        Integer userId = (Integer) request.getSession().getAttribute("userId");
-        if (userId != null) {
-            User user;
+        ServletDispatcher dispatcher = new ServletDispatcher(request, response);
+        UserSession session = new UserSession(request);
+        if (session.isValid()) {
             try {
-                user = new UserManager().getUserById(userId);
-
-                // Utilisation des getters plutôt que de "${sessionScope.user.?}",
-                // puisque le formulaire doit garder les valeurs saisies par l'utilisateur
+                User user = new UserManager().getUserById(session.getUserId());
                 request.setAttribute("nickname", user.getNickname());
                 request.setAttribute("lastName", user.getLastName());
                 request.setAttribute("firstName", user.getFirstName());
@@ -41,68 +39,80 @@ public final class EditAccountServlet extends HttpServlet {
                 request.setAttribute("street", user.getStreet());
                 request.setAttribute("postalCode", user.getPostalCode());
                 request.setAttribute("city", user.getCity());
-                ServletDispatcher.forwardToJsp(request, response, "/pages/account/Edit.jsp");
-                return;
+                request.setAttribute("credit", user.getCredit());
+                dispatcher.forwardToJsp("/pages/account/Edit.jsp");
             } catch (BusinessException e) {
                 e.printStackTrace();
+                request.setAttribute("errorCode", e.getCode());
             }
+        } else {
+            dispatcher.redirectToServlet("/home");
         }
-        ServletDispatcher.redirectToServlet(request, response, "/account/login");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            request.setCharacterEncoding("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String nickname = ServletParameterParser.getTrimmedString(request, "nickname");
-        String lastName = ServletParameterParser.getTrimmedString(request, "lastName");
-        String firstName = ServletParameterParser.getTrimmedString(request, "firstName");
-        String email = ServletParameterParser.getTrimmedString(request, "email");
-        String phoneNumber = ServletParameterParser.getTrimmedString(request, "phoneNumber");
-        String street = ServletParameterParser.getTrimmedString(request, "street");
-        String postalCode = ServletParameterParser.getTrimmedString(request, "postalCode");
-        String city = ServletParameterParser.getTrimmedString(request, "city");
-        String oldPassword = ServletParameterParser.getString(request, "oldPassword");
-        String newPassword = ServletParameterParser.getString(request, "newPassword");
-        String newPasswordCheck = ServletParameterParser.getString(request, "newPasswordCheck");
-        Integer userId = (Integer) request.getSession().getAttribute("userId");
-        try {
-            User user = new UserManager().getUserById(userId);
-            if (!oldPassword.equals(user.getPassword())) {
-                throw new BusinessException(ServletErrorCode.ACCOUNT_EDIT_OLD_PASSWORD_INVALID);
+        ServletDispatcher dispatcher = new ServletDispatcher(request, response);
+        UserSession session = new UserSession(request);
+        if (session.isValid()) {
+            try {
+                request.setCharacterEncoding("UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
-            // Le changement de mot de passe peut rester vide, on ne le vérifie que si le
-            // champ a été rempli
-            if ((newPassword != null) && (!newPassword.isEmpty())) {
-                if (!newPassword.equals(newPasswordCheck)) {
-                    throw new BusinessException(ServletErrorCode.ACCOUNT_CREATE_PASSWORD_CHECK_INVALID);
+            ServletParameterParser parser = new ServletParameterParser(request);
+            String nickname = parser.getTrimmedString("nickname");
+            String lastName = parser.getTrimmedString("lastName");
+            String firstName = parser.getTrimmedString("firstName");
+            String email = parser.getTrimmedString("email");
+            String phoneNumber = parser.getTrimmedString("phoneNumber");
+            String street = parser.getTrimmedString("street");
+            String postalCode = parser.getTrimmedString("postalCode");
+            String city = parser.getTrimmedString("city");
+            String oldPassword = parser.getString("oldPassword");
+            String newPassword = parser.getString("newPassword");
+            String newPasswordCheck = parser.getString("newPasswordCheck");
+            Integer userId = session.getUserId();
+            try {
+                if ((newPassword != null) && (!newPassword.isEmpty())) {
+                    checkNewPassword(newPassword, newPasswordCheck);
+                } else {
+                    newPassword = oldPassword;
                 }
-            } else {
-                newPassword = oldPassword;
+                checkPassword(oldPassword, userId);
+                new UserManager().updateUser(userId, nickname, lastName, firstName, email, newPassword, phoneNumber,
+                        street, postalCode, city);
+                dispatcher.redirectToServlet("/user/profile/" + nickname);
+            } catch (BusinessException e) {
+                e.printStackTrace();
+                request.setAttribute("errorCode", e.getCode());
+                request.setAttribute("nickname", nickname);
+                request.setAttribute("lastName", lastName);
+                request.setAttribute("firstName", firstName);
+                request.setAttribute("email", email);
+                request.setAttribute("phoneNumber", phoneNumber);
+                request.setAttribute("street", street);
+                request.setAttribute("postalCode", postalCode);
+                request.setAttribute("city", city);
+                request.setAttribute("newPassword", newPassword);
+                request.setAttribute("credit", request.getAttribute("credit"));
+                dispatcher.forwardToJsp("/pages/account/Edit.jsp");
             }
-            new UserManager().updateUser(userId, nickname, lastName, firstName, email, newPassword, phoneNumber, street,
-                    postalCode, city);
-            ServletDispatcher.redirectToServlet(request, response, "/home");
-            return;
-        } catch (BusinessException e) {
-            e.printStackTrace();
-            request.setAttribute("errorCode", e.getCode());
+        } else {
+            dispatcher.redirectToServlet("/home");
         }
+    }
 
-        // Ne pas appeler le doGet, puisqu'en cas d'erreur les dernières valeurs saisies
-        // doivent persister
-        request.setAttribute("nickname", nickname);
-        request.setAttribute("lastName", lastName);
-        request.setAttribute("firstName", firstName);
-        request.setAttribute("email", email);
-        request.setAttribute("phoneNumber", phoneNumber);
-        request.setAttribute("street", street);
-        request.setAttribute("postalCode", postalCode);
-        request.setAttribute("city", city);
-        request.setAttribute("newPassword", newPassword);
-        ServletDispatcher.forwardToJsp(request, response, "/pages/account/Edit.jsp");
+    private void checkNewPassword(String newPassword, String newPasswordCheck) throws BusinessException {
+        if ((newPassword != null) && (!newPassword.equals(newPasswordCheck))) {
+            throw new BusinessException(ServletErrorCode.ACCOUNT_CREATE_PASSWORD_CHECK_INVALID);
+        }
+    }
+
+    private void checkPassword(String oldPassword, Integer userId) throws BusinessException {
+        User user = new UserManager().getUserById(userId);
+        if ((oldPassword == null) || (!oldPassword.equals(user.getPassword()))) {
+            throw new BusinessException(ServletErrorCode.ACCOUNT_EDIT_OLD_PASSWORD_INVALID);
+        }
     }
 }

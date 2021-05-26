@@ -94,13 +94,16 @@
                 </div>
                 
                 <!-- Form buttons -->
-                <c:if test="${requestScope.isEditable}">
-                    <div class="form-button-group">
-                        <a href="${pageContext.request.contextPath}/account/edit" class="form-button">
+                <div class="form-button-group">
+                    <c:if test="${requestScope.isEditable}">
+                        <a href="${pageContext.request.contextPath}/account/edit" class="form-button-link">
                             Modifier
                         </a>
-                    </div>
-                </c:if>
+                    </c:if>
+                    <a onclick="history.go(-1)" class="form-button-link">
+                        Retour
+                    </a>
+                </div>
             </div>
         </section>
 

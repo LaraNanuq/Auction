@@ -6,7 +6,7 @@ package com.teamenchaire.auction.servlet;
  * @author Marin Taverniers
  */
 public final class ServletErrorCode {
-    
+
     private ServletErrorCode() {
     }
 

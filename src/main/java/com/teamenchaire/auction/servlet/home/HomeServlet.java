@@ -18,7 +18,7 @@ public final class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        ServletDispatcher.redirectToServlet(request, response, "/auction/list");
+        new ServletDispatcher(request, response).redirectToServlet("/auction/list");
     }
 
     @Override

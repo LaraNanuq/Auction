@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.teamenchaire.auction.servlet.ServletDispatcher;
+import com.teamenchaire.auction.servlet.UserSession;
 
 /**
  * A {@code Servlet} which handles requests to the page to log out of an
@@ -19,8 +20,8 @@ public final class LogoutAccountServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        request.getSession().invalidate();
-        ServletDispatcher.redirectToServlet(request, response, "/home");
+        new UserSession(request).close();
+        new ServletDispatcher(request, response).redirectToServlet("/home");
     }
 
     @Override

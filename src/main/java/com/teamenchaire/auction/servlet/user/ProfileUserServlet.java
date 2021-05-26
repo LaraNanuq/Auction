@@ -9,6 +9,7 @@ import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.UserManager;
 import com.teamenchaire.auction.bo.User;
 import com.teamenchaire.auction.servlet.ServletDispatcher;
+import com.teamenchaire.auction.servlet.UserSession;
 
 /**
  * A {@code Servlet} which handles requests to the page to view an user profile.
@@ -23,31 +24,41 @@ public final class ProfileUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String nickname = request.getPathInfo();
         User user = null;
-        if (nickname != null) {
+        UserManager userManager = new UserManager();
+        ServletDispatcher dispatcher = new ServletDispatcher(request, response);
+        UserSession session = new UserSession(request);
+        if ((nickname != null) && (nickname.length() > 1)) {
             nickname = nickname.replace("/", "").trim();
-            Integer userId = (Integer) request.getSession().getAttribute("userId");
-            
             try {
-                user = new UserManager().getUserById(userId);
-                if (nickname.equalsIgnoreCase(user.getNickname())) {
-                    request.setAttribute("isEditable", true);
-                } else {
-                    user = null;
+                user = userManager.getUserByNickname(nickname);
+                if (user == null) {
+                    dispatcher.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                }
+                if (session.isValid()) {
+                    if (user.getId().equals(session.getUserId())) {
+                        request.setAttribute("isEditable", true);
+                    }
                 }
             } catch (BusinessException e) {
                 e.printStackTrace();
+                request.setAttribute("errorCode", e.getCode());
             }
-        }
-        
-        if (user == null) {
+        } else {
+            if (!session.isValid()) {
+                dispatcher.redirectToServlet("/home");
+                return;
+            }
             try {
-                user = new UserManager().getUserByNickname(nickname);
+                user = userManager.getUserById(session.getUserId());
+                request.setAttribute("isEditable", true);
             } catch (BusinessException e) {
                 e.printStackTrace();
+                request.setAttribute("errorCode", e.getCode());
             }
         }
         request.setAttribute("user", user);
-        ServletDispatcher.forwardToJsp(request, response, "/pages/user/Profile.jsp");
+        dispatcher.forwardToJsp("/pages/user/Profile.jsp");
     }
 
     @Override

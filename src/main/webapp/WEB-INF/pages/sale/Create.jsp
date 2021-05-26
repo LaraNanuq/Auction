@@ -57,7 +57,7 @@
                             rows="5"
                             placeholder="Description de l'article"
                             style="resize: none"
-                            class="form-input form-textarea"
+                            class="form-input form-input-textarea"
                         >${requestScope.description}</textarea>
                     </div>
                     <div class="form-group">
@@ -172,14 +172,12 @@
                 <div class="form-button-group">
                     <input type="submit" value="Valider" class="form-button" />
                     <c:if test="${requestScope.isDeletable}">
-                        <a href="${pageContext.request.contextPath}/sale/delete/${requestScope.item.id}" class="form-button">
+                        <a href="${pageContext.request.contextPath}/sale/delete/${requestScope.item.id}" class="form-button-link">
                             Supprimer
                         </a>
                     </c:if>
-                    <a href="${pageContext.request.contextPath}/home">
-                        <button type="button" class="form-button">
-                            Retour
-                        </button>
+                    <a onclick="history.go(-1)" class="form-button-link">
+                        Retour
                     </a>
                 </div>
             </form>

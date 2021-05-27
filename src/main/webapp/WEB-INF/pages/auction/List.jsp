@@ -70,7 +70,6 @@
                             <label for="filter-purchases" class="form-label">
                                 Achats
                             </label>
-
                             <ul class="form-list">
                                 <c:forEach var="subGroup" items="${requestScope.purchasesGroups}">
                                     <li class="form-list-item">
@@ -101,7 +100,6 @@
                             <label for="filter-sales" class="form-label">
                                 Ventes
                             </label>
-
                             <ul class="form-list">
                                 <c:forEach var="subGroup" items="${requestScope.salesGroups}">
                                     <li class="form-list-item">
@@ -122,7 +120,7 @@
                         </div>
                     </c:if>
 
-                    <!-- Form buttons -->
+                    <!-- Buttons -->
                     <div class="form-button-group">
                         <input type="submit" value="Rechercher" class="form-button" />
                         <a href="${pageContext.request.contextPath}/auction/list" class="form-button-link">
@@ -142,6 +140,7 @@
                         <c:when test="${!empty(itemsGroup.value)}">
                             <ul class="info-list">
                                 <c:forEach var="item" items="${itemsGroup.value}">
+                                    <hr />
                                     <li class="info-list-item">
                                         <p class="info-value">
                                             <a href="${pageContext.request.contextPath}/auction/item/${item.id}" class="form-link">
@@ -185,7 +184,6 @@
                         </c:otherwise>
                     </c:choose>
                 </div>
-                <hr />
             </c:forEach>
         </section>
 

@@ -92,18 +92,18 @@
                         ${requestScope.user.city}
                     </span>
                 </div>
-                
-                <!-- Form buttons -->
-                <div class="form-button-group">
-                    <c:if test="${requestScope.isEditable}">
-                        <a href="${pageContext.request.contextPath}/account/edit" class="form-button-link">
-                            Modifier
-                        </a>
-                    </c:if>
-                    <a onclick="history.go(-1)" class="form-button-link">
-                        Retour
+            </div>
+            
+            <!-- Buttons -->
+            <div class="form-button-group">
+                <c:if test="${requestScope.isEditable}">
+                    <a href="${pageContext.request.contextPath}/account/edit" class="form-button-link">
+                        Modifier
                     </a>
-                </div>
+                </c:if>
+                <a onclick="history.go(-1)" class="form-button-link">
+                    Retour
+                </a>
             </div>
         </section>
 

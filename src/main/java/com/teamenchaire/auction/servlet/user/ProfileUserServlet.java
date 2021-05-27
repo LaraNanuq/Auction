@@ -22,6 +22,7 @@ public final class ProfileUserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        
         String nickname = request.getPathInfo();
         User user = null;
         UserManager userManager = new UserManager();

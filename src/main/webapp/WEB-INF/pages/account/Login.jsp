@@ -19,14 +19,14 @@
         <%@ include file="/WEB-INF/fragments/Navigation.jspf" %>
 
         <!-- Content -->
-        <section class="section login-section">
+        <section class="section">
             <p class="section-title">
                 Connexion
             </p>
 
             <%@ include file="/WEB-INF/fragments/Error.jspf" %>
 
-            <!-- Account -->
+            <!-- Existing account -->
             <form action="${pageContext.request.contextPath}/account/login" method="POST" class="form">
                 <fieldset class="form-section">
                     <legend class="form-section-title">
@@ -58,24 +58,22 @@
                             class="form-input"
                         />
                     </div>
+                    <div class="login-remember-me">
+                        <input
+                            type="checkbox"
+                            name="rememberMe"
+                            id="remember-me"
+                            class=""
+                            ${requestScope.rememberMe ? 'checked' : ''}
+                        />
+                        <label for="remember-me" class="form-label">
+                            Se souvenir de moi
+                        </label>
+                    </div>
 
-                    <!-- Form buttons -->
-                    <div class="login-form-button">
-                        <div class="form-group">
-                            <div class="form-button-group">
-                                <input type="submit" value="Valider" class="form-button" />
-                            </div>
-                            <input
-                                type="checkbox"
-                                name="rememberMe"
-                                id="remember-me"
-                                class=""
-                                ${requestScope.rememberMe ? 'checked' : ''}
-                            />
-                            <label for="remember-me" class="remember-me">
-                                Se souvenir de moi
-                            </label>
-                        </div>
+                    <!-- Buttons -->
+                    <div class="form-button-group">
+                        <input type="submit" value="Valider" class="form-button" />
                     </div>
                     <a href="${pageContext.request.contextPath}/account/login" class="form-link">
                         Mot de passe oublié
@@ -83,11 +81,13 @@
                 </fieldset>
             </form>
 
-            <!-- Create account -->
+            <!-- New account -->
             <fieldset class="form-section">
                 <legend class="form-section-title">
                     Nouveau profil
                 </legend>
+                
+                <!-- Buttons -->
                 <div class="form-button-group">
                     <a href="${pageContext.request.contextPath}/account/create" class="form-button-link">
                         Créer un compte

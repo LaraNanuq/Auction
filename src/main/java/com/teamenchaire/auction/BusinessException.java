@@ -13,7 +13,7 @@ public final class BusinessException extends Exception {
     /**
      * Constructs a {@code BusinessException} with the specified error.
      * 
-     * @param error The error code of the exception
+     * @param error The error of the exception
      */
     public BusinessException(BusinessErrorCode error) {
         this(error, null);
@@ -22,7 +22,7 @@ public final class BusinessException extends Exception {
     /**
      * Constructs a {@code BusinessException} with specified error and cause.
      * 
-     * @param error The error code of the exception
+     * @param error The error of the exception
      * @param cause The cause of the exception
      */
     public BusinessException(BusinessErrorCode error, Throwable cause) {

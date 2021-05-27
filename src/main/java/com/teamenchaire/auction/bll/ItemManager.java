@@ -44,7 +44,6 @@ public final class ItemManager {
         // Add
         Withdrawal withdrawalPoint = new Withdrawal(street, postalCode, city);
         Item item = new Item(name, description, startDate, endDate, price, price, seller, category, withdrawalPoint);
-        
         itemDAO.insert(item);
         return item;
     }
@@ -57,34 +56,34 @@ public final class ItemManager {
     public List<Item> getAllAvailableItems(String name, Integer categoryId) throws BusinessException {
         return itemDAO.selectAllAvailable(name, categoryId);
     }
-    
-    public List<Item> getAvailablePurchasesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
+
+    public List<Item> getAvailablePurchasesItems(Integer userId, String name, Integer categoryId)
+            throws BusinessException {
         checkUserId(userId);
-        // TODO : checkName?
-        //check category?
         return itemDAO.selectAvailablePurchases(userId, name, categoryId);
     }
-    
-    public List<Item> getCurrentPurchasesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
+
+    public List<Item> getCurrentPurchasesItems(Integer userId, String name, Integer categoryId)
+            throws BusinessException {
         checkUserId(userId);
         return itemDAO.selectCurrentPurchases(userId, name, categoryId);
     }
-    
+
     public List<Item> getWonPurchasesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
         checkUserId(userId);
         return itemDAO.selectWonPurchases(userId, name, categoryId);
     }
-    
+
     public List<Item> getCurrentSalesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
         checkUserId(userId);
         return itemDAO.selectCurrentSales(userId, name, categoryId);
     }
-    
+
     public List<Item> getFutureSalesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
         checkUserId(userId);
         return itemDAO.selectFutureSales(userId, name, categoryId);
     }
-    
+
     public List<Item> getEndedSalesItems(Integer userId, String name, Integer categoryId) throws BusinessException {
         checkUserId(userId);
         return itemDAO.selectEndedSales(userId, name, categoryId);
@@ -178,9 +177,9 @@ public final class ItemManager {
             throw new BusinessException(BLLErrorCode.ITEM_ID_NULL);
         }
     }
-    
+
     private void checkUserId(Integer id) throws BusinessException {
-        if ((id == null)) {
+        if (id == null) {
             throw new BusinessException(BLLErrorCode.ITEM_USER_ID_NULL);
         }
     }

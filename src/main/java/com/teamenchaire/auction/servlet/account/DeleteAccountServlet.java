@@ -24,27 +24,25 @@ public final class DeleteAccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         ServletDispatcher dispatcher = new ServletDispatcher(request, response);
-        if (new UserSession(request).isValid()) {
-            dispatcher.forwardToJsp("/pages/account/Delete.jsp");
-        } else {
+        if (!new UserSession(request).isValid()) {
             dispatcher.redirectToServlet("/home");
+            return;
         }
+        dispatcher.forwardToJsp("/pages/account/Delete.jsp");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        ServletParameterParser parser = new ServletParameterParser(request);
+        boolean confirmation = parser.getChecked("confirmation");
         UserSession session = new UserSession(request);
-        if (session.isValid()) {
-            ServletParameterParser parser = new ServletParameterParser(request);
-            boolean confirmation = parser.getChecked("confirmation");
-            try {
-                checkConfirmation(confirmation);
-                new UserManager().removeUser(session.getUserId());
-                session.close();
-            } catch (BusinessException e) {
-                e.printStackTrace();
-                request.setAttribute("exception", e);
-            }
+        try {
+            checkConfirmation(confirmation);
+            new UserManager().removeUser(session.getUserId());
+            session.close();
+        } catch (BusinessException e) {
+            e.printStackTrace();
+            request.setAttribute("exception", e);
         }
         doGet(request, response);
     }

@@ -1,7 +1,5 @@
 package com.teamenchaire.auction.servlet.account;
 
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,20 +25,15 @@ public final class CreateAccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         ServletDispatcher dispatcher = new ServletDispatcher(request, response);
-        if (!new UserSession(request).isValid()) {
-            dispatcher.forwardToJsp("/pages/account/Create.jsp");
-        } else {
+        if (new UserSession(request).isValid()) {
             dispatcher.redirectToServlet("/home");
+            return;
         }
+        dispatcher.forwardToJsp("/pages/account/Create.jsp");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            request.setCharacterEncoding("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         ServletParameterParser parser = new ServletParameterParser(request);
         String nickname = parser.getTrimmedString("nickname");
         String lastName = parser.getTrimmedString("lastName");

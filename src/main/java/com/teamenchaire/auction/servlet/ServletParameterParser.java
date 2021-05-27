@@ -1,5 +1,6 @@
 package com.teamenchaire.auction.servlet;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -17,6 +18,11 @@ public final class ServletParameterParser {
     private HttpServletRequest request;
 
     public ServletParameterParser(HttpServletRequest request) {
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         this.request = request;
     }
 

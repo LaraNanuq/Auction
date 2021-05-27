@@ -167,7 +167,7 @@
                         </p>
                     </div>
 
-                    <!-- Form buttons -->
+                    <!-- Buttons -->
                     <div class="form-button-group">
                         <input type="submit" value="Valider" class="form-button" />
                         <a onclick="history.go(-1)" class="form-button-link">

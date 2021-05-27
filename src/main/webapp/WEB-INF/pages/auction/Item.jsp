@@ -73,7 +73,7 @@
                 </div>
                 <div class="info-group">
                     <label for="sell-price" class="info-label">
-                        Offre actuelle
+                        Prix de vente
                     </label>
                     <span id="sell-price" class="info-value">
                         ${requestScope.item.sellingPrice}
@@ -98,57 +98,57 @@
                         </a>
                     </span>
                 </div>
+            </div>
+            <c:choose>
+                <c:when test="${requestScope.canBid}">
+                    <form action="${pageContext.request.contextPath}/auction/item/${requestScope.item.id}" method="POST" class="form">
+                        <fieldset class="form-section">
+                            <legend class="form-section-title">
+                                Enchère
+                            </legend>
+                            <div class="form-group">
+                                <label for="bid" class="info-label">
+                                    Mon offre
+                                </label>
+                                <input
+                                    type="number"
+                                    name="bid"
+                                    id="bid"
+                                    min="0"
+                                    placeholder="Prix"
+                                    value="${requestScope.bid}"
+                                    class="form-input"
+                                />
+                            </div>
+                        </fieldset>
+                    </form>
+                </c:when>
+                <c:when test="${requestScope.isEnded}">
+                    <div class="info-section">
+                        <div class="info-group">
+                            <p class="info-value">
+                                Cette vente est terminée.
+                            </p>
+                        </div>
+                    </div>
+                </c:when>
+            </c:choose>
 
-                <!-- Bid -->
+            <!-- Buttons -->
+            <div class="form-button-group">
                 <c:choose>
                     <c:when test="${requestScope.canBid}">
-                        <form action="${pageContext.request.contextPath}/auction/item/${requestScope.item.id}" method="POST" class="form">
-                            <fieldset class="form-section">
-                                <legend class="form-section-title">
-                                    Enchère
-                                </legend>
-                                <div class="form-group">
-                                    <label for="bid" class="info-label">
-                                        Mon enchère
-                                    </label>
-                                    <input
-                                        type="number"
-                                        name="bid"
-                                        id="bid"
-                                        min="0"
-                                        placeholder="Offre"
-                                        value="${requestScope.bid}"
-                                        class="form-input"
-                                    />
-                                </div>
-                            </fieldset>
-                        </form>
+                        <input type="submit" value="Enchérir" class="form-button" />
                     </c:when>
-                    <c:when test="${requestScope.isEnded}">
-                        <div class="info-group">
-                            <span class="info-value">
-                                Cette vente est terminée.
-                            </span>
-                        </div>
+                    <c:when test="${requestScope.canEdit}">
+                        <a href="${pageContext.request.contextPath}/sale/edit/${requestScope.item.id}" class="form-button-link">
+                            Modifier
+                        </a>
                     </c:when>
                 </c:choose>
-
-                <!-- Buttons -->
-                <div class="form-button-group">
-                    <c:choose>
-                        <c:when test="${requestScope.canBid}">
-                            <input type="submit" value="Enchérir" class="form-button" />
-                        </c:when>
-                        <c:when test="${requestScope.canEdit}">
-                            <a href="${pageContext.request.contextPath}/sale/edit/${requestScope.item.id}" class="form-button-link">
-                                Modifier
-                            </a>
-                        </c:when>
-                    </c:choose>
-                    <a onclick="history.go(-1)" class="form-button-link">
-                        Retour
-                    </a>
-                </div>
+                <a onclick="history.go(-1)" class="form-button-link">
+                    Retour
+                </a>
             </div>
         </section>
 

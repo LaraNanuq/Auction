@@ -72,16 +72,16 @@ body {
     height: 70px;
     display: flex;
     justify-content: center;
+    align-items: center;
+    margin-top: 20px;
 }
     .footer-text {
-        padding-top: 20px;
         color: white;
     }
 
 /* Body */
 .section {
     padding-left: 220px;
-    padding-right: 80px;
 }
     .section-title {
         padding-top: 20px;
@@ -96,6 +96,7 @@ body {
 }
     .form-section {
         border: 0 none;
+        padding: 10px;
     }
         .form-section-title {
             display: none;
@@ -107,10 +108,9 @@ body {
             }
 
         .form-group {
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding: 10px 0;
             display: flex;
-            width: 350px;
+            width: 400px;
             justify-content: space-between;
         }
             .form-label,
@@ -119,8 +119,9 @@ body {
                 font-weight: bold;
                 font-size: small;
                 padding-right: 15px;
+                width: 150px;
             }
-
+            
             .form-input {
                 border: 1.5px solid #333334;
                 border-radius: 4px;
@@ -137,12 +138,10 @@ body {
 
             .form-link {
                 color: black;
-                padding: 20px;
             }
 
         .form-button-group {
-            padding: 20px;
-            padding-bottom: 70px;
+            padding: 10px 0;
         }
         .form-button-group :hover {
             color: grey;
@@ -175,36 +174,36 @@ body {
 
 /* Text section */
 .info-section {
+	border: 1px solid gray;
+    width: 400px;
+    padding: 10px;
+    margin: 10px 0;
 }
     .info-section-title {
-    }
+     	font-size: x-large;
+        color: #333334;
+        padding-bottom: 10px;
+	}
 
     .info-list {
+        padding: 10px;
     }
         .info-list-item {
         }
 
     .info-group {
-        padding: 10px;
-    }
+        padding: 5px 10px;
+        display: flex;
+	}
+        .info-label {
+        }
+        
         .info-value {
             font-size: 15px;
             font-weight: bold;
-            padding-left: 20px;
         }
 
 /* Login */
-.login-section {
-    width: 50%;
-}
-
-.login-form-button {
-    width: 65%;
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    justify-content: center;
-}
 
 .login-remember-me {
     color: #333334;

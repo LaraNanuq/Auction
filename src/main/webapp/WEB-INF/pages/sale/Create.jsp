@@ -173,11 +173,11 @@
                     </p>
                 </div>
                 
-                <!-- Form buttons -->
+                <!-- Buttons -->
                 <div class="form-button-group">
                     <input type="submit" value="Valider" class="form-button" />
                     <c:if test="${requestScope.isDeletable}">
-                        <a href="${pageContext.request.contextPath}/sale/delete/${requestScope.item.id}" class="form-button-link">
+                        <a href="${pageContext.request.contextPath}/sale/delete/${requestScope.itemId}" class="form-button-link">
                             Supprimer
                         </a>
                     </c:if>

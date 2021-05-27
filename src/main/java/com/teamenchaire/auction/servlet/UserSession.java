@@ -15,25 +15,6 @@ public class UserSession {
         this.session = request.getSession();
     }
 
-    public Integer getUserId() {
-        Integer userId = null;
-        try {
-            userId = (Integer) (session.getAttribute("userId"));
-        } catch (ClassCastException e) {
-            userId = null;
-        }
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        session.setAttribute("userId", userId);
-        session.setAttribute("isValid", true);
-    }
-
-    public void close() {
-        session.invalidate();
-    }
-
     public boolean isValid() {
         Object oIsValid = session.getAttribute("isValid");
         boolean isValid = false;
@@ -45,5 +26,26 @@ public class UserSession {
             }
         }
         return isValid;
+    }
+
+    public Integer getUserId() {
+        Integer userId = null;
+        if (isValid()) {
+            try {
+                userId = (Integer) (session.getAttribute("userId"));
+            } catch (ClassCastException e) {
+                userId = null;
+            }
+        }
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        session.setAttribute("userId", userId);
+        session.setAttribute("isValid", true);
+    }
+
+    public void close() {
+        session.invalidate();
     }
 }

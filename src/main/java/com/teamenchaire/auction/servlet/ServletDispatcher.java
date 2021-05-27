@@ -41,15 +41,15 @@ public class ServletDispatcher {
         }
     }
 
-    public void sendError() {
-        sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    }
-
     public void sendError(int code) {
         try {
             response.sendError(code);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendError() {
+        sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
 }

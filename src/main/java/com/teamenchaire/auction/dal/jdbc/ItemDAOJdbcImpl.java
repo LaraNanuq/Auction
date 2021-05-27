@@ -213,7 +213,7 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
                 statement.setInt(paramIndex, userId);
                 paramIndex++;
             }
-            if (name != null) {
+            if ((name != null) && (!name.isEmpty())) {
                 statement.setString(paramIndex, "%" + name.toUpperCase() + "%");
                 paramIndex++;
             }
@@ -234,7 +234,7 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
     private String buildFilterQuery(String query, String name, Integer categoryId) {
         StringBuilder filterQuery = new StringBuilder();
         filterQuery.append(query);
-        if (name != null) {
+        if ((name != null) && (!name.isEmpty())) {
             filterQuery.append(" ");
             filterQuery.append(SQL_AND_WHERE_NAME);
         }

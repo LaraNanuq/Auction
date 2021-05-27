@@ -99,11 +99,6 @@ public final class ListAuctionServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            request.setCharacterEncoding("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         ServletParameterParser parser = new ServletParameterParser(request);
         String name = parser.getTrimmedString("name");
         Integer categoryId = parser.getInt("categoryId");

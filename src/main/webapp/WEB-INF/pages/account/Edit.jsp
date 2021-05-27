@@ -179,7 +179,7 @@
                         </p>
                     </div>
 
-                    <!-- Form buttons -->
+                    <!-- Buttons -->
                     <div class="form-button-group">
                         <input type="submit" value="Valider" class="form-button" />
                         <a href="${pageContext.request.contextPath}/account/delete" class="form-button-link">

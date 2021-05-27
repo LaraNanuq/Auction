@@ -32,19 +32,19 @@
                     <legend class="form-section-title">
                         Profil
                     </legend>
-                    <div class="form-group">
-                        <input
-                            type="checkbox"
-                            name="confirmation"
-                            id="confirmation"
-                            class="form-input"
-                        />
-                        <label for="confirmation" class="form-label">
-                            Je confirme la suppression définitive de mon compte.
-                        </label>
-                    </div>
+                        <div class="info-group">
+                            <input
+                                type="checkbox"
+                                name="confirmation"
+                                id="confirmation"
+                                class=""
+                            />
+                            <label for="confirmation" class="info-label">
+                                Je confirme la suppression définitive de mon compte.
+                            </label>
+                        </div>
 
-                    <!-- Form buttons -->
+                    <!-- Buttons -->
                     <div class="form-button-group">
                         <input type="submit" value="Valider" class="form-button" />
                         <a onclick="history.go(-1)" class="form-button-link">

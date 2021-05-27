@@ -157,10 +157,10 @@ public final class ListAuctionServlet extends HttpServlet {
                 request.setAttribute("salesGroups", salesSubGroups);
 
                 if ((selectedItemsGroup == ItemsGroups.PURCHASES) && (!purchasesSubGroups.containsValue(true))) {
-                    throw new BusinessException(ServletErrorCode.AUCTION_LIST_FILTER_GROUP_EMPTY);
+                    throw new BusinessException(ServletErrorCode.AUCTION_LIST_GROUP_NULL);
                 }
                 if ((selectedItemsGroup == ItemsGroups.SALES) && (!salesSubGroups.containsValue(true))) {
-                    throw new BusinessException(ServletErrorCode.AUCTION_LIST_FILTER_GROUP_EMPTY);
+                    throw new BusinessException(ServletErrorCode.AUCTION_LIST_GROUP_NULL);
                 }
 
                 ItemManager itemManager = new ItemManager();
@@ -213,7 +213,7 @@ public final class ListAuctionServlet extends HttpServlet {
 
         } catch (BusinessException e) {
             e.printStackTrace();
-            request.setAttribute("errorCode", e.getCode());
+            request.setAttribute("exception", e);
         }
         new ServletDispatcher(request, response).forwardToJsp("/pages/auction/List.jsp");
     }

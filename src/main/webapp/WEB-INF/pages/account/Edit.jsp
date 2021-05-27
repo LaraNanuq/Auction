@@ -34,7 +34,7 @@
                     </legend>
                     <div class="form-group">
                         <label for="nickname" class="form-label">
-                            Pseudo
+                            Pseudo*
                         </label>
                         <input
                             type="text"
@@ -48,7 +48,7 @@
                     </div>
                     <div class="form-group">
                         <label for="last-name" class="form-label">
-                            Nom
+                            Nom*
                         </label>
                         <input
                             type="text"
@@ -61,7 +61,7 @@
                     </div>
                     <div class="form-group">
                         <label for="first-name" class="form-label">
-                            Prénom
+                            Prénom*
                         </label>
                         <input
                             type="text"
@@ -74,7 +74,7 @@
                     </div>
                     <div class="form-group">
                         <label for="email" class="form-label">
-                            Email
+                            Email*
                         </label>
                         <input
                             type="email"
@@ -100,7 +100,7 @@
                     </div>
                     <div class="form-group">
                         <label for="street" class="form-label">
-                            Rue
+                            Rue*
                         </label>
                         <input
                             type="text"
@@ -113,7 +113,7 @@
                     </div>
                     <div class="form-group">
                         <label for="postal-code" class="form-label">
-                            Code postal
+                            Code postal*
                         </label>
                         <input
                             type="text"
@@ -126,7 +126,7 @@
                     </div>
                     <div class="form-group">
                         <label for="city" class="form-label">
-                            Ville
+                            Ville*
                         </label>
                         <input
                             type="text"
@@ -139,7 +139,7 @@
                     </div>
                     <div class="form-group">
                         <label for="old-password" class="form-label">
-                            Mot de passe actuel
+                            Mot de passe actuel*
                         </label>
                         <input
                             type="password"
@@ -158,7 +158,6 @@
                             name="newPassword"
                             id="new-password"
                             placeholder="Nouveau mot de passe"
-                            value="${requestScope.newPassword}"
                             class="form-input"
                         />
                     </div>
@@ -170,21 +169,14 @@
                             type="password"
                             name="newPasswordCheck"
                             id="new-password-check"
-                            placeholder="Confirmation"
+                            placeholder="Nouveau mot de passe"
                             class="form-input"
                         />
                     </div>
-
-                    <!-- Credit -->
                     <div class="info-section">
-                        <div class="info-group">
-                            <label for="credit" class="info-label">
-                                Crédit
-                            </label>
-                            <span id="price" class="info-value">
-                                ${requestScope.credit}
-                            </span>
-                        </div>
+                        <p class="info-value">
+                            * Champs obligatoires
+                        </p>
                     </div>
 
                     <!-- Form buttons -->

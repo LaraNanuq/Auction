@@ -22,27 +22,35 @@ public final class UserDAOJdbcImpl implements UserDAO {
 
     // Insert
     private static final String SQL_INSERT =
-            "INSERT INTO users (nickname, last_name, first_name, email, user_password, phone_number, street, postal_code, city, credit, is_admin)"
+            "INSERT INTO users"
+            + " (nickname, last_name, first_name, email, user_password, phone_number, street, postal_code, city, credit, is_admin)"
             + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // Update
     private static final String SQL_UPDATE =
-            "UPDATE users SET nickname = ?, last_name = ?, first_name = ?, email = ?, user_password = ?, phone_number = ?, street = ?, postal_code = ?, city = ?, credit = ?, is_admin = ?"
+            "UPDATE users"
+            + " SET nickname = ?, last_name = ?, first_name = ?, email = ?, user_password = ?, phone_number = ?, street = ?, postal_code = ?, city = ?, credit = ?, is_admin = ?"
             + " WHERE (id_user = ?)";
 
     // Delete
     private static final String SQL_DELETE =
-            "DELETE FROM users WHERE (id_user = ?)";
+            "DELETE FROM users"
+            + " WHERE (id_user = ?)";
 
     // Select
-    private static final String SQL_SELECT_BY_ID =
-            "SELECT * FROM users WHERE (id_user = ?)";
-        
-    private static final String SQL_SELECT_BY_NICKNAME =
-            "SELECT * FROM users WHERE (nickname = ?)";
+    private static final String SQL_SELECT_ALL =
+            "SELECT"
+            + " id_user, nickname, last_name, first_name, email, user_password, phone_number, street, postal_code, city, credit, is_admin"
+            + " FROM users";
 
-    private static final String SQL_SELECT_BY_EMAIL =
-            "SELECT * FROM users WHERE (email = ?)";
+    private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL
+            + " WHERE (id_user = ?)";
+        
+    private static final String SQL_SELECT_BY_NICKNAME = SQL_SELECT_ALL
+            + " WHERE (upper(nickname) = ?)";
+
+    private static final String SQL_SELECT_BY_EMAIL = SQL_SELECT_ALL
+            + " WHERE (upper(email) = ?)";
 
     /**
      * Constructs a {@code UserDAOJdbcImpl}.
@@ -154,7 +162,7 @@ public final class UserDAOJdbcImpl implements UserDAO {
         User user = null;
         try (Connection connection = JdbcConnectionProvider.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_NICKNAME)) {
-            statement.setString(1, nickname);
+            statement.setString(1, nickname.toUpperCase());
             ResultSet result = statement.executeQuery();
             if (result.next()) {
                 user = buildUser(result);
@@ -170,7 +178,7 @@ public final class UserDAOJdbcImpl implements UserDAO {
         User user = null;
         try (Connection connection = JdbcConnectionProvider.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_EMAIL)) {
-            statement.setString(1, email);
+            statement.setString(1, email.toUpperCase());
             ResultSet result = statement.executeQuery();
             if (result.next()) {
                 user = buildUser(result);

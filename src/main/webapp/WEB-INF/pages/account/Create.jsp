@@ -34,7 +34,7 @@
                     </legend>
                     <div class="form-group">
                         <label for="nickname" class="form-label">
-                            Pseudo
+                            Pseudo*
                         </label>
                         <input
                             type="text"
@@ -48,7 +48,7 @@
                     </div>
                     <div class="form-group">
                         <label for="last-name" class="form-label">
-                            Nom
+                            Nom*
                         </label>
                         <input
                             type="text"
@@ -61,7 +61,7 @@
                     </div>
                     <div class="form-group">
                         <label for="first-name" class="form-label">
-                            Prénom
+                            Prénom*
                         </label>
                         <input
                             type="text"
@@ -74,7 +74,7 @@
                     </div>
                     <div class="form-group">
                         <label for="email" class="form-label">
-                            Email
+                            Email*
                         </label>
                         <input
                             type="email"
@@ -100,7 +100,7 @@
                     </div>
                     <div class="form-group">
                         <label for="street" class="form-label">
-                            Rue
+                            Rue*
                         </label>
                         <input
                             type="text"
@@ -113,7 +113,7 @@
                     </div>
                     <div class="form-group">
                         <label for="postal-code" class="form-label">
-                            Code postal
+                            Code postal*
                         </label>
                         <input
                             type="number"
@@ -126,7 +126,7 @@
                     </div>
                     <div class="form-group">
                         <label for="city" class="form-label">
-                            Ville
+                            Ville*
                         </label>
                         <input
                             type="text"
@@ -139,28 +139,32 @@
                     </div>
                     <div class="form-group">
                         <label for="password" class="form-label">
-                            Mot de passe
+                            Mot de passe*
                         </label>
                         <input
                             type="password"
                             name="password"
                             id="password"
                             placeholder="Mot de passe"
-                            value="${requestScope.password}"
                             class="form-input"
                         />
                     </div>
                     <div class="form-group">
                         <label for="password-check" class="form-label">
-                            Confirmation
+                            Confirmation*
                         </label>
                         <input
                             type="password"
                             name="passwordCheck"
                             id="password-check"
-                            placeholder="Confirmation"
+                            placeholder="Mot de passe"
                             class="form-input"
                         />
+                    </div>
+                    <div class="info-section">
+                        <p class="info-value">
+                            * Champs obligatoires
+                        </p>
                     </div>
 
                     <!-- Form buttons -->

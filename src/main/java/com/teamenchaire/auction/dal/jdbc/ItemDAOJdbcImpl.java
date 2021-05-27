@@ -27,19 +27,29 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
 
     // Insert
     private static final String SQL_INSERT_ITEM =
-            "INSERT INTO items (item_name, item_description, bid_start_date, bid_end_date, starting_price, selling_price, id_user, id_category)"
+            "INSERT INTO items"
+            + " (item_name, item_description, bid_start_date, bid_end_date, starting_price, selling_price, id_user, id_category)"
             + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String SQL_INSERT_WITHDRAWAL =
-            "INSERT INTO withdrawals (id_item, street, postal_code, city)"
+            "INSERT INTO withdrawals"
+            + " (id_item, street, postal_code, city)"
             + " VALUES (?, ?, ?, ?)";
 
     // Select
     private static final String SQL_SELECT_ALL =
-            "SELECT * FROM items i"
+            "SELECT"
+            + " i.id_item, i.item_name, i.item_description, i.bid_start_date, i.bid_end_date, i.starting_price, i.selling_price"
+            + ", u.id_user, u.nickname, u.last_name, u.first_name, u.email, u.user_password, u.phone_number, u.street AS u_street, u.postal_code AS u_postal_code, u.city AS u_city, u.credit, u.is_admin"
+            + ", c.id_category, c.category_name"
+            + ", w.street AS w_street, w.postal_code AS w_postal_code, w.city AS w_city"
+            + " FROM items i"
             + " JOIN users u ON (i.id_user = u.id_user)"
             + " JOIN categories c ON (i.id_category = c.id_category)"
             + " JOIN withdrawals w ON (i.id_item = w.id_item)";
+
+    private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL
+            + " WHERE (i.id_item = ?)";
 
     private static final String SQL_WHERE_HAS_BEGAN = "dateDiff(day, getDate(), i.bid_start_date) <= 0";
     private static final String SQL_WHERE_HAS_ENDED = "dateDiff(day, getDate(), i.bid_end_date) < 0";
@@ -143,7 +153,18 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
 
     @Override
     public Item selectById(Integer id) throws BusinessException {
-        throw new BusinessException(DALErrorCode.SQL_SELECT);
+        Item item = null;
+        try (Connection connection = JdbcConnectionProvider.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID)) {
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                item = buildItem(result);
+            }
+        } catch (SQLException e) {
+            throw new BusinessException(DALErrorCode.SQL_SELECT, e);
+        }
+        return item;
     }
 
     @Override
@@ -152,7 +173,8 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
     }
 
     @Override
-    public List<Item> selectAvailablePurchases(Integer userId, String name, Integer categoryId) throws BusinessException {
+    public List<Item> selectAvailablePurchases(Integer userId, String name, Integer categoryId)
+            throws BusinessException {
         return selectWithFilter(SQL_SELECT_AVAILABLE_PURCHASES, userId, name, categoryId);
     }
 
@@ -181,7 +203,8 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
         return selectWithFilter(SQL_SELECT_ENDED_SALES, userId, name, categoryId);
     }
 
-    private List<Item> selectWithFilter(String query, Integer userId, String name, Integer categoryId) throws BusinessException {
+    private List<Item> selectWithFilter(String query, Integer userId, String name, Integer categoryId)
+            throws BusinessException {
         List<Item> items = new ArrayList<>();
         try (Connection connection = JdbcConnectionProvider.getConnection();
                 PreparedStatement statement = connection.prepareStatement(buildFilterQuery(query, name, categoryId))) {
@@ -233,8 +256,8 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
     private static User buildUser(ResultSet result) throws SQLException {
         return new User(result.getInt("id_user"), result.getString("nickname"), result.getString("last_name"),
                 result.getString("first_name"), result.getString("email"), result.getString("user_password"),
-                result.getString("phone_number"), result.getString("street"), result.getString("postal_code"),
-                result.getString("city"), result.getInt("credit"), result.getBoolean("is_admin"));
+                result.getString("phone_number"), result.getString("u_street"), result.getString("u_postal_code"),
+                result.getString("u_city"), result.getInt("credit"), result.getBoolean("is_admin"));
     }
 
     private static Category buildCategory(ResultSet result) throws SQLException {
@@ -242,6 +265,7 @@ public final class ItemDAOJdbcImpl implements ItemDAO {
     }
 
     private static Withdrawal buildWithdrawal(ResultSet result) throws SQLException {
-        return new Withdrawal(result.getString("street"), result.getString("postal_code"), result.getString("city"));
+        return new Withdrawal(result.getString("w_street"), result.getString("w_postal_code"),
+                result.getString("w_city"));
     }
 }

@@ -1,11 +1,10 @@
 <%@ page pageEncoding="UTF-8" %>
 
 <!-- Error -->
-<c:if test="${!empty(requestScope.errorCode)}">
+<c:if test="${!empty(requestScope.exception)}">
     <div class="error">
         <p class="error-text">
-            ${requestScope.errorCode}
-            <fmt:message key="${requestScope.errorCode}" />
+            <fmt:message key="${requestScope.exception.name}" />
         </p>
     </div>
 </c:if>

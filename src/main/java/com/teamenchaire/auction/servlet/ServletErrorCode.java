@@ -1,20 +1,38 @@
 package com.teamenchaire.auction.servlet;
 
+import com.teamenchaire.auction.BusinessErrorCode;
+
 /**
- * A {@code class} which defines error codes for the servlet layer.
+ * An {@code enum} list of error codes for the servlet layer.
  * 
  * @author Marin Taverniers
  */
-public final class ServletErrorCode {
 
-    private ServletErrorCode() {
-    }
+public enum ServletErrorCode implements BusinessErrorCode {
 
     /* Account */
-    public static final int ACCOUNT_CREATE_PASSWORD_CHECK_INVALID = 30101;
-    public static final int ACCOUNT_EDIT_OLD_PASSWORD_INVALID = 30201;
-    public static final int ACCOUNT_DELETE_CONFIRMATION_INVALID = 30301;
+    ACCOUNT_SET_PASSWORD_CHECK_INVALID(30101),
+    ACCOUNT_EDIT_OLD_PASSWORD_INVALID(30102),
+    ACCOUNT_DELETE_CONFIRMATION_NULL(30103),
 
     /* Auction */
-    public static final int AUCTION_LIST_FILTER_GROUP_EMPTY = 30401;
+    AUCTION_LIST_GROUP_NULL(30201);
+
+    private int code;
+    private String name;
+
+    private ServletErrorCode(int code) {
+        this.code = code;
+        this.name = this.name();
+    }
+
+    @Override
+    public int getCode() {
+        return code;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 }

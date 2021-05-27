@@ -10,7 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.CategoryManager;
@@ -34,12 +33,11 @@ public final class CreateSaleServlet extends HttpServlet {
 
         Integer userId = (Integer) request.getSession().getAttribute("userId");
 
-
         try {
             request.setAttribute("categories", new CategoryManager().getCategories());
         } catch (BusinessException e) {
             e.printStackTrace();
-            request.setAttribute("errorCode", e.getCode());
+            request.setAttribute("exception", e);
         }
         if (request.getAttribute("startDate") == null) {
             request.setAttribute("startDate", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
@@ -85,13 +83,13 @@ public final class CreateSaleServlet extends HttpServlet {
         String city = parser.getTrimmedString("city");
         try {
 
-            Item item = new ItemManager().addItem(userId, name, description, categoryId, price, startDate, endDate, street,
-                    postalCode, city);
+            Item item = new ItemManager().addItem(userId, name, description, categoryId, price, startDate, endDate,
+                    street, postalCode, city);
             response.sendRedirect(request.getContextPath() + "/auction/item/" + item.getId());
             return;
         } catch (BusinessException e) {
             e.printStackTrace();
-            request.setAttribute("errorCode", e.getCode());
+            request.setAttribute("exception", e);
         } catch (IOException e) {
             e.printStackTrace();
         }

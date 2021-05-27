@@ -45,13 +45,12 @@ public final class LoginAccountServlet extends HttpServlet {
         String password = parser.getString("password");
         boolean rememberMe = parser.getChecked("rememberMe");
         try {
-            User user = new UserManager().getUserByUserName(userName, password);
+            User user = new UserManager().getUserByLogin(userName, password);
             new UserSession(request).setUserId(user.getId());
         } catch (BusinessException e) {
             e.printStackTrace();
-            request.setAttribute("errorCode", e.getCode());
+            request.setAttribute("exception", e);
             request.setAttribute("userName", userName);
-            request.setAttribute("password", password);
             request.setAttribute("rememberMe", rememberMe);
         }
         doGet(request, response);

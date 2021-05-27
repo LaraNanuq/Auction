@@ -35,13 +35,23 @@ public final class ItemManager {
         checkCategory(category);
         checkPrice(price);
         checkDates(startDate, endDate);
-        Withdrawal withdrawalPoint = new Withdrawal(street, postalCode, city);
-        checkWithdrawalPoint(withdrawalPoint);
+        checkStreet(street);
+        checkPostalCode(postalCode);
+        checkCity(city);
         User seller = new UserManager().getUserById(sellerId);
-        checkUser(seller);
+        checkSeller(seller);
+
+        // Add
+        Withdrawal withdrawalPoint = new Withdrawal(street, postalCode, city);
         Item item = new Item(name, description, startDate, endDate, price, price, seller, category, withdrawalPoint);
+        
         itemDAO.insert(item);
         return item;
+    }
+
+    public Item getItemById(Integer id) throws BusinessException {
+        checkId(id);
+        return itemDAO.selectById(id);
     }
 
     public List<Item> getAllAvailableItems(String name, Integer categoryId) throws BusinessException {
@@ -82,18 +92,6 @@ public final class ItemManager {
 
     /* Validation */
 
-    private void checkUser(User user) throws BusinessException {
-        if ((user == null) || (user.getId() == null)) {
-            throw new BusinessException(BLLErrorCode.ITEM_SELLER_NULL);
-        }
-    }
-
-    private void checkUserId(Integer id) throws BusinessException {
-        if ((id == null)) {
-            throw new BusinessException(BLLErrorCode.USER_ID_NULL);
-        }
-    }
-
     private void checkName(String name) throws BusinessException {
         if (isStringNull(name)) {
             throw new BusinessException(BLLErrorCode.ITEM_NAME_NULL);
@@ -113,13 +111,16 @@ public final class ItemManager {
     }
 
     private void checkCategory(Category category) throws BusinessException {
-        if ((category == null) || (category.getId() == null)) {
+        if (category == null) {
             throw new BusinessException(BLLErrorCode.ITEM_CATEGORY_NULL);
         }
     }
 
     private void checkPrice(Integer startingPrice) throws BusinessException {
-        if ((startingPrice == null) || (startingPrice < 0)) {
+        if (startingPrice == null) {
+            throw new BusinessException(BLLErrorCode.ITEM_STARTING_PRICE_NULL);
+        }
+        if (startingPrice < 0) {
             throw new BusinessException(BLLErrorCode.ITEM_STARTING_PRICE_INVALID);
         }
     }
@@ -135,31 +136,52 @@ public final class ItemManager {
             throw new BusinessException(BLLErrorCode.ITEM_END_DATE_NULL);
         }
         if (startDate.isAfter(endDate)) {
-            throw new BusinessException(BLLErrorCode.ITEM_DATES_INVALID);
+            throw new BusinessException(BLLErrorCode.ITEM_END_DATE_INVALID);
         }
     }
 
-    private void checkWithdrawalPoint(Withdrawal withdrawalPoint) throws BusinessException {
-        if (withdrawalPoint == null) {
-            throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_NULL);
+    private void checkStreet(String street) throws BusinessException {
+        if (isStringNull(street)) {
+            throw new BusinessException(BLLErrorCode.ITEM_STREET_NULL);
         }
-        if (isStringNull(withdrawalPoint.getStreet())) {
-            throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_STREET_NULL);
+        if (street.length() > 30) {
+            throw new BusinessException(BLLErrorCode.ITEM_STREET_TOO_LONG);
         }
-        if (withdrawalPoint.getStreet().length() > 30) {
-            throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_STREET_TOO_LONG);
+    }
+
+    private void checkPostalCode(String postalCode) throws BusinessException {
+        if (isStringNull(postalCode)) {
+            throw new BusinessException(BLLErrorCode.ITEM_POSTAL_CODE_NULL);
         }
-        if (isStringNull(withdrawalPoint.getPostalCode())) {
-            throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_POSTAL_CODE_NULL);
+        if (postalCode.length() > 15) {
+            throw new BusinessException(BLLErrorCode.ITEM_POSTAL_CODE_TOO_LONG);
         }
-        if (withdrawalPoint.getPostalCode().length() > 15) {
-            throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_POSTAL_CODE_TOO_LONG);
+    }
+
+    private void checkCity(String city) throws BusinessException {
+        if (isStringNull(city)) {
+            throw new BusinessException(BLLErrorCode.ITEM_CITY_NULL);
         }
-        if (isStringNull(withdrawalPoint.getCity())) {
-            throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_CITY_NULL);
+        if (city.length() > 30) {
+            throw new BusinessException(BLLErrorCode.ITEM_CITY_TOO_LONG);
         }
-        if (withdrawalPoint.getCity().length() > 30) {
-            throw new BusinessException(BLLErrorCode.ITEM_WITHDRAWAL_CITY_TOO_LONG);
+    }
+
+    private void checkSeller(User seller) throws BusinessException {
+        if (seller == null) {
+            throw new BusinessException(BLLErrorCode.ITEM_SELLER_NULL);
+        }
+    }
+
+    private void checkId(Integer id) throws BusinessException {
+        if (id == null) {
+            throw new BusinessException(BLLErrorCode.ITEM_ID_NULL);
+        }
+    }
+    
+    private void checkUserId(Integer id) throws BusinessException {
+        if ((id == null)) {
+            throw new BusinessException(BLLErrorCode.ITEM_USER_ID_NULL);
         }
     }
 

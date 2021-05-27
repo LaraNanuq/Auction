@@ -55,7 +55,6 @@
                             name="password"
                             id="password"
                             placeholder="Mot de passe"
-                            value="${requestScope.password}"
                             class="form-input"
                         />
                     </div>

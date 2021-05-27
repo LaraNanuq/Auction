@@ -35,7 +35,7 @@
                     </legend>
                     <div class="form-group">
                         <label for="name" class="form-label">
-                            Nom
+                            Nom*
                         </label>
                         <input
                             type="text"
@@ -48,7 +48,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description" class="form-label">
-                            Description
+                            Description*
                         </label>
                         <textarea
                             name="description"
@@ -62,7 +62,7 @@
                     </div>
                     <div class="form-group">
                         <label for="category-id" class="form-label">
-                            Catégorie
+                            Catégorie*
                         </label>
                         <select name="categoryId" id="category-id" class="form-input">
                             <option value="" disabled selected>
@@ -84,7 +84,7 @@
                     </legend>
                     <div class="form-group">
                         <label for="price" class="form-label">
-                            Prix de départ
+                            Prix de départ*
                         </label>
                         <input
                             type="number"
@@ -98,7 +98,7 @@
                     </div>
                     <div class="form-group">
                         <label for="start-date" class="form-label">
-                            Début de l'enchère
+                            Début de l'enchère*
                         </label>
                         <input
                             type="date"
@@ -110,7 +110,7 @@
                     </div>
                     <div class="form-group">
                         <label for="end-date" class="form-label">
-                            Fin de l'enchère
+                            Fin de l'enchère*
                         </label>
                         <input
                             type="date"
@@ -129,7 +129,7 @@
                     </legend>
                     <div class="form-group">
                         <label for="street" class="form-label">
-                            Rue
+                            Rue*
                         </label>
                         <input
                             type="text"
@@ -142,7 +142,7 @@
                     </div>
                     <div class="form-group">
                         <label for="postal-code" class="form-label">
-                            Code postal
+                            Code postal*
                         </label>
                         <input
                             type="text"
@@ -155,7 +155,7 @@
                     </div>
                     <div class="form-group">
                         <label for="city" class="form-label">
-                            Ville
+                            Ville*
                         </label>
                         <input
                             type="text"
@@ -167,7 +167,12 @@
                         />
                     </div>
                 </fieldset>
-
+                <div class="info-section">
+                    <p class="info-value">
+                        * Champs obligatoires
+                    </p>
+                </div>
+                
                 <!-- Form buttons -->
                 <div class="form-button-group">
                     <input type="submit" value="Valider" class="form-button" />

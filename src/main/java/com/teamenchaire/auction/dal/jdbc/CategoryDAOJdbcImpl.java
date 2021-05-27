@@ -23,10 +23,12 @@ public class CategoryDAOJdbcImpl implements CategoryDAO {
 
     /* Select */
     private static final String SQL_SELECT_ALL =
-            "SELECT * FROM categories";
+            "SELECT"
+            + " id_category, category_name"
+            + " FROM categories";
     
-    private static final String SQL_SELECT_BY_ID =
-            "SELECT * FROM categories WHERE (id_category = ?)";
+    private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL
+            + " WHERE (id_category = ?)";
 
     /**
      * Constructs a {@code CategoryDAOJdbcImpl}.

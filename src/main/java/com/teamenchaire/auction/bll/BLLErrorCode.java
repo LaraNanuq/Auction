@@ -1,58 +1,81 @@
 package com.teamenchaire.auction.bll;
 
+import com.teamenchaire.auction.BusinessErrorCode;
+
 /**
- * A {@code class} which defines error codes for the business logic layer.
+ * An {@code enum} list of error codes for the business logic layer.
  * 
  * @author Marin Taverniers
  */
-public final class BLLErrorCode {
-
-    private BLLErrorCode() {
-    }
+public enum BLLErrorCode implements BusinessErrorCode {
 
     /* User */
-    public static final int USER_NULL = 20301;
-    public static final int USER_USER_NAME_NULL = 20302;
-    public static final int USER_PASSWORD_NULL = 20303;
-    public static final int USER_UNKNOWN = 20304;
-    public static final int USER_PASSWORD_TOO_LONG = 20305;
-    public static final int USER_ID_NULL = 20306;
-    public static final int USER_NICKNAME_NULL = 20307;
-    public static final int USER_NICKNAME_INVALID = 20308;
-    public static final int USER_LAST_NAME_NULL = 20309;
-    public static final int USER_LAST_NAME_TOO_LONG = 20310;
-    public static final int PHONE_NUMBER_TOO_LONG = 20311;
-    public static final int USER_FIRST_NAME_NULL = 20312;
-    public static final int USER_FIRST_NAME_TOO_LONG = 20313;
-    public static final int USER_EMAIL_NULL = 20314;
-    public static final int USER_EMAIL_TOO_LONG = 20315;
-    public static final int USER_STREET_NULL = 20316;
-    public static final int USER_STREET_TOO_LONG = 20317;
-    public static final int USER_POSTAL_CODE_NULL = 20318;
-    public static final int USER_POSTAL_CODE_TOO_LONG = 20319;
-    public static final int USER_CITY_NULL = 20320;
-    public static final int USER_CITY_TOO_LONG = 20321;
+    USER_NICKNAME_NULL(20101),
+    USER_NICKNAME_INVALID(20102),
+    USER_NICKNAME_TOO_LONG(20103),
+    USER_NICKNAME_ALREADY_EXISTS(20104),
+    USER_LAST_NAME_NULL(20105),
+    USER_LAST_NAME_TOO_LONG(20106),
+    USER_FIRST_NAME_NULL(20107),
+    USER_FIRST_NAME_TOO_LONG(20108),
+    USER_EMAIL_NULL(20109),
+    USER_EMAIL_TOO_LONG(20110),
+    USER_EMAIL_ALREADY_EXISTS(20111),
+    USER_PHONE_NUMBER_TOO_LONG(20112),
+    USER_STREET_NULL(20113),
+    USER_STREET_TOO_LONG(20114),
+    USER_POSTAL_CODE_NULL(20115),
+    USER_POSTAL_CODE_TOO_LONG(20116),
+    USER_CITY_NULL(20117),
+    USER_CITY_TOO_LONG(20118),
+    USER_PASSWORD_NULL(20119),
+    USER_PASSWORD_TOO_LONG(20120),
+    USER_NULL(20121),
+    USER_ID_NULL(20122),
+    USER_USER_NAME_NULL(20123),
+    USER_UNKNOWN(20124),
+    USER_PASSWORD_INVALID(20125),
 
     /* Item */
-    public static final int ITEM_SELLER_NULL = 20102;
-    public static final int ITEM_NAME_NULL = 20103;
-    public static final int ITEM_NAME_TOO_LONG = 20104;
-    public static final int ITEM_DESCRIPTION_NULL = 20105;
-    public static final int ITEM_DESCRIPTION_TOO_LONG = 20106;
-    public static final int ITEM_CATEGORY_NULL = 20107;
-    public static final int ITEM_STARTING_PRICE_INVALID = 20108;
-    public static final int ITEM_START_DATE_NULL = 20109;
-    public static final int ITEM_START_DATE_INVALID = 20110;
-    public static final int ITEM_END_DATE_NULL = 20111;
-    public static final int ITEM_DATES_INVALID = 20112;
-    public static final int ITEM_WITHDRAWAL_NULL = 20113;
-    public static final int ITEM_WITHDRAWAL_STREET_NULL = 20114;
-    public static final int ITEM_WITHDRAWAL_STREET_TOO_LONG = 20115;
-    public static final int ITEM_WITHDRAWAL_POSTAL_CODE_NULL = 20116;
-    public static final int ITEM_WITHDRAWAL_POSTAL_CODE_TOO_LONG = 20117;
-    public static final int ITEM_WITHDRAWAL_CITY_NULL = 20118;
-    public static final int ITEM_WITHDRAWAL_CITY_TOO_LONG = 20119;
+    ITEM_NAME_NULL(20201),
+    ITEM_NAME_TOO_LONG(20202),
+    ITEM_DESCRIPTION_NULL(20203),
+    ITEM_DESCRIPTION_TOO_LONG(20204),
+    ITEM_CATEGORY_NULL(20205),
+    ITEM_STARTING_PRICE_NULL(20206),
+    ITEM_STARTING_PRICE_INVALID(20207),
+    ITEM_START_DATE_NULL(20208),
+    ITEM_START_DATE_INVALID(20209),
+    ITEM_END_DATE_NULL(20210),
+    ITEM_END_DATE_INVALID(20211),
+    ITEM_STREET_NULL(20212),
+    ITEM_STREET_TOO_LONG(20213),
+    ITEM_POSTAL_CODE_NULL(20214),
+    ITEM_POSTAL_CODE_TOO_LONG(20215),
+    ITEM_CITY_NULL(20216),
+    ITEM_CITY_TOO_LONG(20217),
+    ITEM_SELLER_NULL(20218),
+    ITEM_ID_NULL(20219),
+    ITEM_USER_ID_NULL(20220),
 
     /* Category */
-    public static final int CATEGORY_ID_NULL = 20201;
+    CATEGORY_ID_NULL(20301);
+    
+    private int code;
+    private String name;
+
+    private BLLErrorCode(int code) {
+        this.code = code;
+        this.name = this.name();
+    }
+
+    @Override
+    public int getCode() {
+        return code;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 }

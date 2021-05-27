@@ -39,11 +39,10 @@ public final class EditAccountServlet extends HttpServlet {
                 request.setAttribute("street", user.getStreet());
                 request.setAttribute("postalCode", user.getPostalCode());
                 request.setAttribute("city", user.getCity());
-                request.setAttribute("credit", user.getCredit());
                 dispatcher.forwardToJsp("/pages/account/Edit.jsp");
             } catch (BusinessException e) {
                 e.printStackTrace();
-                request.setAttribute("errorCode", e.getCode());
+                request.setAttribute("exception", e);
             }
         } else {
             dispatcher.redirectToServlet("/home");
@@ -85,7 +84,7 @@ public final class EditAccountServlet extends HttpServlet {
                 dispatcher.redirectToServlet("/user/profile/" + nickname);
             } catch (BusinessException e) {
                 e.printStackTrace();
-                request.setAttribute("errorCode", e.getCode());
+                request.setAttribute("exception", e);
                 request.setAttribute("nickname", nickname);
                 request.setAttribute("lastName", lastName);
                 request.setAttribute("firstName", firstName);
@@ -94,8 +93,6 @@ public final class EditAccountServlet extends HttpServlet {
                 request.setAttribute("street", street);
                 request.setAttribute("postalCode", postalCode);
                 request.setAttribute("city", city);
-                request.setAttribute("newPassword", newPassword);
-                request.setAttribute("credit", request.getAttribute("credit"));
                 dispatcher.forwardToJsp("/pages/account/Edit.jsp");
             }
         } else {
@@ -105,7 +102,7 @@ public final class EditAccountServlet extends HttpServlet {
 
     private void checkNewPassword(String newPassword, String newPasswordCheck) throws BusinessException {
         if ((newPassword != null) && (!newPassword.equals(newPasswordCheck))) {
-            throw new BusinessException(ServletErrorCode.ACCOUNT_CREATE_PASSWORD_CHECK_INVALID);
+            throw new BusinessException(ServletErrorCode.ACCOUNT_SET_PASSWORD_CHECK_INVALID);
         }
     }
 

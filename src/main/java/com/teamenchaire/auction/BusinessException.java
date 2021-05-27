@@ -8,26 +8,26 @@ package com.teamenchaire.auction;
 public final class BusinessException extends Exception {
     private static final long serialVersionUID = 1L;
 
-    private int code;
+    private BusinessErrorCode error;
 
     /**
-     * Constructs a {@code BusinessException} with the specified error code.
+     * Constructs a {@code BusinessException} with the specified error.
      * 
-     * @param code The error code of the exception
+     * @param error The error code of the exception
      */
-    public BusinessException(int code) {
-        this(code, null);
+    public BusinessException(BusinessErrorCode error) {
+        this(error, null);
     }
 
     /**
-     * Constructs a {@code BusinessException} with specified error code and cause.
+     * Constructs a {@code BusinessException} with specified error and cause.
      * 
-     * @param code The error code of the exception
-     * @param code The cause of the exception
+     * @param error The error code of the exception
+     * @param cause The cause of the exception
      */
-    public BusinessException(int code, Throwable cause) {
+    public BusinessException(BusinessErrorCode error, Throwable cause) {
         super(cause);
-        this.code = code;
+        this.error = error;
     }
 
     /**
@@ -36,6 +36,15 @@ public final class BusinessException extends Exception {
      * @return the error code of the exception.
      */
     public int getCode() {
-        return code;
+        return error.getCode();
+    }
+
+    /**
+     * Gets the error name of this exception.
+     * 
+     * @return the error name of the exception.
+     */
+    public String getName() {
+        return error.getName();
     }
 }

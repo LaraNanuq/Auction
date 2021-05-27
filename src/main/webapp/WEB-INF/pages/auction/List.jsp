@@ -144,7 +144,9 @@
                                 <c:forEach var="item" items="${itemsGroup.value}">
                                     <li class="info-list-item">
                                         <p class="info-value">
-                                            ${item.name}
+                                            <a href="${pageContext.request.contextPath}/auction/item/${item.id}" class="form-link">
+                                                ${item.name}
+                                            </a>
                                         </p>
                                         <div class="info-group">
                                             <label for="price" class="info-label">
@@ -167,7 +169,9 @@
                                                 Vendeur
                                             </label>
                                             <span id="price" class="info-value">
-                                                ${item.seller.nickname}
+                                                <a href="${pageContext.request.contextPath}/user/profile/${item.seller.nickname}" class="form-link">
+                                                    ${item.seller.nickname}
+                                                </a>
                                             </span>
                                         </div>
                                     </li>

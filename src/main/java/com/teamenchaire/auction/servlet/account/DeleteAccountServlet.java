@@ -43,7 +43,7 @@ public final class DeleteAccountServlet extends HttpServlet {
                 session.close();
             } catch (BusinessException e) {
                 e.printStackTrace();
-                request.setAttribute("errorCode", e.getCode());
+                request.setAttribute("exception", e);
             }
         }
         doGet(request, response);
@@ -51,7 +51,7 @@ public final class DeleteAccountServlet extends HttpServlet {
 
     private void checkConfirmation(boolean confirmation) throws BusinessException {
         if (!confirmation) {
-            throw new BusinessException(ServletErrorCode.ACCOUNT_DELETE_CONFIRMATION_INVALID);
+            throw new BusinessException(ServletErrorCode.ACCOUNT_DELETE_CONFIRMATION_NULL);
         }
     }
 }

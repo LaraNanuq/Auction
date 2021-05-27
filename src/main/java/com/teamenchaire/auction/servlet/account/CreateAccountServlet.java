@@ -59,7 +59,7 @@ public final class CreateAccountServlet extends HttpServlet {
             new UserSession(request).setUserId(user.getId());
         } catch (BusinessException e) {
             e.printStackTrace();
-            request.setAttribute("errorCode", e.getCode());
+            request.setAttribute("exception", e);
             request.setAttribute("nickname", nickname);
             request.setAttribute("lastName", lastName);
             request.setAttribute("firstName", firstName);
@@ -68,14 +68,13 @@ public final class CreateAccountServlet extends HttpServlet {
             request.setAttribute("street", street);
             request.setAttribute("postalCode", postalCode);
             request.setAttribute("city", city);
-            request.setAttribute("password", password);
         }
         doGet(request, response);
     }
 
     private void checkPassword(String password, String passwordCheck) throws BusinessException {
         if ((password != null) && (!password.equals(passwordCheck))) {
-            throw new BusinessException(ServletErrorCode.ACCOUNT_CREATE_PASSWORD_CHECK_INVALID);
+            throw new BusinessException(ServletErrorCode.ACCOUNT_SET_PASSWORD_CHECK_INVALID);
         }
     }
 }

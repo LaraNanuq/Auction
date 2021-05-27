@@ -42,7 +42,7 @@ public final class ProfileUserServlet extends HttpServlet {
                 }
             } catch (BusinessException e) {
                 e.printStackTrace();
-                request.setAttribute("errorCode", e.getCode());
+                request.setAttribute("exception", e);
             }
         } else {
             if (!session.isValid()) {
@@ -54,7 +54,7 @@ public final class ProfileUserServlet extends HttpServlet {
                 request.setAttribute("isEditable", true);
             } catch (BusinessException e) {
                 e.printStackTrace();
-                request.setAttribute("errorCode", e.getCode());
+                request.setAttribute("exception", e);
             }
         }
         request.setAttribute("user", user);

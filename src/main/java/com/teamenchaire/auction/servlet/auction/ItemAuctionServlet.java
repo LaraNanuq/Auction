@@ -25,15 +25,9 @@ public final class ItemAuctionServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        UserSession session = new UserSession(request);
         ServletDispatcher dispatcher = new ServletDispatcher(request, response);
-
-        // Get item
+        UserSession session = new UserSession(request);
         Integer id = new ServletPathParser(request).getInt();
-        if (id == null) {
-            dispatcher.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
         try {
             Item item = new ItemManager().getItemById(id);
             if (item == null) {
@@ -43,14 +37,14 @@ public final class ItemAuctionServlet extends HttpServlet {
 
             // Get state
             LocalDate today = LocalDate.now();
-            boolean isSeller = (session.isValid()) && (item.getSeller().getId().equals(session.getUserId()));
+            boolean isSeller = item.getSeller().getId().equals(session.getUserId());
             boolean isStarted = today.isAfter(item.getStartDate().minusDays(1));
             boolean isEnded = today.isAfter(item.getEndDate());
             if (isSeller) {
-                if (isEnded) {
-                    dispatcher.redirectToServlet("/sale/finalize/" + item.getId());
-                    return;
-                }
+                // if (isEnded) {
+                // dispatcher.redirectToServlet("/sale/finalize/" + item.getId());
+                // return;
+                // }
                 if (!isStarted) {
                     request.setAttribute("canEdit", true);
                 }
@@ -59,13 +53,12 @@ public final class ItemAuctionServlet extends HttpServlet {
                     dispatcher.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
-                if (isEnded) {
-                    request.setAttribute("isEnded", true);
-                } else if (session.isValid()) {
+                if ((!isEnded) && (session.isValid())) {
                     request.setAttribute("canBid", true);
                 }
             }
             request.setAttribute("item", item);
+            request.setAttribute("isEnded", isEnded);
         } catch (BusinessException e) {
             e.printStackTrace();
             request.setAttribute("exception", e);

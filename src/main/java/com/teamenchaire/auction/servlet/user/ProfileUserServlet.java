@@ -9,6 +9,7 @@ import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.UserManager;
 import com.teamenchaire.auction.bo.User;
 import com.teamenchaire.auction.servlet.ServletDispatcher;
+import com.teamenchaire.auction.servlet.ServletPathParser;
 import com.teamenchaire.auction.servlet.UserSession;
 
 /**
@@ -22,43 +23,33 @@ public final class ProfileUserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        
-        String nickname = request.getPathInfo();
-        User user = null;
-        UserManager userManager = new UserManager();
         ServletDispatcher dispatcher = new ServletDispatcher(request, response);
-        UserSession session = new UserSession(request);
-        if ((nickname != null) && (nickname.length() > 1)) {
-            nickname = nickname.replace("/", "").trim();
-            try {
-                user = userManager.getUserByNickname(nickname);
-                if (user == null) {
-                    dispatcher.sendError(HttpServletResponse.SC_NOT_FOUND);
+        try {
+            String nickname = new ServletPathParser(request).getString();
+            UserSession session = new UserSession(request);
+            UserManager userManager = new UserManager();
+            User user;
+            if ((nickname == null) || (nickname.isEmpty())) {
+                if (!session.isValid()) {
+                    dispatcher.redirectToServlet("/home");
                     return;
                 }
-                if (session.isValid()) {
-                    if (user.getId().equals(session.getUserId())) {
-                        request.setAttribute("isEditable", true);
-                    }
-                }
-            } catch (BusinessException e) {
-                e.printStackTrace();
-                request.setAttribute("exception", e);
+                user = userManager.getUserById(session.getUserId());
+            } else {
+                user = userManager.getUserByNickname(nickname);
             }
-        } else {
-            if (!session.isValid()) {
-                dispatcher.redirectToServlet("/home");
+            if (user == null) {
+                dispatcher.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
-            try {
-                user = userManager.getUserById(session.getUserId());
+            request.setAttribute("user", user);
+            if (user.getId().equals(session.getUserId())) {
                 request.setAttribute("isEditable", true);
-            } catch (BusinessException e) {
-                e.printStackTrace();
-                request.setAttribute("exception", e);
             }
+        } catch (BusinessException e) {
+            e.printStackTrace();
+            request.setAttribute("exception", e);
         }
-        request.setAttribute("user", user);
         dispatcher.forwardToJsp("/pages/user/Profile.jsp");
     }
 

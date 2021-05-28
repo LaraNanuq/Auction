@@ -131,15 +131,15 @@
             </form>
 
             <!-- Auction -->
-            <c:forEach var="itemsGroup" items="${requestScope.items}">
+            <c:forEach var="group" items="${requestScope.itemGroups}">
                 <div class="info-section">
                     <p class="info-section-title">
-                        <fmt:message key="${requestScope.group}_${itemsGroup.key}" />
+                        <fmt:message key="${requestScope.group}_${group.key}" />
                     </p>
                     <c:choose>
-                        <c:when test="${!empty(itemsGroup.value)}">
+                        <c:when test="${!empty(group.value)}">
                             <ul class="info-list">
-                                <c:forEach var="item" items="${itemsGroup.value}">
+                                <c:forEach var="item" items="${group.value}">
                                     <hr />
                                     <li class="info-list-item">
                                         <p class="info-value">

@@ -7,7 +7,18 @@ package com.teamenchaire.auction;
  * @author Marin Taverniers
  */
 public interface BusinessErrorCode {
+
+    /**
+     * Returns the code of this error.
+     * 
+     * @return the code of the error.
+     */
     int getCode();
 
+    /**
+     * Returns the name of this error.
+     * 
+     * @return the name of the error.
+     */
     String getName();
 }

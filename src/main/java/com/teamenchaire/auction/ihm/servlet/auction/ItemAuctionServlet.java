@@ -1,4 +1,4 @@
-package com.teamenchaire.auction.servlet.auction;
+package com.teamenchaire.auction.ihm.servlet.auction;
 
 import java.time.LocalDate;
 
@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.ItemManager;
 import com.teamenchaire.auction.bo.Item;
-import com.teamenchaire.auction.servlet.ServletDispatcher;
-import com.teamenchaire.auction.servlet.ServletPathParser;
-import com.teamenchaire.auction.servlet.UserSession;
+import com.teamenchaire.auction.ihm.session.UserSession;
+import com.teamenchaire.auction.ihm.util.ServletDispatcher;
+import com.teamenchaire.auction.ihm.util.ServletPathParser;
 
 /**
  * A {@code Servlet} which handles requests to the page to view an item.
@@ -53,7 +53,7 @@ public final class ItemAuctionServlet extends HttpServlet {
                     dispatcher.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
-                if ((!isEnded) && (session.isValid())) {
+                if ((!isEnded) && (session.isOpen())) {
                     request.setAttribute("canBid", true);
                 }
             }

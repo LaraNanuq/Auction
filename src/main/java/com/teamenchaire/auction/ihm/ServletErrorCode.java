@@ -1,4 +1,4 @@
-package com.teamenchaire.auction.servlet;
+package com.teamenchaire.auction.ihm;
 
 import com.teamenchaire.auction.BusinessErrorCode;
 
@@ -7,7 +7,6 @@ import com.teamenchaire.auction.BusinessErrorCode;
  * 
  * @author Marin Taverniers
  */
-
 public enum ServletErrorCode implements BusinessErrorCode {
 
     /* Account */

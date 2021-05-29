@@ -179,7 +179,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Gets all information about this user.
+     * Returns all information about this user.
      * 
      * @return all information about the user.
      */

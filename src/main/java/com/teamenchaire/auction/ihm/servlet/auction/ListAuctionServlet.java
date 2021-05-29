@@ -1,4 +1,4 @@
-package com.teamenchaire.auction.servlet.auction;
+package com.teamenchaire.auction.ihm.servlet.auction;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,13 +13,13 @@ import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.CategoryManager;
 import com.teamenchaire.auction.bll.ItemManager;
 import com.teamenchaire.auction.bo.Item;
-import com.teamenchaire.auction.servlet.ServletDispatcher;
-import com.teamenchaire.auction.servlet.ServletErrorCode;
-import com.teamenchaire.auction.servlet.ServletParameterParser;
-import com.teamenchaire.auction.servlet.UserSession;
-import com.teamenchaire.auction.servlet.auction.ItemsGroup.RadioGroups;
-import com.teamenchaire.auction.servlet.auction.ItemsGroup.Purchases;
-import com.teamenchaire.auction.servlet.auction.ItemsGroup.Sales;
+import com.teamenchaire.auction.ihm.ServletErrorCode;
+import com.teamenchaire.auction.ihm.servlet.auction.ItemsGroup.Purchases;
+import com.teamenchaire.auction.ihm.servlet.auction.ItemsGroup.RadioGroups;
+import com.teamenchaire.auction.ihm.servlet.auction.ItemsGroup.Sales;
+import com.teamenchaire.auction.ihm.session.UserSession;
+import com.teamenchaire.auction.ihm.util.ServletDispatcher;
+import com.teamenchaire.auction.ihm.util.ServletParameterParser;
 
 /**
  * A {@code Servlet} which handles requests to the page to list auction.
@@ -40,7 +40,7 @@ public final class ListAuctionServlet extends HttpServlet {
         try {
             request.setAttribute("categories", new CategoryManager().getCategories());
             Map<String, List<Item>> itemGroups;
-            if (!session.isValid()) {
+            if (!session.isOpen()) {
 
                 // Get all available items
                 group = RadioGroups.PURCHASES.getGroupName();

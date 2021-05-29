@@ -17,6 +17,7 @@ import com.teamenchaire.auction.dal.UserDAO;
  * the JDBC driver.
  * 
  * @author Ayelen Dumas
+ * @author Marin Taverniers
  */
 public final class UserDAOJdbcImpl implements UserDAO {
 

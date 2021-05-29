@@ -56,7 +56,7 @@ public class Category implements Serializable {
     }
 
     /**
-     * Gets all information about this category.
+     * Returns all information about this category.
      * 
      * @return all information about the category.
      */

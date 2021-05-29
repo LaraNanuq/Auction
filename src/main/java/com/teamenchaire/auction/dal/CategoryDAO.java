@@ -9,5 +9,4 @@ import com.teamenchaire.auction.bo.Category;
  * @author Marin Taverniers
  */
 public interface CategoryDAO extends GenericDAO<Category> {
-
 }

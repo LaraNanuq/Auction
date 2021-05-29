@@ -69,7 +69,7 @@ public class Bid implements Serializable {
     }
 
     /**
-     * Gets all information about this bid.
+     * Returns all information about this bid.
      * 
      * @return all information about the bid.
      */

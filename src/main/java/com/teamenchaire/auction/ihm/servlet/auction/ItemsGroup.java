@@ -1,4 +1,4 @@
-package com.teamenchaire.auction.servlet.auction;
+package com.teamenchaire.auction.ihm.servlet.auction;
 
 import java.util.List;
 
@@ -14,10 +14,30 @@ import com.teamenchaire.auction.bo.Item;
 public interface ItemsGroup {
     final ItemManager itemManager = new ItemManager();
 
+    /**
+     * Returns the list of items that match specified user, name and category
+     * filters.
+     * 
+     * @param userId     The ID of the user to search for or to ignore
+     * @param name       The name to search for
+     * @param categoryId The ID of the category to search for
+     * @return the list of items matching filters.
+     * @throws BusinessException if the database request cannot be performed.
+     */
     List<Item> getItems(Integer userId, String name, Integer categoryId) throws BusinessException;
 
+    /**
+     * Returns the name of this group.
+     * 
+     * @return the name of the group.
+     */
     String getGroupName();
 
+    /**
+     * An {@code enum} list of item groups.
+     * 
+     * @author Marin Taverniers
+     */
     public enum RadioGroups {
         PURCHASES("purchases"), SALES("sales");
 
@@ -32,6 +52,11 @@ public interface ItemsGroup {
         }
     }
 
+    /**
+     * An {@code enum} list of item groups related to purchases.
+     * 
+     * @author Marin Taverniers
+     */
     public enum Purchases implements ItemsGroup {
         AVAILABLE {
             @Override
@@ -70,6 +95,11 @@ public interface ItemsGroup {
         };
     }
 
+    /**
+     * An {@code enum} list of item groups related to sales.
+     * 
+     * @author Marin Taverniers
+     */
     public enum Sales implements ItemsGroup {
         CURRENT {
             @Override

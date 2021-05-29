@@ -1,4 +1,4 @@
-package com.teamenchaire.auction.servlet.account;
+package com.teamenchaire.auction.ihm.servlet.account;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -7,15 +7,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.UserManager;
-import com.teamenchaire.auction.servlet.ServletDispatcher;
-import com.teamenchaire.auction.servlet.ServletErrorCode;
-import com.teamenchaire.auction.servlet.ServletParameterParser;
-import com.teamenchaire.auction.servlet.UserSession;
+import com.teamenchaire.auction.ihm.ServletErrorCode;
+import com.teamenchaire.auction.ihm.session.UserSession;
+import com.teamenchaire.auction.ihm.util.ServletDispatcher;
+import com.teamenchaire.auction.ihm.util.ServletParameterParser;
 
 /**
  * A {@code Servlet} which handles requests to the page to delete an account.
  * 
  * @author Ayelen Dumas
+ * @author Marin Taverniers
  */
 @WebServlet("/account/delete")
 public final class DeleteAccountServlet extends HttpServlet {
@@ -24,10 +25,6 @@ public final class DeleteAccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         ServletDispatcher dispatcher = new ServletDispatcher(request, response);
-        if (!new UserSession(request).isValid()) {
-            dispatcher.redirectToServlet("/home");
-            return;
-        }
         dispatcher.forwardToJsp("/pages/account/Delete.jsp");
     }
 

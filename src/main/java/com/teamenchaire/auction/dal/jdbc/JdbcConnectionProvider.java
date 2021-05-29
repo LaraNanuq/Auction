@@ -25,7 +25,7 @@ public final class JdbcConnectionProvider {
     }
 
     /**
-     * Gets a connection to the database.
+     * Returns a connection to the database.
      * 
      * @return a connection to the database.
      * @throws BusinessException if a connection cannot be established.
@@ -41,7 +41,7 @@ public final class JdbcConnectionProvider {
     }
 
     /**
-     * Gets the data source which provides a connection to the database.
+     * Returns the data source which provides a connection to the database.
      * 
      * @return a data source which provides a connection to the database.
      * @throws BusinessException if the name of the context cannot be found.

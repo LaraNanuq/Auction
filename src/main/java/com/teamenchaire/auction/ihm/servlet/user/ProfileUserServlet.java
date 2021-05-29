@@ -1,4 +1,4 @@
-package com.teamenchaire.auction.servlet.user;
+package com.teamenchaire.auction.ihm.servlet.user;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.UserManager;
 import com.teamenchaire.auction.bo.User;
-import com.teamenchaire.auction.servlet.ServletDispatcher;
-import com.teamenchaire.auction.servlet.ServletPathParser;
-import com.teamenchaire.auction.servlet.UserSession;
+import com.teamenchaire.auction.ihm.session.UserSession;
+import com.teamenchaire.auction.ihm.util.ServletDispatcher;
+import com.teamenchaire.auction.ihm.util.ServletPathParser;
 
 /**
  * A {@code Servlet} which handles requests to the page to view an user profile.
@@ -30,8 +30,8 @@ public final class ProfileUserServlet extends HttpServlet {
             UserManager userManager = new UserManager();
             User user;
             if ((nickname == null) || (nickname.isEmpty())) {
-                if (!session.isValid()) {
-                    dispatcher.redirectToServlet("/home");
+                if (!session.isOpen()) {
+                    dispatcher.redirectToUrl("/home");
                     return;
                 }
                 user = userManager.getUserById(session.getUserId());

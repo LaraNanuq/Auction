@@ -12,7 +12,7 @@
             </a>
         </li>
         <c:choose>
-            <c:when test="${!sessionScope.isValid}">
+            <c:when test="${!sessionScope.isOpen}">
                 <li class="navigation-item">
                     <a href="${pageContext.request.contextPath}/account/login" class="navigation-link">
                         Connexion

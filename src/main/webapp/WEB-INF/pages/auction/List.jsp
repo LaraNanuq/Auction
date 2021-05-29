@@ -1,3 +1,5 @@
+<!-- Author: Marin Taverniers -->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -57,7 +59,7 @@
                             </c:forEach>
                         </select>
                     </div>
-                    <c:if test="${sessionScope.isValid}">
+                    <c:if test="${sessionScope.isOpen}">
                         <div>
                             <input
                                 type="radio"

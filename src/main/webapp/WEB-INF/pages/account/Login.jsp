@@ -1,3 +1,5 @@
+<!-- Author: Marin Taverniers -->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -33,17 +35,17 @@
                         Profil existant
                     </legend>
                     <div class="form-group">
-                        <label for="user-name" class="form-label">
+                        <label for="username" class="form-label">
                             Nom d'utilisateur
                         </label>
                         <input
                             type="text"
-                            name="userName"
-                            id="user-name"
+                            name="username"
+                            id="username"
                             placeholder="Pseudo ou email"
-                            value="${requestScope.userName}"
+                            value="${requestScope.username}"
                             class="form-input"
-                            autofocus
+                            ${empty(requestScope.username) ? 'autofocus' : ''}
                         />
                     </div>
                     <div class="form-group">
@@ -56,6 +58,7 @@
                             id="password"
                             placeholder="Mot de passe"
                             class="form-input"
+                            ${!empty(requestScope.username) ? 'autofocus' : ''}
                         />
                     </div>
                     <div class="login-remember-me">
@@ -70,12 +73,15 @@
                             Se souvenir de moi
                         </label>
                     </div>
+                    <div class="hidden">
+                        <input type="hidden" name="redirectTo" value="${param.redirectTo}">
+                    </div>
 
                     <!-- Buttons -->
                     <div class="form-button-group">
                         <input type="submit" value="Valider" class="form-button" />
                     </div>
-                    <a href="${pageContext.request.contextPath}/account/login" class="form-link">
+                    <a href="${pageContext.request.contextPath}/account/reset-password" class="form-link">
                         Mot de passe oublié
                     </a>
                 </fieldset>

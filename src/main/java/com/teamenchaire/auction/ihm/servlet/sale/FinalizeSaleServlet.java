@@ -1,27 +1,24 @@
-package com.teamenchaire.auction.servlet.account;
+package com.teamenchaire.auction.ihm.servlet.sale;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.teamenchaire.auction.servlet.ServletDispatcher;
-import com.teamenchaire.auction.servlet.UserSession;
+import com.teamenchaire.auction.ihm.util.ServletDispatcher;
 
 /**
- * A {@code Servlet} which handles requests to the page to log out of an
- * account.
+ * A {@code Servlet} which handles requests to the page to finalize a sale.
  * 
- * @author Ayelen Dumas
+ * @author Marin Taverniers
  */
-@WebServlet("/account/logout")
-public final class LogoutAccountServlet extends HttpServlet {
+@WebServlet("/sale/finalize/*")
+public final class FinalizeSaleServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        new UserSession(request).close();
-        new ServletDispatcher(request, response).redirectToServlet("/home");
+        new ServletDispatcher(request, response).sendError(HttpServletResponse.SC_NOT_FOUND);
     }
 
     @Override

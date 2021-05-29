@@ -1,11 +1,11 @@
-package com.teamenchaire.auction.servlet.sale;
+package com.teamenchaire.auction.ihm.servlet.sale;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.teamenchaire.auction.servlet.ServletDispatcher;
+import com.teamenchaire.auction.ihm.util.ServletDispatcher;
 
 /**
  * A {@code Servlet} which handles requests to the page to edit a sale.

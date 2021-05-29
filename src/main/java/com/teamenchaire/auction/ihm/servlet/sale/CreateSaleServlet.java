@@ -1,4 +1,4 @@
-package com.teamenchaire.auction.servlet.sale;
+package com.teamenchaire.auction.ihm.servlet.sale;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,9 +14,9 @@ import com.teamenchaire.auction.bll.ItemManager;
 import com.teamenchaire.auction.bll.UserManager;
 import com.teamenchaire.auction.bo.Item;
 import com.teamenchaire.auction.bo.User;
-import com.teamenchaire.auction.servlet.ServletDispatcher;
-import com.teamenchaire.auction.servlet.ServletParameterParser;
-import com.teamenchaire.auction.servlet.UserSession;
+import com.teamenchaire.auction.ihm.session.UserSession;
+import com.teamenchaire.auction.ihm.util.ServletDispatcher;
+import com.teamenchaire.auction.ihm.util.ServletParameterParser;
 
 /**
  * A {@code Servlet} which handles requests to the page to create a sale.
@@ -31,10 +31,6 @@ public final class CreateSaleServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         ServletDispatcher dispatcher = new ServletDispatcher(request, response);
         UserSession session = new UserSession(request);
-        if (!session.isValid()) {
-            dispatcher.redirectToServlet("/home");
-            return;
-        }
         try {
             request.setAttribute("categories", new CategoryManager().getCategories());
             request.setAttribute("startDate", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
@@ -67,7 +63,7 @@ public final class CreateSaleServlet extends HttpServlet {
             request.setAttribute("categories", new CategoryManager().getCategories());
             Item item = new ItemManager().addItem(userId, name, description, categoryId, price, startDate, endDate,
                     street, postalCode, city);
-            dispatcher.redirectToServlet("/auction/item/" + item.getId());
+            dispatcher.redirectToUrl("/auction/item/" + item.getId());
         } catch (BusinessException e) {
             e.printStackTrace();
             request.setAttribute("exception", e);

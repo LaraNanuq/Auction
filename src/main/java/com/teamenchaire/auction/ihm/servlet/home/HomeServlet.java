@@ -1,11 +1,11 @@
-package com.teamenchaire.auction.servlet.home;
+package com.teamenchaire.auction.ihm.servlet.home;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.teamenchaire.auction.servlet.ServletDispatcher;
+import com.teamenchaire.auction.ihm.util.ServletDispatcher;
 
 /**
  * A {@code Servlet} which handles requests to the home page.
@@ -18,7 +18,7 @@ public final class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        new ServletDispatcher(request, response).redirectToServlet("/auction/list");
+        new ServletDispatcher(request, response).redirectToUrl("/auction/list");
     }
 
     @Override

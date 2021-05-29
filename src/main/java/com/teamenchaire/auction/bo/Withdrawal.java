@@ -58,7 +58,7 @@ public class Withdrawal implements Serializable {
     }
 
     /**
-     * Gets all information about this withdrawal point.
+     * Returns all information about this withdrawal point.
      * 
      * @return all information about the withdrawal point.
      */

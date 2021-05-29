@@ -9,6 +9,7 @@ import com.teamenchaire.auction.dal.UserDAO;
  * A {@code class} which controls users using a data access object.
  *
  * @author Ayelen Dumas
+ * @author Marin Taverniers
  */
 public final class UserManager {
     private static final Integer CREDIT_DEFAULT = 100;
@@ -105,14 +106,14 @@ public final class UserManager {
         return userDAO.selectByEmail(email);
     }
 
-    public User getUserByLogin(String userName, String password) throws BusinessException {
-        checkUserName(userName);
+    public User getUserByLogin(String username, String password) throws BusinessException {
+        checkUserName(username);
         checkPassword(password);
         User user = null;
-        if (userName.contains("@")) {
-            user = getUserByEmail(userName);
+        if (username.contains("@")) {
+            user = getUserByEmail(username);
         } else {
-            user = getUserByNickname(userName);
+            user = getUserByNickname(username);
         }
         if (user == null) {
             throw new BusinessException(BLLErrorCode.USER_UNKNOWN);
@@ -230,8 +231,8 @@ public final class UserManager {
         }
     }
 
-    private void checkUserName(String userName) throws BusinessException {
-        if (isStringEmpty(userName)) {
+    private void checkUserName(String username) throws BusinessException {
+        if (isStringEmpty(username)) {
             throw new BusinessException(BLLErrorCode.USER_USER_NAME_NULL);
         }
     }

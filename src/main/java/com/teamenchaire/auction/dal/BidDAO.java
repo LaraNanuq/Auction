@@ -8,5 +8,4 @@ import com.teamenchaire.auction.bo.Bid;
  * @author Marin Taverniers
  */
 public interface BidDAO extends GenericDAO<Bid> {
-
 }

@@ -1,4 +1,4 @@
-package com.teamenchaire.auction.servlet.account;
+package com.teamenchaire.auction.ihm.servlet.account;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,15 +8,16 @@ import javax.servlet.http.HttpServletResponse;
 import com.teamenchaire.auction.BusinessException;
 import com.teamenchaire.auction.bll.UserManager;
 import com.teamenchaire.auction.bo.User;
-import com.teamenchaire.auction.servlet.ServletDispatcher;
-import com.teamenchaire.auction.servlet.ServletErrorCode;
-import com.teamenchaire.auction.servlet.ServletParameterParser;
-import com.teamenchaire.auction.servlet.UserSession;
+import com.teamenchaire.auction.ihm.ServletErrorCode;
+import com.teamenchaire.auction.ihm.session.UserSession;
+import com.teamenchaire.auction.ihm.util.ServletDispatcher;
+import com.teamenchaire.auction.ihm.util.ServletParameterParser;
 
 /**
  * A {@code Servlet} which handles requests to the page to create an account.
  * 
  * @author Ayelen Dumas
+ * @author Marin Taverniers
  */
 @WebServlet("/account/create")
 public final class CreateAccountServlet extends HttpServlet {
@@ -25,10 +26,6 @@ public final class CreateAccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         ServletDispatcher dispatcher = new ServletDispatcher(request, response);
-        if (new UserSession(request).isValid()) {
-            dispatcher.redirectToServlet("/home");
-            return;
-        }
         dispatcher.forwardToJsp("/pages/account/Create.jsp");
     }
 
@@ -49,7 +46,7 @@ public final class CreateAccountServlet extends HttpServlet {
             checkPassword(password, passwordCheck);
             User user = new UserManager().addUser(nickname, lastName, firstName, email, password, phoneNumber, street,
                     postalCode, city);
-            new UserSession(request).setUserId(user.getId());
+            new UserSession(request).open(user.getId());
         } catch (BusinessException e) {
             e.printStackTrace();
             request.setAttribute("exception", e);

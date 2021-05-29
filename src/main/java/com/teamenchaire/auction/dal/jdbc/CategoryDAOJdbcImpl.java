@@ -19,7 +19,7 @@ import com.teamenchaire.auction.dal.DALErrorCode;
  * 
  * @author Marin Taverniers
  */
-public class CategoryDAOJdbcImpl implements CategoryDAO {
+public final class CategoryDAOJdbcImpl implements CategoryDAO {
 
     /* Select */
     private static final String SQL_SELECT_ALL =

@@ -163,7 +163,7 @@ public class Item implements Serializable {
     }
 
     /**
-     * Gets all information about this item.
+     * Returns all information about this item.
      * 
      * @return all information about the item.
      */

@@ -1,3 +1,7 @@
+# Configuration files
+**/META-INF/context.xml
+**/WEB-INF/lib/
+
 # Maven
 target/
 pom.xml.tag

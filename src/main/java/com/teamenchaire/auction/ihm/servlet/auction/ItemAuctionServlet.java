@@ -41,10 +41,10 @@ public final class ItemAuctionServlet extends HttpServlet {
             boolean isStarted = today.isAfter(item.getStartDate().minusDays(1));
             boolean isEnded = today.isAfter(item.getEndDate());
             if (isSeller) {
-                // if (isEnded) {
-                // dispatcher.redirectToServlet("/sale/finalize/" + item.getId());
-                // return;
-                // }
+                if (isEnded) {
+                    dispatcher.redirectToUrl("/sale/finalize/" + item.getId());
+                    return;
+                }
                 if (!isStarted) {
                     request.setAttribute("canEdit", true);
                 }

@@ -29,63 +29,81 @@
             <%@ include file="/WEB-INF/fragments/Error.jspf" %>
 
             <!-- Account -->
-            <form action="${pageContext.request.contextPath}/account/reset-password" method="POST" class="form">
-                <fieldset class="form-section">
-                    <legend class="form-section-title">
-                        Profil
-                    </legend>
-                    <div class="form-group">
-                        <label for="email" class="form-label">
-                            Email*
-                        </label>
-                        <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            placeholder="Email"
-                            value="${requestScope.email}"
-                            class="form-input"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label for="new-password" class="form-label">
-                            Nouveau mot de passe*
-                        </label>
-                        <input
-                            type="password"
-                            name="newPassword"
-                            id="new-password"
-                            placeholder="Nouveau mot de passe"
-                            class="form-input"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label for="new-password-check" class="form-label">
-                            Confirmation*
-                        </label>
-                        <input
-                            type="password"
-                            name="newPasswordCheck"
-                            id="new-password-check"
-                            placeholder="Nouveau mot de passe"
-                            class="form-input"
-                        />
-                    </div>
+            <c:choose>
+                <c:when test="${requestScope.passwordUpdated}">
                     <div class="info-section">
                         <p class="info-value">
-                            * Champs obligatoires
+                            Le mot de passe a été modifié.
                         </p>
                     </div>
-
+        
                     <!-- Buttons -->
                     <div class="form-button-group">
-                        <input type="submit" value="Valider" class="form-button" />
-                        <a onclick="history.go(-1)" class="form-button-link">
-                            Retour
+                        <a href="${pageContext.request.contextPath}/account/login" class="form-button-link">
+                            Connexion
                         </a>
                     </div>
-                </fieldset>
-            </form>
+                </c:when>
+                <c:otherwise>
+                    <form action="${pageContext.request.contextPath}/account/reset-password" method="POST" class="form">
+                        <fieldset class="form-section">
+                            <legend class="form-section-title">
+                                Profil
+                            </legend>
+                            <div class="form-group">
+                                <label for="email" class="form-label">
+                                    Email*
+                                </label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    id="email"
+                                    placeholder="Email"
+                                    value="${requestScope.email}"
+                                    class="form-input"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="new-password" class="form-label">
+                                    Nouveau mot de passe*
+                                </label>
+                                <input
+                                    type="password"
+                                    name="newPassword"
+                                    id="new-password"
+                                    placeholder="Nouveau mot de passe"
+                                    class="form-input"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="new-password-check" class="form-label">
+                                    Confirmation*
+                                </label>
+                                <input
+                                    type="password"
+                                    name="newPasswordCheck"
+                                    id="new-password-check"
+                                    placeholder="Nouveau mot de passe"
+                                    class="form-input"
+                                />
+                            </div>
+                            <div class="info-section">
+                                <p class="info-value">
+                                    * Champs obligatoires
+                                </p>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="form-button-group">
+                                <input type="submit" value="Valider" class="form-button" />
+                                <a onclick="history.go(-1)" class="form-button-link">
+                                    Retour
+                                </a>
+                            </div>
+                        </fieldset>
+                    </form>
+                </c:otherwise>
+            </c:choose>
         </section>
 
         <%@ include file="/WEB-INF/fragments/Footer.jspf" %>

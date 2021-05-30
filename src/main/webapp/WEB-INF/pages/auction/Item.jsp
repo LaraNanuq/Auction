@@ -122,6 +122,11 @@
                                     class="form-input"
                                 />
                             </div>
+                            
+                            <!-- Buttons -->
+                            <div class="form-button-group">
+                                <input type="submit" value="Enchérir" class="form-button" />
+                            </div>
                         </fieldset>
                     </form>
                 </c:when>
@@ -138,16 +143,11 @@
 
             <!-- Buttons -->
             <div class="form-button-group">
-                <c:choose>
-                    <c:when test="${requestScope.canBid}">
-                        <input type="submit" value="Enchérir" class="form-button" />
-                    </c:when>
-                    <c:when test="${requestScope.canEdit}">
-                        <a href="${pageContext.request.contextPath}/sale/edit/${requestScope.item.id}" class="form-button-link">
-                            Modifier
-                        </a>
-                    </c:when>
-                </c:choose>
+                <c:if test="${requestScope.canEdit}">
+                    <a href="${pageContext.request.contextPath}/sale/edit/${requestScope.item.id}" class="form-button-link">
+                        Modifier
+                    </a>
+                </c:if>
                 <a onclick="history.go(-1)" class="form-button-link">
                     Retour
                 </a>

@@ -3,4 +3,4 @@
 
 ## Collaborators
 - Ayelen DUMAS
-- Marin TAVERNIERS
+- Lara NANUQ
